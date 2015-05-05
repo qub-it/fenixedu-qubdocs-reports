@@ -1,0 +1,98 @@
+package org.fenixedu.qubdocs.domain;
+
+public class DocumentTemplate {
+    //String reportKey;				// Existed in the oddjet connector 
+    LocalizedString name;
+    LocalizedString description;
+    DateTime creationDate;
+    DateTime updateDate;
+    Boolean active;
+}
+
+public class DocumentTemplateVersion extends .org.fenixedu.bennu.io.domain.GenericFile {
+}
+
+public class DocumentPrinterConfiguration {
+	String fontsPath;
+	Boolean openOfficeConverting;
+}
+
+relation DocumentTemplateBennu {
+ 	DocumentTemplate playsRole documentTemplates {
+ 		multiplicity *;
+ 	}
+ 
+ 	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu {
+        multiplicity 1..1;
+    }
+}
+
+relation DocumentTemplateCreationResponsible {
+	.org.fenixedu.bennu.core.domain.User playsRole creator {
+		multiplicity 1..1;
+	}
+	
+	DocumentTemplate playsRole createdDocumentTemplates {
+		multiplicity *;
+	}
+}
+
+relation DocumentTemplateUpdateResponsible {
+	.org.fenixedu.bennu.core.domain.User playsRole updater {
+		multiplicity 1..1;
+	}
+	
+	DocumentTemplate playsRole updatedDocumentTemplates {
+		multiplicity *;
+	}
+}
+
+relation DocumentTemplateVersionBennu {
+	DocumentTemplateVersion playsRole documentTemplateVersions {
+		multiplicity *;
+	}	
+
+ 	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu {
+        multiplicity 1..1;
+    }
+}
+
+relation DocumentTemplateHistoricVersions {
+	DocumentTemplate playsRole historicDocumentTemplate {
+		multiplicity 0..1;
+	}
+
+	DocumentTemplateVersion playsRole historicVersions {
+		multiplicity *;
+	}
+}
+
+relation DocumentTemplateCurrentVersion {
+	DocumentTemplate playsRole documentTemplate {
+		multiplicity 0..1;
+	}
+	
+	DocumentTemplateVersion playsRole currentVersion {
+		multiplicity 0..1;
+	}
+}
+
+relation DocumentTemplateVersionPerson {
+	DocumentTemplateVersion playsRole documentTemplateVersions {
+		multiplicity *;
+	}
+	
+	.org.fenixedu.bennu.core.domain.User playsRole uploader {
+		multiplicity 1..1;
+	}	
+}
+
+relation DocumentPrinterConfigurationBennu {
+	DocumentPrinterConfiguration playsRole documentPrinterConfiguration {
+		multiplicity 0..1;
+	}
+	
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu {
+        multiplicity 1..1;
+    }
+}
