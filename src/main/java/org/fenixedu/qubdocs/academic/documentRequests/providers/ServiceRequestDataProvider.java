@@ -27,6 +27,7 @@
 
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
+import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
 import org.fenixedu.academic.util.Money;
 
@@ -34,41 +35,49 @@ import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ServiceRequestDataProvider implements IReportDataProvider {
-    
+
     protected static final String KEY = "serviceRequest";
     protected static final String KEY_FOR_PRICE = "serviceRequestPrice";
-    
+    protected static final String KEY_EXECUTION_YEAR = "executionYearName";
+    protected static final String KEY_PREVIOUS_EXECUTION_YEAR = "previousExecutionYearName";
+
     protected DocumentRequest documentRequest;
-    
-    public ServiceRequestDataProvider(final DocumentRequest documentRequest) {
+    protected ExecutionYear executionYear;
+
+    public ServiceRequestDataProvider(final DocumentRequest documentRequest, ExecutionYear executionYear) {
         this.documentRequest = documentRequest;
+        this.executionYear = executionYear;
     }
-    
+
     @Override
     public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
     }
 
     @Override
     public boolean handleKey(final String key) {
-        return KEY.equals(key) || KEY_FOR_PRICE.equals(key);
+        return KEY.equals(key) || KEY_FOR_PRICE.equals(key) || KEY_EXECUTION_YEAR.equals(key) || KEY_PREVIOUS_EXECUTION_YEAR.equals(key);
     }
 
     @Override
     public Object valueForKey(final String key) {
-        if(KEY.equals(key)) {
+        if (KEY.equals(key)) {
             return documentRequest;
-        } else if(KEY_FOR_PRICE.equals(key)) {
-            if(documentRequest.getEvent() == null) {
+        } else if (KEY_FOR_PRICE.equals(key)) {
+            if (documentRequest.getEvent() == null) {
                 return Money.ZERO;
             }
-            
-            if(documentRequest.getEvent().isCancelled()) {
+
+            if (documentRequest.getEvent().isCancelled()) {
                 return Money.ZERO;
             }
-            
+
             return documentRequest.getEvent().getOriginalAmountToPay().toPlainString();
+        } else if (KEY_EXECUTION_YEAR.equals(key)) {
+            return executionYear.getName();
+        } else if (KEY_PREVIOUS_EXECUTION_YEAR.equals(key)) {
+            return executionYear.getPreviousExecutionYear().getName();
         }
-        
+
         return null;
     }
 

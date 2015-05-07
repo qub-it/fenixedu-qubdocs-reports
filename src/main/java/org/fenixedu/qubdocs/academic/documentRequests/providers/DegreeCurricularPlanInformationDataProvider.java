@@ -63,7 +63,7 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         this.cycleType = cycleType;
         this.executionYear = executionYear;
     }
-    
+
     public DegreeCurricularPlanInformationDataProvider(final Registration registration, final ExecutionYear executionYear) {
         this(registration, null, executionYear);
     }
@@ -75,8 +75,9 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
 
         checkData();
     }
-    
-    public DegreeCurricularPlanInformationDataProvider(final Registration registration, final ExecutionYear executionYear, final LocalDate conclusionDate) {
+
+    public DegreeCurricularPlanInformationDataProvider(final Registration registration, final ExecutionYear executionYear,
+            final LocalDate conclusionDate) {
         this(registration, null, executionYear, conclusionDate);
     }
 
@@ -124,7 +125,7 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
     public LocalizedString getDegreeName() {
         return getDegree().getNameI18N().toLocalizedString();
     }
-    
+
     public LocalizedString getDegreePresentationName() {
         return getDegree().getPresentationNameI18N(executionYear);
     }
@@ -133,7 +134,7 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         return registration.getDegree();
     }
 
-    public LocalizedString getDegreeTypeName() {
+    public LocalizedString getDegreeTypeFilteredName() {
         return registration.getDegreeType().getName();
     }
 
@@ -170,7 +171,7 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         }
 
         if (registration.getDegreeType().getCycleTypes().size() == 1) {
-            return registration.getDegreeType().getCycleTypes().iterator().next().getDescriptionI18N();
+            return null; // return registration.getDegreeType().getCycleTypes().iterator().next().getDescriptionI18N();
         }
 
         throw new DomainException("error.DegreeCurricularPlanInformationProvider.more.than.one.cycle");
@@ -185,11 +186,11 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
     }
 
     public Integer getNumberOfYears() {
-        return 0; // registration.getDegreeType().getYears(getCycleType());
+        return 0;// registration.getDegreeType().getYears(getCycleType());
     }
 
     public Integer getNumberOfSemesters() {
-        return 0; // registration.getDegreeType().getSemesters(getCycleType());
+        return 0;// registration.getDegreeType().getSemesters(getCycleType());
     }
 
     public BigDecimal getEcts() {

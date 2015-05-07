@@ -54,6 +54,7 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
     protected Registration registration;
     protected CycleType cycleType;
+
     //protected IEctsConversionService service = EctsConversionServiceFactory.newInstance().getService();
 
     public ConclusionInformationDataProvider(final Registration registration, final CycleType cycleType) {
@@ -127,7 +128,7 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         public boolean isMobilityReferenceTable() {
 //            EctsGraduationGradeConversionTable graduationGradeConversionTable = getGraduationEctsConversionTable();
 //            return graduationGradeConversionTable.isMobilityReferenceTable();
-            
+
             return false;
         }
 

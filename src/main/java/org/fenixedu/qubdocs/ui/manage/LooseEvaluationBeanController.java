@@ -27,12 +27,9 @@
 
 package org.fenixedu.qubdocs.ui.manage;
 
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpSession;
 
 import org.fenixedu.academic.domain.EnrolmentEvaluation;
-import org.fenixedu.academic.domain.EvaluationSeason;
 import org.fenixedu.academic.domain.Grade;
 import org.fenixedu.academic.domain.GradeScale;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
@@ -65,7 +62,7 @@ public class LooseEvaluationBeanController extends DomainBaseController {
     public String create(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan, final Model model) {
         model.addAttribute("studentCurricularPlan", studentCurricularPlan);
         model.addAttribute("LooseEvaluationBean_enrolment_options", studentCurricularPlan.getEnrolmentsSet());
-        model.addAttribute("typeValues", EvaluationSeason.all().collect(Collectors.<EvaluationSeason> toSet()));
+        model.addAttribute("typeValues", org.fenixedu.academic.domain.curriculum.EnrolmentEvaluationType.values());
 
         return "fenixedu-qubdocs-reports/manage/looseevaluationbean/create";
     }
@@ -77,7 +74,8 @@ public class LooseEvaluationBeanController extends DomainBaseController {
             @RequestParam(value = "availabledate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") org.joda.time.LocalDate availableDate,
             @RequestParam(value = "examdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") org.joda.time.LocalDate examDate,
             @RequestParam(value = "grade", required = false) String grade,
-            @RequestParam(value = "type", required = false) EvaluationSeason type, Model model) {
+            @RequestParam(value = "type", required = false) org.fenixedu.academic.domain.curriculum.EnrolmentEvaluationType type,
+            Model model) {
 
         try {
             createLooseEvaluation(enrolment, availableDate, examDate, Grade.createGrade(grade, GradeScale.TYPE20), type);
@@ -97,7 +95,7 @@ public class LooseEvaluationBeanController extends DomainBaseController {
     @Atomic
     public void createLooseEvaluation(org.fenixedu.academic.domain.Enrolment enrolment, org.joda.time.LocalDate availableDate,
             org.joda.time.LocalDate examDate, org.fenixedu.academic.domain.Grade grade,
-            EvaluationSeason type) {
+            org.fenixedu.academic.domain.curriculum.EnrolmentEvaluationType type) {
 
         final EnrolmentEvaluation evaluation = new EnrolmentEvaluation(enrolment, type);
 

@@ -43,7 +43,6 @@ import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
-
 public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
 
     public static final Comparator<RemarkEntry> ENTRY_COMPARATOR = new Comparator<RemarkEntry>() {
@@ -52,29 +51,29 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
         public int compare(RemarkEntry o1, RemarkEntry o2) {
             return o1.remarkNumber.compareTo(o2.remarkNumber);
         }
-        
+
     };
-    
+
     protected static final String KEY = "curriculumEntryRemarks";
     protected char counter = 'a';
 
     protected RemarkEntry creditsRemarkEntry = new RemarkEntry(String.valueOf(counter++));
     protected Set<RemarkEntry> entries = Sets.newTreeSet(ENTRY_COMPARATOR);
-    
+
     protected String key;
     protected Registration registration;
-    
+
     public CurriculumEntryRemarksDataProvider(final Registration registration) {
         entries.add(creditsRemarkEntry);
         this.key = KEY;
         this.registration = registration;
     }
-    
+
     public CurriculumEntryRemarksDataProvider(final Registration registration, final String key) {
         this(registration);
         this.key = key;
     }
-    
+
     @Override
     public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
 
@@ -99,24 +98,25 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
         for (RemarkEntry remarkEntry : Sets.newHashSet(entries)) {
             addedToInstitution |= remarkEntry.addIf(curriculumEntry);
         }
-        
-        if(addedToInstitution) {
+
+        if (addedToInstitution) {
             return;
         }
-        
-        if(curriculumEntry.isExternal()) {
+
+        if (curriculumEntry.isExternal()) {
             addInstitutionEntryFor(curriculumEntry);
         }
     }
-    
+
     public Set<RemarkEntry> getRemarkEntriesFor(final CurriculumEntry curriculumEntry) {
         return Sets.filter(entries, new Predicate<RemarkEntry>() {
-           public boolean apply(final RemarkEntry remarkEntry) {
-               return remarkEntry.curriculumEntries.contains(curriculumEntry);
-           } 
+            @Override
+            public boolean apply(final RemarkEntry remarkEntry) {
+                return remarkEntry.curriculumEntries.contains(curriculumEntry);
+            }
         });
     }
-    
+
     protected void addInstitutionEntryFor(final CurriculumEntry curriculumEntry) {
         entries.add(new RemarkEntry(String.valueOf(counter++), curriculumEntry));
     }
@@ -139,7 +139,7 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
             this.remarkNumber = remarkNumber;
             this.type = RemarkEntryType.CREDITS;
         }
-        
+
         public RemarkEntry(final String remarkNumber, final CurriculumEntry curriculumEntry) {
             this.remarkNumber = remarkNumber;
             this.institution = ((ExternalEnrolment) curriculumEntry.getICurriculumEntry()).getAcademicUnit();
@@ -160,7 +160,7 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
                 curriculumEntries.add(entry);
                 return false;
             }
-            
+
             return false;
         }
 
@@ -174,7 +174,7 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
 
         // TODO
         public LocalizedString getDescription() {
-            if(curriculumEntries.isEmpty()) {
+            if (curriculumEntries.isEmpty()) {
                 LocalizedString mls = new LocalizedString();
                 for (Locale locale : CoreConfiguration.supportedLocales()) {
                     mls = mls.with(locale, "");
@@ -193,18 +193,18 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
             return mls;
         }
     }
-    
+
     // TODO
     public boolean isDismissal(CurriculumEntry entry) {
-        if(entry.isDismissal()) {
+        if (entry.isDismissal()) {
             return true;
         }
-        
-        if(entry.isIEnrolment() && ((IEnrolment) entry.getICurriculumEntry()).isEnrolment()) {
+
+        if (entry.isIEnrolment() && ((IEnrolment) entry.getICurriculumEntry()).isEnrolment()) {
             return false;
             // return ((Enrolment) entry.getICurriculumEntry()).hasAnyDismissal(registration.getLastStudentCurricularPlan());
         }
-        
+
         return false;
     }
 
