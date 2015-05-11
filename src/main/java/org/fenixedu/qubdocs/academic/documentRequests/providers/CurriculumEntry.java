@@ -37,6 +37,7 @@ import java.util.Set;
 
 import org.fenixedu.academic.domain.CompetenceCourse;
 import org.fenixedu.academic.domain.Enrolment;
+import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
@@ -49,6 +50,7 @@ import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider.RemarkEntry;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
+import org.joda.time.LocalDate;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -179,6 +181,14 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
         return null;
     }
+    
+    public String getCode(){
+        return getCompetenceCourse().getCode();
+    }
+    
+    public ExecutionSemester getExecutionSemester(){
+        return iCurriculumEntry.getExecutionPeriod();
+    }
 
     public String getGrade() {
         return iCurriculumEntry.getGradeValue();
@@ -197,6 +207,13 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return getExecutionYear().getName();
     }
 
+    public LocalDate getApprovementDate() {
+        
+        return getICurriculumEntry().getApprovementDate().toLocalDate();
+        
+    }
+    
+    
     protected boolean isCurriculumLine() {
         return iCurriculumEntry instanceof CurriculumLine;
     }

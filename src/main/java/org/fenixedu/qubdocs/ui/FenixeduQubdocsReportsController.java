@@ -32,9 +32,9 @@ import org.fenixedu.bennu.spring.portal.SpringFunctionality;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/fenixedu-qubdocs-reports")
-@SpringApplication(group = "logged", path = "fenixedu-qubdocs-reports", title = "title.FenixeduQubdocsReports")
+@SpringApplication(group = "logged", path = "qubdocsReports", title = "title.FenixeduQubdocsReports", hint="FenixEdu-Reports")
 @SpringFunctionality(app = FenixeduQubdocsReportsController.class, title = "title.FenixeduQubdocsReports")
+@RequestMapping("/qubdocsReports")
 public class FenixeduQubdocsReportsController {
 
     @RequestMapping

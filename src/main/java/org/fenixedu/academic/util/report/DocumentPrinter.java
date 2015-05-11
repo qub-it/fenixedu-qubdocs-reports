@@ -39,9 +39,12 @@ import org.fenixedu.academic.report.academicAdministrativeOffice.AdministrativeO
 import org.fenixedu.academic.report.academicAdministrativeOffice.DocumentRequestReader;
 import org.fenixedu.qubdocs.FenixEduDocumentGenerator;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.ApprovementCertificateCurriculumEntries;
+import org.fenixedu.qubdocs.academic.documentRequests.providers.ConclusionInformationDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntriesDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider;
+import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumInformationDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.DegreeCurricularPlanInformationDataProvider;
+import org.fenixedu.qubdocs.academic.documentRequests.providers.DocumentSignatureDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.EnrolmentsDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.ExtraCurricularCoursesDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.LocalizedDatesProvider;
@@ -49,6 +52,7 @@ import org.fenixedu.qubdocs.academic.documentRequests.providers.RegistrationData
 import org.fenixedu.qubdocs.academic.documentRequests.providers.ServiceRequestDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.StandaloneCurriculumEntriesDataProvider;
 import org.fenixedu.qubdocs.base.providers.PersonReportDataProvider;
+import org.fenixedu.qubdocs.base.providers.UserReportDataProvider;
 import org.fenixedu.qubdocs.domain.DocumentPrinterConfiguration;
 import org.joda.time.LocalDate;
 
@@ -65,7 +69,8 @@ public class DocumentPrinter implements ReportPrinter {
             final AdministrativeOfficeDocument document = (AdministrativeOfficeDocument) reportDescription;
 
             final FenixEduDocumentGenerator generator =
-                    FenixEduDocumentGenerator.create("/home/anilmamede/Desktop/doc.odt", FenixEduDocumentGenerator.PDF);
+                    FenixEduDocumentGenerator.create("/home/pmoita/Desktop/certificadoAproveitamento.odt",
+                            FenixEduDocumentGenerator.PDF);
             final DocumentRequest documentRequest = DocumentRequestReader.toDocumentRequest(document);
             final ExecutionYear executionYear = documentRequest.getExecutionYear();
             final Registration registration = documentRequest.getRegistration();
@@ -74,11 +79,23 @@ public class DocumentPrinter implements ReportPrinter {
             generator.registerDataProvider(new PersonReportDataProvider(documentRequest.getStudent().getPerson()));
             generator.registerDataProvider(new RegistrationDataProvider(registration));
             generator.registerDataProvider(new LocalizedDatesProvider());
-            generator.registerDataProvider(new ServiceRequestDataProvider(DocumentRequestReader.toDocumentRequest(document)));
+            generator.registerDataProvider(new ServiceRequestDataProvider(DocumentRequestReader.toDocumentRequest(document),
+                    executionYear));
             generator.registerDataProvider(new DegreeCurricularPlanInformationDataProvider(registration, requestedCycle,
                     executionYear));
             generator
                     .registerDataProvider(new EnrolmentsDataProvider(registration, executionYear, documentRequest.getLanguage()));
+
+            generator.registerDataProvider(new DocumentSignatureDataProvider());
+
+            generator.registerDataProvider(new ConclusionInformationDataProvider(registration, requestedCycle));
+
+            generator.registerDataProvider(new CurriculumEntriesDataProvider(registration, requestedCycle,
+                    new CurriculumEntryRemarksDataProvider(registration), documentRequest.getLanguage()));
+
+            generator.registerDataProvider(new UserReportDataProvider());
+
+            generator.registerDataProvider(new CurriculumInformationDataProvider(registration, executionYear));
 
             if (documentRequest instanceof ExtraCurricularCertificateRequest) {
                 final ExtraCurricularCertificateRequest extraCurricularCertificateRequest =

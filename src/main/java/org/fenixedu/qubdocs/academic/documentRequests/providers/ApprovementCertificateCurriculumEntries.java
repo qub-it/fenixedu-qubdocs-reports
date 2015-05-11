@@ -64,7 +64,7 @@ public class ApprovementCertificateCurriculumEntries extends CurriculumEntriesDa
 
         if (curriculumEntries == null) {
 
-            final Set<ICurriculumEntry> entries = Sets.newHashSet(/*certificateRequest.getEntriesToReport(false)*/);
+            final Set<ICurriculumEntry> entries = Sets.newHashSet(/*certificateRequest.getEntries*/);
 
             curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
 
