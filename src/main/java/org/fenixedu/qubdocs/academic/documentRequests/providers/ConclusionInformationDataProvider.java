@@ -28,13 +28,16 @@
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import org.fenixedu.academic.domain.ExecutionYear;
+import org.fenixedu.academic.domain.degreeStructure.CycleCourseGroup;
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
 import org.fenixedu.academic.domain.degreeStructure.EctsGraduationGradeConversionTable;
 import org.fenixedu.academic.domain.degreeStructure.EctsTableIndex;
+import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
@@ -53,13 +56,13 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
     protected static final String KEY = "conclusionInformation";
 
     protected Registration registration;
-    protected CycleType cycleType;
+    protected ProgramConclusion programConclusion;
 
     //protected IEctsConversionService service = EctsConversionServiceFactory.newInstance().getService();
 
-    public ConclusionInformationDataProvider(final Registration registration, final CycleType cycleType) {
+    public ConclusionInformationDataProvider(final Registration registration, final ProgramConclusion programConclusion) {
         this.registration = registration;
-        this.cycleType = cycleType;
+        this.programConclusion = programConclusion;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
     }
 
     protected ConclusionInformation conclusionInformation() {
-        return new ConclusionInformation(new RegistrationConclusionBean(registration, cycleType));
+        return new ConclusionInformation(new RegistrationConclusionBean(registration, programConclusion));
     }
 
     public class ConclusionInformation {
@@ -98,11 +101,11 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         }
 
         public String getAverage() {
-            return conclusionBean.getAverage().toPlainString();
+            return conclusionBean.getRawGrade().getValue();
         }
 
         public String getFinalAverage() {
-            return conclusionBean.getFinalAverage().toString();
+            return conclusionBean.getFinalGrade().getValue();
         }
 
         // TODO
@@ -118,7 +121,7 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         public LocalizedString getGraduateTitle() {
             LocalizedString mls = new LocalizedString();
             for (Locale locale : CoreConfiguration.supportedLocales()) {
-                mls = mls.with(locale, registration.getGraduateTitle(cycleType, locale));
+                mls = mls.with(locale, registration.getGraduateTitle(programConclusion, locale));
             }
 
             return mls;
@@ -134,8 +137,10 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
         protected EctsGraduationGradeConversionTable getGraduationEctsConversionTable() {
             final ExecutionYear conclusionYear = conclusionBean.getConclusionYear();
+            final Collection<CycleCourseGroup> parentCycleCourseGroups = programConclusion.groupFor(registration.getLastDegreeCurricularPlan()).get().getParentCycleCourseGroups();
+
             EctsGraduationGradeConversionTable graduationGradeConversionTable =
-                    EctsTableIndex.getGraduationGradeConversionTable(registration.getDegree(), cycleType,
+                    EctsTableIndex.getGraduationGradeConversionTable(registration.getDegree(), !parentCycleCourseGroups.isEmpty() ? parentCycleCourseGroups.iterator().next().getCycleType() : null,
                             conclusionYear.getAcademicInterval(), new DateTime());
             return graduationGradeConversionTable;
         }

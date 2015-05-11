@@ -29,7 +29,6 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
-import org.fenixedu.academic.util.Money;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IReportDataProvider;
@@ -60,18 +59,18 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
 
     @Override
     public Object valueForKey(final String key) {
+
         if (KEY.equals(key)) {
             return documentRequest;
         } else if (KEY_FOR_PRICE.equals(key)) {
-            if (documentRequest.getEvent() == null) {
-                return Money.ZERO;
-            }
-
-            if (documentRequest.getEvent().isCancelled()) {
-                return Money.ZERO;
-            }
-
-            return documentRequest.getEvent().getOriginalAmountToPay().toPlainString();
+//            final IAcademicTreasuryEvent academicTreasuryEvent = TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(documentRequest);
+//            
+//            if(academicTreasuryEvent == null || !academicTreasuryEvent.isWithDebitEntry()) {
+//                return IAcademicTreasuryEvent.zeroValuesEvent(documentRequest.getServiceRequestType().getName());
+//            }
+//            
+//            return academicTreasuryEvent;
+            return null;
         } else if (KEY_EXECUTION_YEAR.equals(key)) {
             return executionYear.getName();
         } else if (KEY_PREVIOUS_EXECUTION_YEAR.equals(key)) {

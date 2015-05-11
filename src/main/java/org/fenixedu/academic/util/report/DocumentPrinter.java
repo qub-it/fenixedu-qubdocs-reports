@@ -29,10 +29,13 @@ package org.fenixedu.academic.util.report;
 
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
+import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.ApprovementMobilityCertificateRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DegreeFinalizationCertificateRequest;
+import org.fenixedu.academic.domain.serviceRequests.documentRequests.DiplomaRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.ExtraCurricularCertificateRequest;
+import org.fenixedu.academic.domain.serviceRequests.documentRequests.RegistryDiplomaRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.StandaloneEnrolmentCertificateRequest;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.report.academicAdministrativeOffice.AdministrativeOfficeDocument;
@@ -75,6 +78,7 @@ public class DocumentPrinter implements ReportPrinter {
             final ExecutionYear executionYear = documentRequest.getExecutionYear();
             final Registration registration = documentRequest.getRegistration();
             final CycleType requestedCycle = requestedCycle(registration, documentRequest);
+            final ProgramConclusion programConclusion = programConclusion(registration, documentRequest);
 
             generator.registerDataProvider(new PersonReportDataProvider(documentRequest.getStudent().getPerson()));
             generator.registerDataProvider(new RegistrationDataProvider(registration));
@@ -88,7 +92,7 @@ public class DocumentPrinter implements ReportPrinter {
 
             generator.registerDataProvider(new DocumentSignatureDataProvider());
 
-            generator.registerDataProvider(new ConclusionInformationDataProvider(registration, requestedCycle));
+            generator.registerDataProvider(new ConclusionInformationDataProvider(registration, programConclusion));
 
             generator.registerDataProvider(new CurriculumEntriesDataProvider(registration, requestedCycle,
                     new CurriculumEntryRemarksDataProvider(registration), documentRequest.getLanguage()));
@@ -137,6 +141,18 @@ public class DocumentPrinter implements ReportPrinter {
             return new ReportResult(report, "application/PDF", "pdf");
         }
 
+        return null;
+    }
+
+    private ProgramConclusion programConclusion(final Registration registration, final DocumentRequest documentRequest) {
+        if(documentRequest instanceof RegistryDiplomaRequest) {
+            return ((RegistryDiplomaRequest) documentRequest).getProgramConclusion();
+        } else if(documentRequest instanceof DiplomaRequest) {
+            return ((DiplomaRequest) documentRequest).getProgramConclusion();
+        } else if(documentRequest instanceof DegreeFinalizationCertificateRequest) {
+            return ((DegreeFinalizationCertificateRequest) documentRequest).getProgramConclusion();
+        }
+    
         return null;
     }
 

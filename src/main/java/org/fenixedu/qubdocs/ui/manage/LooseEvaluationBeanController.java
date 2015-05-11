@@ -27,6 +27,8 @@
 
 package org.fenixedu.qubdocs.ui.manage;
 
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpSession;
 
 import org.fenixedu.academic.domain.EnrolmentEvaluation;
@@ -62,7 +64,7 @@ public class LooseEvaluationBeanController extends DomainBaseController {
     public String create(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan, final Model model) {
         model.addAttribute("studentCurricularPlan", studentCurricularPlan);
         model.addAttribute("LooseEvaluationBean_enrolment_options", studentCurricularPlan.getEnrolmentsSet());
-        model.addAttribute("typeValues", org.fenixedu.academic.domain.curriculum.EnrolmentEvaluationType.values());
+        model.addAttribute("typeValues", org.fenixedu.academic.domain.EvaluationSeason.all().collect(Collectors.toSet()));
 
         return "fenixedu-qubdocs-reports/manage/looseevaluationbean/create";
     }
@@ -74,7 +76,7 @@ public class LooseEvaluationBeanController extends DomainBaseController {
             @RequestParam(value = "availabledate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") org.joda.time.LocalDate availableDate,
             @RequestParam(value = "examdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") org.joda.time.LocalDate examDate,
             @RequestParam(value = "grade", required = false) String grade,
-            @RequestParam(value = "type", required = false) org.fenixedu.academic.domain.curriculum.EnrolmentEvaluationType type,
+            @RequestParam(value = "type", required = false) org.fenixedu.academic.domain.EvaluationSeason type,
             Model model) {
 
         try {
@@ -95,7 +97,7 @@ public class LooseEvaluationBeanController extends DomainBaseController {
     @Atomic
     public void createLooseEvaluation(org.fenixedu.academic.domain.Enrolment enrolment, org.joda.time.LocalDate availableDate,
             org.joda.time.LocalDate examDate, org.fenixedu.academic.domain.Grade grade,
-            org.fenixedu.academic.domain.curriculum.EnrolmentEvaluationType type) {
+            org.fenixedu.academic.domain.EvaluationSeason type) {
 
         final EnrolmentEvaluation evaluation = new EnrolmentEvaluation(enrolment, type);
 
