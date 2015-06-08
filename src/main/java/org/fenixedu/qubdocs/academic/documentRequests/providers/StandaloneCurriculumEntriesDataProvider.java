@@ -42,6 +42,7 @@ import org.joda.time.LocalDate;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvider {
@@ -126,5 +127,11 @@ public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvi
             }            
         }
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

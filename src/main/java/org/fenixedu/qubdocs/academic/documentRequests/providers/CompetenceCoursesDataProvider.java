@@ -37,6 +37,7 @@ import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class CompetenceCoursesDataProvider implements IReportDataProvider {
@@ -102,5 +103,11 @@ public class CompetenceCoursesDataProvider implements IReportDataProvider {
         }
 
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

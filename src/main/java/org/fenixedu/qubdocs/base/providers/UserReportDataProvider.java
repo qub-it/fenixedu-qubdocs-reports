@@ -1,7 +1,9 @@
 package org.fenixedu.qubdocs.base.providers;
 
 import org.fenixedu.bennu.core.security.Authenticate;
+
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class UserReportDataProvider implements IReportDataProvider {
@@ -24,4 +26,10 @@ public class UserReportDataProvider implements IReportDataProvider {
         }
         return null;
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 }

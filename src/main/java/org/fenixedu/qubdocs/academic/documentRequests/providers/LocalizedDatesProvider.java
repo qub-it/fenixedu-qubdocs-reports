@@ -31,6 +31,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 
@@ -61,5 +62,11 @@ public class LocalizedDatesProvider implements IReportDataProvider {
     public DateTime nowDateTime() {
         return new DateTime();
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
         
 }

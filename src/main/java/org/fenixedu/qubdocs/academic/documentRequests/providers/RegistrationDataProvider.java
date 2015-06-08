@@ -30,6 +30,7 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 import org.fenixedu.academic.domain.student.Registration;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class RegistrationDataProvider implements IReportDataProvider {
@@ -56,5 +57,11 @@ public class RegistrationDataProvider implements IReportDataProvider {
     public Object valueForKey(final String key) {
         return handleKey(key) ? registration : null;
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

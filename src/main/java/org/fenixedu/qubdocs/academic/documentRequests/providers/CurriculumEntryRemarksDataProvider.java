@@ -41,6 +41,7 @@ import org.fenixedu.commons.i18n.LocalizedString;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
@@ -207,5 +208,11 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
 
         return false;
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

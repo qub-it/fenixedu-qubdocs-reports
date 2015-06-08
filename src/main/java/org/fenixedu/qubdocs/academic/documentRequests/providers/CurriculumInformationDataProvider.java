@@ -6,6 +6,7 @@ import org.fenixedu.academic.domain.student.curriculum.Curriculum;
 import org.joda.time.DateTime;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class CurriculumInformationDataProvider implements IReportDataProvider {
@@ -51,5 +52,11 @@ public class CurriculumInformationDataProvider implements IReportDataProvider {
 
         return curriculum.getCurricularYear();
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

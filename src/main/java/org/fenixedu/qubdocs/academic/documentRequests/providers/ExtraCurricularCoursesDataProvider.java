@@ -43,6 +43,7 @@ import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
@@ -151,5 +152,11 @@ public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
     public boolean isEmpty() {
         return getCurriculumEntries().isEmpty();
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

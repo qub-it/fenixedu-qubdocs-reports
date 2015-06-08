@@ -46,6 +46,7 @@ import org.joda.time.LocalDate;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class DegreeCurricularPlanInformationDataProvider implements IReportDataProvider {
@@ -288,5 +289,11 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         DegreeType degreeType = getDegree().getDegreeType();
         return !degreeType.isBolonhaType() && degreeType.isDegree();
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -31,6 +31,7 @@ import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ServiceRequestDataProvider implements IReportDataProvider {
@@ -79,5 +80,11 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
 
         return null;
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

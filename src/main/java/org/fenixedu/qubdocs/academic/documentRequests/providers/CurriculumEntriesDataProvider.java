@@ -38,6 +38,7 @@ import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class CurriculumEntriesDataProvider implements IReportDataProvider {
@@ -106,4 +107,10 @@ public class CurriculumEntriesDataProvider implements IReportDataProvider {
 
         return curriculumEntries;
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -31,6 +31,7 @@ import org.fenixedu.academic.domain.Person;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class PersonReportDataProvider implements IReportDataProvider {
@@ -67,5 +68,11 @@ public class PersonReportDataProvider implements IReportDataProvider {
     public void checkData() {
         
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

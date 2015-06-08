@@ -3,6 +3,7 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 import org.fenixedu.qubdocs.domain.DocumentSignature;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class DocumentSignatureDataProvider implements IReportDataProvider {
@@ -30,5 +31,11 @@ public class DocumentSignatureDataProvider implements IReportDataProvider {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

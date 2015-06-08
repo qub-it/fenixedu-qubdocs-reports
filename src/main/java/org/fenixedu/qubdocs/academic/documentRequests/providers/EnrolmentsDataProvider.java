@@ -40,6 +40,7 @@ import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class EnrolmentsDataProvider implements IReportDataProvider {
@@ -183,5 +184,11 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     protected boolean standaloneRegistration() {
         return registration.getDegree().isEmpty();
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

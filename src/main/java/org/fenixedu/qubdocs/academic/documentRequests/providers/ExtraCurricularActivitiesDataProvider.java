@@ -38,6 +38,7 @@ import org.joda.time.Interval;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
+import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ExtraCurricularActivitiesDataProvider implements IReportDataProvider {
@@ -113,5 +114,11 @@ public class ExtraCurricularActivitiesDataProvider implements IReportDataProvide
         
         return activities;
     }
+
+	@Override
+	public void registerFieldsMetadata(IFieldsExporter exporter) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
