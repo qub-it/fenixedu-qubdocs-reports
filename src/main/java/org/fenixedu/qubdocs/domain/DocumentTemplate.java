@@ -44,6 +44,7 @@ import pt.ist.fenixframework.Atomic;
 import com.google.common.base.Predicate;
 import com.qubit.terra.docs.core.DocumentTemplateEngine;
 import com.qubit.terra.docs.core.IDocumentTemplate;
+import com.qubit.terra.docs.core.IDocumentTemplateVersion;
 import com.qubit.terra.docs.util.IReportDataProvider;
 import com.qubit.terra.docs.util.ReportGenerator;
 
@@ -85,6 +86,11 @@ public class DocumentTemplate extends DocumentTemplate_Base implements IDocument
     		throw new DomainException(exceptionCause);
     	}
     }
+    
+    @Override
+    public IDocumentTemplateVersion getCurrentVersion() {
+    	return getDocumentTemplateFile();
+    }
 
     @Override
     public boolean isActive() {
@@ -122,8 +128,8 @@ public class DocumentTemplate extends DocumentTemplate_Base implements IDocument
         return (Set<? extends DocumentTemplate>) DocumentTemplateEngine.getServiceImplementation().readActiveDocuments();
     }
 
-    public DocumentTemplateVersion createVersion(final String filename, final byte[] content) {
-        return DocumentTemplateVersion.create(this, filename, content);
+    public DocumentTemplateFile createFile(final String filename, final byte[] content) {
+        return DocumentTemplateFile.create(this, filename, content);
     }
 
     public FenixEduDocumentGenerator createGeneratorForDocx(final Collection<? extends IReportDataProvider> dataProviders) {

@@ -27,38 +27,28 @@
 
 package org.fenixedu.qubdocs.domain;
 
-import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 
-import pt.ist.fenixframework.Atomic;
-
 import com.qubit.terra.docs.core.IDocumentTemplateVersion;
 
-public class DocumentTemplateVersion extends DocumentTemplateVersion_Base implements IDocumentTemplateVersion {
+import pt.ist.fenixframework.Atomic;
 
+public class DocumentTemplateFile extends DocumentTemplateFile_Base implements IDocumentTemplateVersion{
 	
 	private static final String ROOT_DIR = "DocumentTemplate";
-
-    protected DocumentTemplateVersion() {
+    
+	protected DocumentTemplateFile() {
         super();
         setBennu(Bennu.getInstance());
     }
-
-    protected DocumentTemplateVersion(final DocumentTemplate documentTemplate, final String filename, final byte[] content) {
+    
+    protected DocumentTemplateFile(final DocumentTemplate documentTemplate, final String filename, final byte[] content) {
         this();
         init(filename, filename, content);
         setDocumentTemplate(documentTemplate);
         setUploader(Authenticate.getUser());
-
-        checkRules();
-    }
-
-    protected void checkRules() {
-        if (getDocumentTemplate() == null && getHistoricDocumentTemplate() == null) {
-            throw new DomainException("error.DocumentTemplateVersion.documentTemplate.required");
-        }
     }
     
     @Override
@@ -66,18 +56,10 @@ public class DocumentTemplateVersion extends DocumentTemplateVersion_Base implem
 		//TODO: Should check instead if the user has authorization to deal with documents
 		return user == getUploader();
 	}
-
+    
     @Atomic
-    public void markAsHistoric() {
-        setHistoricDocumentTemplate(getDocumentTemplate());
-        setDocumentTemplate(null);
-
-        checkRules();
-    }
-
-    @Atomic
-    public static DocumentTemplateVersion create(final DocumentTemplate documentTemplate, final String filename,
+    public static DocumentTemplateFile create(final DocumentTemplate documentTemplate, final String filename,
             final byte[] content) {
-        return new DocumentTemplateVersion(documentTemplate, filename, content);
+        return new DocumentTemplateFile(documentTemplate, filename, content);
     }
 }

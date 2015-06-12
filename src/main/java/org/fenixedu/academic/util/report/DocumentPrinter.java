@@ -72,7 +72,7 @@ public class DocumentPrinter implements ReportPrinter {
             final AdministrativeOfficeDocument document = (AdministrativeOfficeDocument) reportDescription;
 
             final FenixEduDocumentGenerator generator =
-                    FenixEduDocumentGenerator.create("/home/pmoita/Desktop/certificadoAproveitamento.odt",
+                    FenixEduDocumentGenerator.create("/home/diogo/workspace_fenixedu/fenixedu-qubdocs-reports/src/main/resources/META-INF/templates/certidaoInscricao.odt",
                             FenixEduDocumentGenerator.PDF);
             final DocumentRequest documentRequest = DocumentRequestReader.toDocumentRequest(document);
             final ExecutionYear executionYear = documentRequest.getExecutionYear();
