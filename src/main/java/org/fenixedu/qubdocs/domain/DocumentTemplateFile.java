@@ -27,8 +27,12 @@
 
 package org.fenixedu.qubdocs.domain;
 
+import org.fenixedu.academic.domain.accessControl.academicAdministration.AcademicAccessRule;
+import org.fenixedu.academic.domain.accessControl.academicAdministration.AcademicOperationType;
+import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 
 import com.qubit.terra.docs.core.IDocumentTemplateVersion;
@@ -52,9 +56,15 @@ public class DocumentTemplateFile extends DocumentTemplateFile_Base implements I
     }
     
     @Override
+    public void delete() {
+    	setUploader(null);
+    	setDocumentTemplate(null);
+    	super.delete();
+    }
+    
+    @Override
 	public boolean isAccessible(User user) {
-		//TODO: Should check instead if the user has authorization to deal with documents
-		return user == getUploader();
+		return AcademicAccessRule.isMember(user, AcademicOperationType.MANAGE_DOCUMENTS, null, null);
 	}
     
     @Atomic
