@@ -8,7 +8,7 @@ import org.fenixedu.academic.domain.administrativeOffice.AdministrativeOffice;
 import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
 import org.fenixedu.qubdocs.domain.DocumentSignature;
-import org.fenixedu.qubdocs.ui.DomainBaseController;
+import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsController;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pt.ist.fenixframework.Atomic;
 
 //@Component("org.fenixedu.qubdocs.ui.manageDocumentSignature") <-- Use for duplicate controller name disambiguation
-@SpringFunctionality(app = FenixeduQubdocsReportsController.class, title = "label.title.manageDocumentSignature",accessGroup = "anyone")// CHANGE_ME accessGroup = "group1 | group2 | groupXPTO"
+@SpringFunctionality(app = FenixeduQubdocsReportsController.class, title = "label.title.manageDocumentSignature",
+        accessGroup = "anyone")
+// CHANGE_ME accessGroup = "group1 | group2 | groupXPTO"
 //or
 //@BennuSpringController(value = FenixeduQubdocsReportsController.class)
 @RequestMapping("/qubdocs/managedocumentsignature/documentsignature")
-public class DocumentSignatureController extends DomainBaseController {
+public class DocumentSignatureController extends FenixeduQubdocsReportsBaseController {
 
 //
 
@@ -69,8 +71,8 @@ public class DocumentSignatureController extends DomainBaseController {
         //The initialization of the result list must be done here
         //
         //
-        return new ArrayList<DocumentSignature>(DocumentSignature.readAll()); 
-        
+        return new ArrayList<DocumentSignature>(DocumentSignature.readAll());
+
     }
 
     private List<DocumentSignature> filterSearchDocumentSignature(java.lang.String responsibleName,
@@ -193,8 +195,9 @@ public class DocumentSignatureController extends DomainBaseController {
          * the object with the default constructor and use the setter
          * for each field
          */
-  
-        return DocumentSignature.create(AdministrativeOffice.readDegreeAdministrativeOffice(), responsibleName, responsibleFunction, responsibleUnit);
+
+        return DocumentSignature.create(AdministrativeOffice.readDegreeAdministrativeOffice(), responsibleName,
+                responsibleFunction, responsibleUnit);
     }
 
 //				
@@ -250,7 +253,7 @@ public class DocumentSignatureController extends DomainBaseController {
          * the object with the default setter for each field
          */
         getDocumentSignature(m).edit(responsibleName, responsibleFunction, responsibleUnit);
-  
+
     }
 
 }

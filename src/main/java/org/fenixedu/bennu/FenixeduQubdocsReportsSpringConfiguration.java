@@ -31,4 +31,5 @@ import org.fenixedu.bennu.spring.BennuSpringModule;
 
 @BennuSpringModule(basePackages = "org.fenixedu.qubdocs.ui", bundles = "FenixeduQubdocsReportsResources")
 public class FenixeduQubdocsReportsSpringConfiguration {
+	public static final String BUNDLE = "resources/FenixeduQubdocsReportsResources";
 }

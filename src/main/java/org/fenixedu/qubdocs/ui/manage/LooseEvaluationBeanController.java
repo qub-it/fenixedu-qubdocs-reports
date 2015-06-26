@@ -38,7 +38,7 @@ import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.spring.portal.BennuSpringController;
-import org.fenixedu.qubdocs.ui.DomainBaseController;
+import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,7 +55,7 @@ import pt.ist.fenixframework.Atomic;
 //@SpringFunctionality(app = DomainController.class, title = "label.title.manage")
 @BennuSpringController(value = FenixeduQubdocsReportsController.class)
 @RequestMapping("/looseevaluation")
-public class LooseEvaluationBeanController extends DomainBaseController {
+public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseController {
 
     @Autowired
     private HttpSession session;
