@@ -28,20 +28,20 @@ ${portal.toolkit()}
 
 <%-- TITLE --%>
 <div class="page-header">
-	<h1><spring:message code="label.documentTemplates.viewTemplate" />
+	<h1><spring:message code="label.documentTemplates.readTemplate" />
 		<small></small>
 	</h1>
 </div>
 <div class="modal fade" id="deleteModal">
   <div class="modal-dialog">
     <div class="modal-content">
-    <form id ="deleteForm" action="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/deleteviewtemplate/${academicServiceRequestTemplate.externalId}"   method="POST">
+    <form id ="deleteForm" action="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/deletetemplate/${academicServiceRequestTemplate.externalId}"   method="POST">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"><spring:message code="label.confirmation"/></h4>
       </div>
       <div class="modal-body">
-        <p><spring:message code = "label.documentTemplates.viewTemplate.confirmDelete"/></p>
+        <p><spring:message code = "label.documentTemplates.readTemplate.confirmDelete"/></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code = "label.close"/></button>
@@ -53,7 +53,7 @@ ${portal.toolkit()}
 </div><!-- /.modal -->
 <%-- NAVIGATION --%>
 <div class="well well-sm" style="display:inline-block">
-	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/managetemplates"  ><spring:message code="label.event.back" /></a>
+	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplates"  ><spring:message code="label.event.back" /></a>
 |&nbsp;&nbsp;				<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;<a class="" href="#" data-toggle="modal"
 data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 				|&nbsp;&nbsp;

@@ -28,7 +28,7 @@ ${portal.toolkit()}
 
 <%-- TITLE --%>
 <div class="page-header">
-	<h1><spring:message code="label.documentTemplates.manageTemplates" />
+	<h1><spring:message code="label.documentTemplates.searchTemplates" />
 		<small></small>
 	</h1>
 </div>
@@ -74,7 +74,7 @@ ${portal.toolkit()}
 
 <script type="text/javascript">
 	  function processDelete(externalId) {
-	    url = "${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/managetemplatesmanageTemplates/delete/" + externalId;
+	    url = "${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplatessearchTemplates/delete/" + externalId;
 	    $("#deleteForm").attr("action", url);
 	    $('#deleteModal').modal('toggle')
 	  }
@@ -90,7 +90,7 @@ ${portal.toolkit()}
         <h4 class="modal-title"><spring:message code="label.confirmation"/></h4>
       </div>
       <div class="modal-body">
-        <p><spring:message code = "label.documentTemplates.manageTemplates.confirmDelete"/></p>
+        <p><spring:message code = "label.documentTemplates.searchTemplates.confirmDelete"/></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code = "label.close"/></button>
@@ -158,8 +158,8 @@ ${portal.toolkit()}
 
 
 <c:choose>
-	<c:when test="${not empty managetemplatesResultsDataSet}">
-		<table id="managetemplatesTable" class="table responsive table-bordered table-hover">
+	<c:when test="${not empty searchtemplatesResultsDataSet}">
+		<table id="searchtemplatesTable" class="table responsive table-bordered table-hover">
 			<thead>
 				<tr>
 					<%--!!!  Field names here --%>
@@ -190,8 +190,8 @@ ${portal.toolkit()}
 </c:choose>
 
 <script>
-	var managetemplatesDataSet = [
-			<c:forEach items="${managetemplatesResultsDataSet}" var="searchResult">
+	var searchtemplatesDataSet = [
+			<c:forEach items="${searchtemplatesResultsDataSet}" var="searchResult">
 				<%-- Field access / formatting  here CHANGE_ME --%>
 				{
 				"DT_RowId" : '<c:out value='${searchResult.externalId}'/>',
@@ -203,7 +203,7 @@ ${portal.toolkit()}
 "degree" : "<c:out value='${searchResult.degree}'/>",
 "programconclusion" : "<c:out value='${searchResult.programConclusion}'/>",
 "actions" :
-" <a  class=\"btn btn-default btn-xs\" href=\"${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/managetemplatesmanageTemplates/view/${searchResult.externalId}\"><spring:message code='label.view'/></a>" +
+" <a  class=\"btn btn-default btn-xs\" href=\"${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplatessearchTemplates/view/${searchResult.externalId}\"><spring:message code='label.view'/></a>" +
                 "" 
 			},
             </c:forEach>
@@ -234,7 +234,7 @@ ${portal.toolkit()}
 	
 
 
-		var table = $('#managetemplatesTable').DataTable({language : {
+		var table = $('#searchtemplatesTable').DataTable({language : {
 			url : "${datatablesI18NUrl}",			
 		},
 		"columns": [
@@ -253,7 +253,7 @@ ${portal.toolkit()}
 		//54
 		               { "width": "54px", "targets": 7 } 
 		             ],
-		"data" : managetemplatesDataSet,
+		"data" : searchtemplatesDataSet,
 		//Documentation: https://datatables.net/reference/option/dom
 //"dom": '<"col-sm-6"l><"col-sm-3"f><"col-sm-3"T>rtip', //FilterBox = YES && ExportOptions = YES
 "dom": 'T<"clear">lrtip', //FilterBox = NO && ExportOptions = YES
@@ -265,7 +265,7 @@ ${portal.toolkit()}
 		});
 		table.columns.adjust().draw();
 		
-		  $('#managetemplatesTable tbody').on( 'click', 'tr', function () {
+		  $('#searchtemplatesTable tbody').on( 'click', 'tr', function () {
 		        $(this).toggleClass('selected');
 		    } );
 		  
