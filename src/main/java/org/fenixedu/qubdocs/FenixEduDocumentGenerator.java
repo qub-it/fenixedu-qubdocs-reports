@@ -41,16 +41,15 @@ import org.fenixedu.qubdocs.util.reports.helpers.MoneyHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.NumbersHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.StringsHelper;
 
-import com.qubit.terra.docs.core.DocumentGenerator;
 import com.qubit.terra.docs.core.DocumentTemplateEngine;
 import com.qubit.terra.docs.util.IReportDataProvider;
 import com.qubit.terra.docs.util.ReportGenerationException;
 import com.qubit.terra.docs.util.ReportGenerator;
 
 public class FenixEduDocumentGenerator extends ReportGenerator {
-	
-	protected FenixEduDocumentGenerator(final DocumentTemplate documentTemplate, final String mimeType) {
-        this(documentTemplate.getCurrentVersion().getContent(), mimeType);
+
+    protected FenixEduDocumentGenerator(final DocumentTemplate documentTemplate, final String mimeType) {
+        this(documentTemplate.getDocumentTemplateFile().getContent(), mimeType);
     }
 
     protected FenixEduDocumentGenerator(final byte[] template, final String mimeType) {
@@ -88,5 +87,4 @@ public class FenixEduDocumentGenerator extends ReportGenerator {
             throw new ReportGenerationException("Error finding template", e);
         }
     }
-
 }

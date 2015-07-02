@@ -197,13 +197,13 @@ ${portal.toolkit()}
 				"DT_RowId" : '<c:out value='${searchResult.externalId}'/>',
 "active" : "<c:if test="${searchResult.active}"><spring:message code="label.true" /></c:if><c:if test="${not searchResult.active}"><spring:message code="label.false" /></c:if>",
 "name" : "<c:out value='${searchResult.name.content}'/>",
-"servicerequesttype" : "<c:out value='${searchResult.serviceRequestType}'/>",
+"servicerequesttype" : "<c:out value='${searchResult.serviceRequestType.name.content}'/>",
 "custom" : "<c:if test="${searchResult.custom}"><spring:message code="label.true" /></c:if><c:if test="${not searchResult.custom}"><spring:message code="label.false" /></c:if>",
-"degreetype" : "<c:out value='${searchResult.degreeType}'/>",
-"degree" : "<c:out value='${searchResult.degree}'/>",
-"programconclusion" : "<c:out value='${searchResult.programConclusion}'/>",
+"degreetype" : "<c:out value='${searchResult.degreeType.name.content}'/>",
+"degree" : "<c:out value='${searchResult.degree.presentationNameI18N.content}'/>",
+"programconclusion" : "<c:out value='${searchResult.programConclusion.name.content}'/>",
 "actions" :
-" <a  class=\"btn btn-default btn-xs\" href=\"${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplatessearchTemplates/view/${searchResult.externalId}\"><spring:message code='label.view'/></a>" +
+" <a  class=\"btn btn-default btn-xs\" href=\"${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplates/view/${searchResult.externalId}\"><spring:message code='label.view'/></a>" +
                 "" 
 			},
             </c:forEach>
@@ -216,7 +216,7 @@ ${portal.toolkit()}
 	serviceRequestType_options = [
 		<c:forEach items="${AcademicServiceRequestTemplate_serviceRequestType_options}" var="element"> 
 			{
-				text :"<c:out value='${element}'/>", 
+				text :"<c:out value='${element.name.content}'/>", 
 				id : "<c:out value='${element.externalId}'/>"
 			},
 		</c:forEach>

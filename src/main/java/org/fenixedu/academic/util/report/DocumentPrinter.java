@@ -56,6 +56,7 @@ import org.fenixedu.qubdocs.academic.documentRequests.providers.StandaloneCurric
 import org.fenixedu.qubdocs.base.providers.PersonReportDataProvider;
 import org.fenixedu.qubdocs.base.providers.UserReportDataProvider;
 import org.fenixedu.qubdocs.domain.DocumentPrinterConfiguration;
+import org.fenixedu.qubdocs.domain.serviceRequests.AcademicServiceRequestTemplate;
 import org.joda.time.LocalDate;
 
 import com.qubit.terra.docs.core.DocumentTemplateEngine;
@@ -70,14 +71,17 @@ public class DocumentPrinter implements ReportPrinter {
         if (reportDescription instanceof AdministrativeOfficeDocument) {
             final AdministrativeOfficeDocument document = (AdministrativeOfficeDocument) reportDescription;
 
-            final FenixEduDocumentGenerator generator =
-                    FenixEduDocumentGenerator.create("/home/diogo/workspace_fenixedu/fenixedu-qubdocs-reports/src/main/resources/META-INF/templates/certidaoInscricao.odt",
-                            FenixEduDocumentGenerator.PDF);
             final DocumentRequest documentRequest = DocumentRequestReader.toDocumentRequest(document);
             final ExecutionYear executionYear = documentRequest.getExecutionYear();
             final Registration registration = documentRequest.getRegistration();
             final CycleType requestedCycle = requestedCycle(registration, documentRequest);
             final ProgramConclusion programConclusion = programConclusion(registration, documentRequest);
+
+            final FenixEduDocumentGenerator generator =
+                    FenixEduDocumentGenerator.create(AcademicServiceRequestTemplate.findTemplateFor(
+                            documentRequest.getLanguage(), documentRequest.getServiceRequestType(),
+                            documentRequest.getDegreeType(), programConclusion, documentRequest.getDegree()),
+                            FenixEduDocumentGenerator.PDF);
 
             generator.registerDataProvider(new PersonReportDataProvider(documentRequest.getStudent().getPerson()));
             generator.registerDataProvider(new RegistrationDataProvider(registration));
@@ -147,14 +151,14 @@ public class DocumentPrinter implements ReportPrinter {
     }
 
     private ProgramConclusion programConclusion(final Registration registration, final DocumentRequest documentRequest) {
-        if(documentRequest instanceof RegistryDiplomaRequest) {
+        if (documentRequest instanceof RegistryDiplomaRequest) {
             return ((RegistryDiplomaRequest) documentRequest).getProgramConclusion();
-        } else if(documentRequest instanceof DiplomaRequest) {
+        } else if (documentRequest instanceof DiplomaRequest) {
             return ((DiplomaRequest) documentRequest).getProgramConclusion();
-        } else if(documentRequest instanceof DegreeFinalizationCertificateRequest) {
+        } else if (documentRequest instanceof DegreeFinalizationCertificateRequest) {
             return ((DegreeFinalizationCertificateRequest) documentRequest).getProgramConclusion();
         }
-    
+
         return null;
     }
 

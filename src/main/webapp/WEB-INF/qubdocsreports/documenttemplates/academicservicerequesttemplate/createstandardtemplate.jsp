@@ -71,7 +71,7 @@ ${portal.toolkit()}
 				</div>	
 			</c:if>
 
-<form method="post" class="form-horizontal">
+<form method="post" class="form-horizontal" enctype="multipart/form-data">
 <div class="panel panel-default">
   <div class="panel-body">
 <div class="form-group row">
@@ -87,14 +87,25 @@ ${portal.toolkit()}
 <div class="col-sm-10">
 	<input id="academicServiceRequestTemplate_description" class="form-control" type="text" name="description"  bennu-localized-string value='${not empty param.description ? param.description : "{}" } '/> 
 </div>
-</div>		
+</div>
+<!--
 <div class="form-group row">
-<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.language"/></div> 
-
-<div class="col-sm-10">
-	<input id="academicServiceRequestTemplate_language" class="form-control" type="text" name="language"  value='<c:out value='${not empty param.language ? param.language : academicServiceRequestTemplate.language }'/>'  required />
-</div>	
-</div>		
+<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.language"/></div>
+	<div class="col-sm-10">
+		<input id="academicServiceRequestTemplate_language" class="form-control" type="text" name="language"  value='<c:out value='${not empty param.language ? param.language : academicServiceRequestTemplate.language }'/>'  required />
+	</div>	
+</div>
+-->
+<div class="form-group row">
+	<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.language"/></div> 
+	<div class="col-sm-2">
+		<select id="academicServiceRequestTemplate_language" class="form-control" name="language">
+			<c:forEach items="${AcademicServiceRequestTemplate_language_options}" var="element">
+				<option value="${element.language}_${element.country}">${element.displayLanguage}</option>
+			</c:forEach>
+		</select>
+	</div>
+</div>
 <div class="form-group row">
 <div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.serviceRequestType"/></div> 
 
@@ -126,15 +137,21 @@ ${portal.toolkit()}
 				</div>
 </div>		
 <div class="form-group row">
-<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.programConclusion"/></div> 
-
-<div class="col-sm-4">
-	<%-- Relation to side 1 drop down rendered in input --%>
-		 <select id="academicServiceRequestTemplate_programConclusion" class="js-example-basic-single" name="programconclusion">
-		 <option value=""></option> <%-- empty option remove it if you don't want to have it or give it a label CHANGE_ME --%> 
+	<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.programConclusion"/></div>
+	<div class="col-sm-4">
+		<%-- Relation to side 1 drop down rendered in input --%>
+		<select id="academicServiceRequestTemplate_programConclusion" class="js-example-basic-single" name="programconclusion">
+			<option value=""></option> <%-- empty option remove it if you don't want to have it or give it a label CHANGE_ME --%> 
 		</select>
-				</div>
-</div>		
+	</div>
+</div>
+<div class="form-group row">
+<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.documentTemplateFile"/></div>
+	<div class="col-sm-4">
+		<input type="file" name="documentTemplateFile" accept=".odt, application/vnd.oasis.opendocument.text" required />
+	</div>	
+</div>
+
   </div>
   <div class="panel-footer">
 		<input type="submit" class="btn btn-default" role="button" value="<spring:message code="label.submit" />"/>
@@ -150,7 +167,7 @@ $(document).ready(function() {
 	serviceRequestType_options = [
 		<c:forEach items="${AcademicServiceRequestTemplate_serviceRequestType_options}" var="element"> 
 			{
-				text : "<c:out value='${element}'/>",  
+				text : "<c:out value='${element.name.content}'/>",  
 				id : "<c:out value='${element.externalId}'/>"
 			},
 		</c:forEach>

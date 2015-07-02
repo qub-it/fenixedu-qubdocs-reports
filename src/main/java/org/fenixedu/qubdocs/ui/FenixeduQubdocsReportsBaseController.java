@@ -28,13 +28,29 @@
 package org.fenixedu.qubdocs.ui;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import java.util.ArrayList;
 
+import org.fenixedu.bennu.BeanConverterService;
+import org.fenixedu.bennu.DomainObjectAdapter;
+import org.fenixedu.bennu.IBean;
+import org.fenixedu.bennu.LocalizedStringAdapter;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import pt.ist.fenixframework.DomainObject;
+
+import com.fatboyindustrial.gsonjodatime.Converters;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 
 public class FenixeduQubdocsReportsBaseController {
 
@@ -99,32 +115,22 @@ public class FenixeduQubdocsReportsBaseController {
         // ....
     }
 
-    /*
-    
-    
-        @InitBinder
+    @InitBinder
     public void initBinder(WebDataBinder binder) {
-    	GenericConversionService conversionService = (GenericConversionService) binder.getConversionService();
-    	conversionService.addConverter(new BeanConverterService());
-    //        			conversionService.addConverter(new CountryConverterService());
-    //        			conversionService.addConverter(new DistrictConverterService());
-    //        			conversionService.addConverter(new MunicipalityConverterService());
+        GenericConversionService conversionService = (GenericConversionService) binder.getConversionService();
+        conversionService.addConverter(new BeanConverterService());
     }
 
     protected String getBeanJson(IBean bean) {
-    	GsonBuilder builder = new GsonBuilder();
-    	builder.registerTypeAdapter(LocalizedString.class, new LocalizedStringAdapter());
-    //        			builder.registerTypeAdapter(Country.class, new CountryAdapter());
-    //        			builder.registerTypeAdapter(District.class, new DistrictAdapter());
-    //        			builder.registerTypeAdapter(Municipality.class, new MunicipalityAdapter());
-    	builder.registerTypeHierarchyAdapter(DomainObject.class, new DomainObjectAdapter());
-    	Gson gson = Converters.registerDateTime(builder).create();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(LocalizedString.class, new LocalizedStringAdapter());
+        builder.registerTypeHierarchyAdapter(DomainObject.class, new DomainObjectAdapter());
+        Gson gson = Converters.registerDateTime(builder).create();
 
-    	// CREATING JSON TREE TO ADD CLASSNAME ATTRIBUTE MUST DO THIS AUTOMAGICALLY
-    	JsonElement jsonTree = gson.toJsonTree(bean);
-    	jsonTree.getAsJsonObject().addProperty("classname", bean.getClass().getName());
-    	return jsonTree.toString();
+        // CREATING JSON TREE TO ADD CLASSNAME ATTRIBUTE MUST DO THIS AUTOMAGICALLY
+        JsonElement jsonTree = gson.toJsonTree(bean);
+        jsonTree.getAsJsonObject().addProperty("classname", bean.getClass().getName());
+        return jsonTree.toString();
     }
-    */
 
 }

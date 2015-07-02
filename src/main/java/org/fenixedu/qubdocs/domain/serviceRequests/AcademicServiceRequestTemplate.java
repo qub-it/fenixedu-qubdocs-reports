@@ -30,12 +30,14 @@ package org.fenixedu.qubdocs.domain.serviceRequests;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.degree.DegreeType;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
 import org.fenixedu.academic.domain.util.Email;
+import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.LocalizedString;
 
 import pt.ist.fenixframework.Atomic;
@@ -63,9 +65,16 @@ public class AcademicServiceRequestTemplate extends AcademicServiceRequestTempla
         setProgramConclusion(null);
         setDegreeType(null);
         setServiceRequestType(null);
+        setUpdater(null);
+        setCreator(null);
         setBennu(null);
 
         deleteDomainObject();
+    }
+
+    public static Stream<AcademicServiceRequestTemplate> findAll() {
+        return Bennu.getInstance().getDocumentTemplatesSet().stream().filter(dt -> dt instanceof AcademicServiceRequestTemplate)
+                .map(AcademicServiceRequestTemplate.class::cast);
     }
 
     /*

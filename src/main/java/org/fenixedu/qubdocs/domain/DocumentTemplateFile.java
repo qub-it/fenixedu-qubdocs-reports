@@ -39,37 +39,37 @@ import com.qubit.terra.docs.core.IDocumentTemplateVersion;
 
 import pt.ist.fenixframework.Atomic;
 
-public class DocumentTemplateFile extends DocumentTemplateFile_Base implements IDocumentTemplateVersion{
-	
-	private static final String ROOT_DIR = "DocumentTemplate";
-    
-	protected DocumentTemplateFile() {
+public class DocumentTemplateFile extends DocumentTemplateFile_Base implements IDocumentTemplateVersion {
+
+    private static final String ROOT_DIR = "DocumentTemplate";
+
+    protected DocumentTemplateFile() {
         super();
         setBennu(Bennu.getInstance());
     }
-    
+
     protected DocumentTemplateFile(final DocumentTemplate documentTemplate, final String filename, final byte[] content) {
         this();
         init(filename, filename, content);
         setDocumentTemplate(documentTemplate);
         setUploader(Authenticate.getUser());
     }
-    
+
     @Override
     public void delete() {
-    	setUploader(null);
-    	setDocumentTemplate(null);
-    	super.delete();
+        setUploader(null);
+        setDocumentTemplate(null);
+        setBennu(null);
+        super.delete();
     }
-    
+
     @Override
-	public boolean isAccessible(User user) {
-		return AcademicAccessRule.isMember(user, AcademicOperationType.MANAGE_DOCUMENTS, null, null);
-	}
-    
+    public boolean isAccessible(User user) {
+        return AcademicAccessRule.isMember(user, AcademicOperationType.MANAGE_DOCUMENTS, null, null);
+    }
+
     @Atomic
-    public static DocumentTemplateFile create(final DocumentTemplate documentTemplate, final String filename,
-            final byte[] content) {
+    public static DocumentTemplateFile create(final DocumentTemplate documentTemplate, final String filename, final byte[] content) {
         return new DocumentTemplateFile(documentTemplate, filename, content);
     }
 }

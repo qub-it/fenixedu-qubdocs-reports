@@ -122,7 +122,7 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 <tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.serviceRequestType"/></th> 
 	<td>
-		<c:out value='${academicServiceRequestTemplate.serviceRequestType}'/>
+		<c:out value='${academicServiceRequestTemplate.serviceRequestType.name.content}'/>
 	</td> 
 </tr>
 <tr>
@@ -134,25 +134,25 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 <tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.degreeType"/></th> 
 	<td>
-		<c:out value='${academicServiceRequestTemplate.degreeType}'/>
+		<c:out value='${academicServiceRequestTemplate.degreeType.name.content}'/>
 	</td> 
 </tr>
 <tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.degree"/></th> 
 	<td>
-		<c:out value='${academicServiceRequestTemplate.degree}'/>
+		<c:out value='${academicServiceRequestTemplate.degree.presentationNameI18N.content}'/>
 	</td> 
 </tr>
 <tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.programConclusion"/></th> 
 	<td>
-		<c:out value='${academicServiceRequestTemplate.programConclusion}'/>
+		<c:out value='${academicServiceRequestTemplate.programConclusion.name.content}'/>
 	</td> 
 </tr>
 <tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.documentTemplateFile"/></th> 
 	<td>
-		<c:out value='${academicServiceRequestTemplate.documentTemplateFile}'/>
+		<c:out value='${academicServiceRequestTemplate.documentTemplateFile.displayName}'/>
 	</td> 
 </tr>
 </tbody>
