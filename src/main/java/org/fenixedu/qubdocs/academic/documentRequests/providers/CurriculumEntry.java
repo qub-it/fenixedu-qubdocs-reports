@@ -36,11 +36,13 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.academic.domain.CompetenceCourse;
+import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
+import org.fenixedu.academic.domain.degreeStructure.Context;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
@@ -72,9 +74,9 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public LocalizedString getName() {
-        if ((iCurriculumEntry instanceof IEnrolment) && ((IEnrolment) iCurriculumEntry).isEnrolment()) {
-            return ((Enrolment) iCurriculumEntry).getCurricularCourse().getNameI18N(
-                    iCurriculumEntry.getExecutionPeriod()).toLocalizedString();
+        if (iCurriculumEntry instanceof IEnrolment && ((IEnrolment) iCurriculumEntry).isEnrolment()) {
+            return ((Enrolment) iCurriculumEntry).getCurricularCourse().getNameI18N(iCurriculumEntry.getExecutionPeriod())
+                    .toLocalizedString();
         }
 
         return iCurriculumEntry.getName().toLocalizedString();
@@ -181,13 +183,36 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
         return null;
     }
-    
-    public String getCode(){
+
+    public String getCode() {
         return getCompetenceCourse().getCode();
     }
-    
-    public ExecutionSemester getExecutionSemester(){
+
+    public ExecutionSemester getExecutionSemester() {
         return iCurriculumEntry.getExecutionPeriod();
+    }
+
+    public int getCurricularYear() {
+        if (isIEnrolment() && !isExternal()) {
+            return findCurricularYear((Enrolment) iCurriculumEntry);
+        }
+
+        throw new RuntimeException("how to handle?");
+    }
+
+    private Integer findCurricularYear(final Enrolment enrolment) {
+        List<Integer> possibleCurricularYears = Lists.newArrayList();
+
+        CurricularCourse curricularCourse = enrolment.getCurricularCourse();
+        Set<Context> childContextsSet = enrolment.getCurriculumGroup().getDegreeModule().getChildContextsSet();
+
+        for (Context context : childContextsSet) {
+            if (context.getChildDegreeModule() == curricularCourse && context.isValid(getExecutionSemester())) {
+                possibleCurricularYears.add(context.getCurricularYear());
+            }
+        }
+
+        return !possibleCurricularYears.isEmpty() ? Collections.min(possibleCurricularYears) : -1;
     }
 
     public String getGrade() {
@@ -208,12 +233,11 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public LocalDate getApprovementDate() {
-        
+
         return getICurriculumEntry().getApprovementDate().toLocalDate();
-        
+
     }
-    
-    
+
     protected boolean isCurriculumLine() {
         return iCurriculumEntry instanceof CurriculumLine;
     }
@@ -255,15 +279,15 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public boolean isExtraCurricular() {
-        return (iCurriculumEntry instanceof Enrolment) && ((Enrolment) iCurriculumEntry).isExtraCurricular();
+        return iCurriculumEntry instanceof Enrolment && ((Enrolment) iCurriculumEntry).isExtraCurricular();
     }
 
     public boolean isPropedeutics() {
-        return (iCurriculumEntry instanceof Enrolment) && ((Enrolment) iCurriculumEntry).isPropaedeutic();
+        return iCurriculumEntry instanceof Enrolment && ((Enrolment) iCurriculumEntry).isPropaedeutic();
     }
 
     public boolean isStandalone() {
-        return (iCurriculumEntry instanceof Enrolment) && ((Enrolment) iCurriculumEntry).isPropaedeutic();
+        return iCurriculumEntry instanceof Enrolment && ((Enrolment) iCurriculumEntry).isPropaedeutic();
     }
 
     public String getRemarkNumbers() {
@@ -271,6 +295,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
         final List<String> list =
                 Lists.newArrayList(Lists.transform(Lists.newArrayList(remarkEntries), new Function<RemarkEntry, String>() {
+                    @Override
                     public String apply(final RemarkEntry entry) {
                         return String.format("%s)", entry.remarkNumber);
                     }
@@ -283,7 +308,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && (obj instanceof CurriculumEntry)
+        return obj != null && obj instanceof CurriculumEntry
                 && getICurriculumEntry() == ((CurriculumEntry) obj).getICurriculumEntry();
     }
 
@@ -327,7 +352,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 //        }
 //
 //        return ectsGrade.getValue();
-        
+
         return null;
     }
 
@@ -346,6 +371,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         Set<CurriculumEntry> result = Sets.newHashSet();
 
         result.addAll(Collections2.transform(entries, new Function<ICurriculumEntry, CurriculumEntry>() {
+            @Override
             public CurriculumEntry apply(ICurriculumEntry entry) {
                 return new CurriculumEntry(registration, entry, remarksDataProvider);
             }
@@ -359,8 +385,10 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
             @Override
             public int compare(CurriculumEntry o1, CurriculumEntry o2) {
-                String nameO1 = o1.getName().getContent(locale) != null ? o1.getName().getContent(locale) : o1.getName().getContent();
-                String nameO2 = o2.getName().getContent(locale) != null ? o2.getName().getContent(locale) : o2.getName().getContent();
+                String nameO1 =
+                        o1.getName().getContent(locale) != null ? o1.getName().getContent(locale) : o1.getName().getContent();
+                String nameO2 =
+                        o2.getName().getContent(locale) != null ? o2.getName().getContent(locale) : o2.getName().getContent();
 
                 int result = nameO1.compareTo(nameO2);
 

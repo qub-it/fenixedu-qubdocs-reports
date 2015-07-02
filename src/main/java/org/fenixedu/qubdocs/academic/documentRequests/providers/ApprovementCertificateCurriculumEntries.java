@@ -32,23 +32,21 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.ApprovementMobilityCertificateRequest;
+import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 
-
 public class ApprovementCertificateCurriculumEntries extends CurriculumEntriesDataProvider {
 
     protected static final String KEY = "approvementCertificateCurriculumEntries";
 
-    private ApprovementMobilityCertificateRequest certificateRequest;
+    private DocumentRequest certificateRequest;
 
-    public ApprovementCertificateCurriculumEntries(final ApprovementMobilityCertificateRequest certificateRequest,
-            final Registration registration, final CycleType cycleType,
-            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale) {
+    public ApprovementCertificateCurriculumEntries(final DocumentRequest certificateRequest, final Registration registration,
+            final CycleType cycleType, final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale) {
         super(registration, cycleType, remarksDataProvider, locale);
 
         this.certificateRequest = certificateRequest;
@@ -60,11 +58,12 @@ public class ApprovementCertificateCurriculumEntries extends CurriculumEntriesDa
     }
 
     // TODO
+    @Override
     protected Set<CurriculumEntry> getCurriculumEntries() {
 
         if (curriculumEntries == null) {
 
-            final Set<ICurriculumEntry> entries = Sets.newHashSet(/*certificateRequest.getEntries*/);
+            final Set<ICurriculumEntry> entries = Sets.newHashSet(certificateRequest.getApprovedCurriculumEntries());
 
             curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
 
