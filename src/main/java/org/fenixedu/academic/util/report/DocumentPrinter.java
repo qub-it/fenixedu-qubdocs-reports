@@ -30,7 +30,6 @@ package org.fenixedu.academic.util.report;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.ApprovementMobilityCertificateRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DegreeFinalizationCertificateRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DiplomaRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
@@ -120,16 +119,19 @@ public class DocumentPrinter implements ReportPrinter {
                                 registration), documentRequest.getLanguage(), new LocalDate()));
             }
 
-            if (documentRequest instanceof ApprovementMobilityCertificateRequest) {
-                final ApprovementMobilityCertificateRequest approvementRequest =
-                        (ApprovementMobilityCertificateRequest) documentRequest;
+//            if (documentRequest instanceof ApprovementMobilityCertificateRequest) {
+//                final ApprovementMobilityCertificateRequest approvementRequest =
+//                        (ApprovementMobilityCertificateRequest) documentRequest;
+//
+//                final ApprovementCertificateCurriculumEntries entriesDataProvider =
+//                        new ApprovementCertificateCurriculumEntries(approvementRequest, registration, requestedCycle,
+//                                new CurriculumEntryRemarksDataProvider(registration), approvementRequest.getLanguage());
+//
+//                generator.registerDataProvider(entriesDataProvider);
+//            }
 
-                final ApprovementCertificateCurriculumEntries entriesDataProvider =
-                        new ApprovementCertificateCurriculumEntries(approvementRequest, registration, requestedCycle,
-                                new CurriculumEntryRemarksDataProvider(registration), approvementRequest.getLanguage());
-
-                generator.registerDataProvider(entriesDataProvider);
-            }
+            generator.registerDataProvider(new ApprovementCertificateCurriculumEntries(documentRequest, registration,
+                    requestedCycle, new CurriculumEntryRemarksDataProvider(registration), documentRequest.getLanguage()));
 
             if (documentRequest instanceof DegreeFinalizationCertificateRequest) {
                 generator.registerDataProvider(new CurriculumEntriesDataProvider(registration, requestedCycle,
