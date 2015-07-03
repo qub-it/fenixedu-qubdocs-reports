@@ -73,8 +73,8 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
     public RedirectView create(
             @PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan,
             @RequestParam(value = "enrolment", required = false) org.fenixedu.academic.domain.Enrolment enrolment,
-            @RequestParam(value = "availabledate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") org.joda.time.LocalDate availableDate,
-            @RequestParam(value = "examdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ") org.joda.time.LocalDate examDate,
+            @RequestParam(value = "availabledate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") org.joda.time.LocalDate availableDate,
+            @RequestParam(value = "examdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") org.joda.time.LocalDate examDate,
             @RequestParam(value = "grade", required = false) String grade,
             @RequestParam(value = "type", required = false) org.fenixedu.academic.domain.EvaluationSeason type,
             Model model) {
