@@ -128,7 +128,7 @@ ${portal.toolkit()}
 
 				<div class="col-sm-10">
 					<input id="looseEvaluationBean_availableDate" class="form-control"
-						type="text" name="availabledate" bennu-datetime
+						type="text" name="availabledate" bennu-date
 						value="${not empty param.availabledate ? param.availabledate : looseEvaluationBean.availableDate }" />
 				</div>
 			</div>
@@ -139,7 +139,7 @@ ${portal.toolkit()}
 
 				<div class="col-sm-10">
 					<input id="looseEvaluationBean_examDate" class="form-control"
-						type="text" name="examdate" bennu-datetime
+						type="text" name="examdate" bennu-date
 						value="${not empty param.examdate ? param.examdate : looseEvaluationBean.examDate }" />
 				</div>
 			</div>
@@ -165,7 +165,7 @@ ${portal.toolkit()}
 						<option value=""></option>
 						<%-- empty option remove it if you don't want to have it or give it a label --%>
 						<c:forEach items="${typeValues}" var="field">
-							<option value="${field}">${field}</option>
+							<option value="${field.externalId}">${field.name.content}</option>
 						</c:forEach>
 					</select>
 					<script>
