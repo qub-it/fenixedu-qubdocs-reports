@@ -27,14 +27,13 @@
 
 package org.fenixedu.qubdocs.util.reports.helpers;
 
-import org.fenixedu.academic.util.Money;
-
+import org.fenixedu.academic.domain.treasury.IAcademicTreasuryEvent;
 import com.qubit.terra.docs.util.helpers.IDocumentHelper;
 
 public class MoneyHelper implements IDocumentHelper {
 
-    public String asString(final Money money) {
-        return money.toPlainString();
+    public String total(final IAcademicTreasuryEvent event) {
+        return event.formatMoney(event.getAmountToPay());
     }
 
 }

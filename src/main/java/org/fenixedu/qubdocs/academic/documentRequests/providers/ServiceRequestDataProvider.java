@@ -29,6 +29,9 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
+import org.fenixedu.academic.domain.treasury.IAcademicServiceRequestAndAcademicTaxTreasuryEvent;
+import org.fenixedu.academic.domain.treasury.IAcademicTreasuryEvent;
+import org.fenixedu.academic.domain.treasury.TreasuryBridgeAPIFactory;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IFieldsExporter;
@@ -37,6 +40,7 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 public class ServiceRequestDataProvider implements IReportDataProvider {
 
     protected static final String KEY = "serviceRequest";
+    protected static final String KEY_HAS_PRICETAG = "hasPricetag";
     protected static final String KEY_FOR_PRICE = "serviceRequestPrice";
     protected static final String KEY_EXECUTION_YEAR = "executionYearName";
     protected static final String KEY_PREVIOUS_EXECUTION_YEAR = "previousExecutionYearName";
@@ -55,7 +59,8 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
 
     @Override
     public boolean handleKey(final String key) {
-        return KEY.equals(key) || KEY_FOR_PRICE.equals(key) || KEY_EXECUTION_YEAR.equals(key) || KEY_PREVIOUS_EXECUTION_YEAR.equals(key);
+        return KEY.equals(key) || KEY_HAS_PRICETAG.equals(key) || KEY_FOR_PRICE.equals(key) || KEY_EXECUTION_YEAR.equals(key)
+                || KEY_PREVIOUS_EXECUTION_YEAR.equals(key);
     }
 
     @Override
@@ -63,15 +68,12 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
 
         if (KEY.equals(key)) {
             return documentRequest;
+        } else if (KEY_HAS_PRICETAG.equals(key)) {
+            final IAcademicServiceRequestAndAcademicTaxTreasuryEvent academicTreasuryEvent =
+                    TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(documentRequest);
+            return (academicTreasuryEvent != null && academicTreasuryEvent.isWithDebitEntry());
         } else if (KEY_FOR_PRICE.equals(key)) {
-//            final IAcademicTreasuryEvent academicTreasuryEvent = TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(documentRequest);
-//            
-//            if(academicTreasuryEvent == null || !academicTreasuryEvent.isWithDebitEntry()) {
-//                return IAcademicTreasuryEvent.zeroValuesEvent(documentRequest.getServiceRequestType().getName());
-//            }
-//            
-//            return academicTreasuryEvent;
-            return null;
+            return TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(documentRequest);
         } else if (KEY_EXECUTION_YEAR.equals(key)) {
             return executionYear.getName();
         } else if (KEY_PREVIOUS_EXECUTION_YEAR.equals(key)) {
@@ -81,10 +83,10 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
         return null;
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void registerFieldsMetadata(IFieldsExporter exporter) {
+        // TODO Auto-generated method stub
+
+    }
 
 }
