@@ -89,11 +89,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
 
     public static final String CONTROLLER_URL = "/qubdocsreports/documenttemplates/academicservicerequesttemplate";
 
-    private static final List<DocumentRequestType> SUPPORTED_DOCUMENTS = Arrays.asList(new DocumentRequestType[] {
-            DocumentRequestType.SCHOOL_REGISTRATION_DECLARATION, DocumentRequestType.ENROLMENT_DECLARATION,
-            DocumentRequestType.SCHOOL_REGISTRATION_CERTIFICATE, DocumentRequestType.ENROLMENT_CERTIFICATE,
-            DocumentRequestType.APPROVEMENT_CERTIFICATE, DocumentRequestType.DEGREE_FINALIZATION_CERTIFICATE });
-
     //
 
     @RequestMapping
@@ -149,9 +144,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         model.addAttribute("searchtemplatesResultsDataSet", searchtemplatesResultsDataSet);
         model.addAttribute(
                 "AcademicServiceRequestTemplate_serviceRequestType_options",
-                org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findAll()
-                        .filter(s -> SUPPORTED_DOCUMENTS.contains(s.getDocumentRequestType()))
-                        .sorted((s, next_s) -> s.getName().compareTo(next_s.getName())).collect(Collectors.toList()));
+                org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
+                        .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
         return "qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplates";
     }
 
@@ -228,9 +222,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         model.addAttribute("AcademicServiceRequestTemplate_language_options", CoreConfiguration.supportedLocales());
         model.addAttribute(
                 "AcademicServiceRequestTemplate_serviceRequestType_options",
-                org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findAll()
-                        .filter(s -> SUPPORTED_DOCUMENTS.contains(s.getDocumentRequestType()))
-                        .sorted((s, next_s) -> s.getName().compareTo(next_s.getName())).collect(Collectors.toList()));
+                org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
+                        .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
         model.addAttribute("AcademicServiceRequestTemplate_degreeType_options", DegreeType.all().collect(Collectors.toList()));
         model.addAttribute("AcademicServiceRequestTemplate_degree_options", new ArrayList<org.fenixedu.academic.domain.Degree>()); // CHANGE_ME - MUST DEFINE RELATION
         //model.addAttribute("AcademicServiceRequestTemplate_degree_options", org.fenixedu.academic.domain.Degree.findAll()); // CHANGE_ME - MUST DEFINE RELATION
@@ -241,10 +234,9 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         //IF ANGULAR, initialize the Bean
         AcademicServiceRequestTemplateBean bean = new AcademicServiceRequestTemplateBean();
         bean.setLanguageDataSource(new ArrayList<Locale>(CoreConfiguration.supportedLocales()));
-        bean.setServiceRequestTypeDataSource(ServiceRequestType.findAll()
-                .filter(s -> SUPPORTED_DOCUMENTS.contains(s.getDocumentRequestType()))
-                .sorted((s, next_s) -> s.getName().compareTo(next_s.getName())).collect(Collectors.toList()));
-        bean.setDegreeTypeDataSource(DegreeType.all().sorted((dt, next_dt) -> dt.compareTo(next_dt)).collect(Collectors.toList()));
+        bean.setServiceRequestTypeDataSource(ServiceRequestType.findActive()
+                .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
+        bean.setDegreeTypeDataSource(DegreeType.all().sorted().collect(Collectors.toList()));
         this.setAcademicServiceRequestTemplateBean(bean, model);
 
         //return "qubdocsreports/documenttemplates/academicservicerequesttemplate/createstandardtemplate";
