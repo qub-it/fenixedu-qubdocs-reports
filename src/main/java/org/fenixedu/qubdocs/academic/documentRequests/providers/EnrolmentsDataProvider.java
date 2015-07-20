@@ -27,6 +27,8 @@
 
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
@@ -47,6 +49,8 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     protected static final String KEY = "enrolments";
     protected static final String KEY_FOR_LIST = "enrolmentsList";
     protected static final String KEY_FOR_NORMAL_ENROLMENTS = "normalEnrolmentsList";
+    protected static final String KEY_FOR_TOTAL_NORMAL_ENROLMENTS = "totalNormalEnrolments";
+    protected static final String KEY_FOR_TOTAL_NORMAL_ECTS = "totalNormalECTS";
     protected static final String KEY_FOR_EXTRA_ENROLMENTS = "extraEnrolmentsList";
     protected static final String KEY_FOR_STANDALONE_ENROLMENTS = "standaloneEnrolmentsList";
     protected static final String KEY_HAS_EXTRA_ENROLMENTS = "hasExtraEnrolments";
@@ -80,8 +84,9 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     @Override
     public boolean handleKey(final String key) {
         return KEY.equals(key) || KEY_FOR_LIST.equals(key) || KEY_FOR_NORMAL_ENROLMENTS.equals(key)
-                || KEY_FOR_EXTRA_ENROLMENTS.equals(key) || KEY_FOR_STANDALONE_ENROLMENTS.equals(key) ||
-                KEY_HAS_EXTRA_ENROLMENTS.equals(key) || KEY_HAS_STANDALONE_ENROLMENTS.equals(key);
+                || KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)
+                || KEY_FOR_EXTRA_ENROLMENTS.equals(key) || KEY_FOR_STANDALONE_ENROLMENTS.equals(key)
+                || KEY_HAS_EXTRA_ENROLMENTS.equals(key) || KEY_HAS_STANDALONE_ENROLMENTS.equals(key);
     }
 
     @Override
@@ -92,6 +97,10 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
             return this.getCurriculumEntries();
         } else if (KEY_FOR_NORMAL_ENROLMENTS.equals(key)) {
             return this.getNormalCurriculumEntries();
+        } else if (KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key)) {
+            return getTotalNormalCurriculumEntries();
+        } else if (KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)) {
+            return getTotalNormalECTS();
         } else if (KEY_FOR_EXTRA_ENROLMENTS.equals(key)) {
             return this.getExtraCurriculumEntries();
         } else if (KEY_FOR_STANDALONE_ENROLMENTS.equals(key)) {
@@ -125,7 +134,7 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
 
             for (ICurriculumEntry entry : enrolmentsAux) {
                 if (((Enrolment) entry).isStandalone() && !standaloneRegistration()) {
-                    enrolments.add((ICurriculumEntry) entry);
+                    enrolments.add(entry);
                 }
             }
 
@@ -144,7 +153,7 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
 
             for (ICurriculumEntry entry : enrolmentsAux) {
                 if (((Enrolment) entry).isExtraCurricular()) {
-                    enrolments.add((ICurriculumEntry) entry);
+                    enrolments.add(entry);
                 }
             }
 
@@ -162,16 +171,16 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
             Set<ICurriculumEntry> enrolments = new HashSet<ICurriculumEntry>();
 
             for (ICurriculumEntry entry : enrolmentsAux) {
-                if(((Enrolment) entry).isExtraCurricular()) {
+                if (((Enrolment) entry).isExtraCurricular()) {
                     continue;
                 }
-                
-                if(((Enrolment) entry).isPropaedeutic()) {
+
+                if (((Enrolment) entry).isPropaedeutic()) {
                     continue;
                 }
-                
-                if (!((Enrolment) entry).isStandalone() || registration.getDegree().isEmpty() ) {
-                    enrolments.add((ICurriculumEntry) entry);
+
+                if (!((Enrolment) entry).isStandalone() || registration.getDegree().isEmpty()) {
+                    enrolments.add(entry);
                 }
             }
 
@@ -181,14 +190,23 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         return normalCurriculumEntries;
     }
 
+    public int getTotalNormalCurriculumEntries() {
+        return getNormalCurriculumEntries().size();
+    }
+
+    public BigDecimal getTotalNormalECTS() {
+        return getNormalCurriculumEntries().stream().map(CurriculumEntry::getEctsCredits)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     protected boolean standaloneRegistration() {
         return registration.getDegree().isEmpty();
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void registerFieldsMetadata(IFieldsExporter exporter) {
+        // TODO Auto-generated method stub
+
+    }
 
 }
