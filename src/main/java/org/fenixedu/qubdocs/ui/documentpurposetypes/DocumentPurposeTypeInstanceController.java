@@ -200,10 +200,11 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
 
         setDocumentPurposeTypeInstance(documentPurposeTypeInstance, model);
         try {
+            String code = documentPurposeTypeInstance.getCode();
             //call the Atomic delete function
             deleteDocumentPurposeTypeInstance(documentPurposeTypeInstance);
             addInfoMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE,
-                    "label.info.documentPurposeTypes.successfulDelete", documentPurposeTypeInstance.getCode()), model);
+                    "label.info.documentPurposeTypes.successfulDelete", code), model);
             return redirect("/qubdocsreports/documentpurposetypes/documentpurposetypeinstance/", model, redirectAttributes);
         } catch (Exception ex) {
             //Add error messages to the list

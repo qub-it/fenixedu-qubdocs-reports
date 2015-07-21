@@ -41,18 +41,18 @@ ${portal.toolkit()}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code = "label.close"/></button>
-        <a class="btn btn-danger" href="${pageContext.request.contextPath}/qubdocs/managedocumentsignature/documentsignature/delete/${documentSignature.externalId}"  > <spring:message code = "label.delete"/></a>
+        <a class="btn btn-danger" href="${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/delete/${documentSignature.externalId}"  > <spring:message code = "label.delete"/></a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <%-- NAVIGATION --%>
 <div class="well well-sm" style="display:inline-block">
-	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocs/managedocumentsignature/documentsignature/"  ><spring:message code="label.event.back" /></a>
+	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/"  ><spring:message code="label.event.back" /></a>
 |&nbsp;&nbsp;				<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;<a class="" href="#" data-toggle="modal"
 data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 				|&nbsp;&nbsp;
-	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocs/managedocumentsignature/documentsignature/update/${documentSignature.externalId}"  ><spring:message code="label.event.update" /></a>
+	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/update/${documentSignature.externalId}"  ><spring:message code="label.event.update" /></a>
 |&nbsp;&nbsp;</div>
 	<c:if test="${not empty infoMessages}">
 				<div class="alert alert-info" role="alert">
@@ -89,7 +89,13 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 	<div class="panel-body">
 <form method="post" class="form-horizontal">
 <table class="table">
-		<tbody>
+		<tbody>		
+<tr>
+	<th scope="row" class="col-xs-3"><spring:message code="label.DocumentSignature.responsibleGender"/></th> 
+	<td>
+		<c:out value='${documentSignature.responsibleGender.localizedName}'/>
+	</td> 
+</tr>
 <tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.DocumentSignature.responsibleName"/></th> 
 	<td>
@@ -106,6 +112,12 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 	<th scope="row" class="col-xs-3"><spring:message code="label.DocumentSignature.responsibleUnit"/></th> 
 	<td>
 		<c:out value='${documentSignature.responsibleUnit.content}'/>
+	</td> 
+</tr>
+<tr>
+	<th scope="row" class="col-xs-3"><spring:message code="label.DocumentSignature.responsibleDefault"/></th> 
+	<td>
+		<c:if test="${documentSignature.defaultSignature}"><spring:message code="label.true" /></c:if><c:if test="${not documentSignature.defaultSignature}"><spring:message code="label.false" /></c:if>
 	</td> 
 </tr>
 </tbody>

@@ -31,13 +31,15 @@ ${portal.toolkit()}
 </div>
 <%-- NAVIGATION --%>
 <div class="well well-sm" style="display:inline-block">
-	<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocs/managedocumentsignature/documentsignature/create"   ><spring:message code="label.event.create" /></a>
+	<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/create"   ><spring:message code="label.event.create" /></a>
 |&nbsp;&nbsp;</div>
 	<c:if test="${not empty infoMessages}">
 				<div class="alert alert-info" role="alert">
 					
 					<c:forEach items="${infoMessages}" var="message"> 
-						<p>${message}</p>
+						<p> <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true">&nbsp;</span>
+  							${message}
+  						</p>
 					</c:forEach>
 					
 				</div>	
@@ -46,7 +48,9 @@ ${portal.toolkit()}
 				<div class="alert alert-warning" role="alert">
 					
 					<c:forEach items="${warningMessages}" var="message"> 
-						<p>${message}</p>
+						<p> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;</span>
+  							${message}
+  						</p>
 					</c:forEach>
 					
 				</div>	
@@ -55,7 +59,9 @@ ${portal.toolkit()}
 				<div class="alert alert-danger" role="alert">
 					
 					<c:forEach items="${errorMessages}" var="message"> 
-						<p>${message}</p>
+						<p> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;</span>
+  							${message}
+  						</p>
 					</c:forEach>
 					
 				</div>	
@@ -104,6 +110,8 @@ ${portal.toolkit()}
 <th><spring:message code="label.DocumentSignature.responsibleName"/></th>
 <th><spring:message code="label.DocumentSignature.responsibleFunction"/></th>
 <th><spring:message code="label.DocumentSignature.responsibleUnit"/></th>
+<th><spring:message code="label.DocumentSignature.responsibleGender"/></th>
+<th><spring:message code="label.DocumentSignature.responsibleDefault"/></th>
 <%-- Operations Column --%>
 					<th></th>
 				</tr>
@@ -132,8 +140,10 @@ ${portal.toolkit()}
 "responsiblename" : "<c:out value='${searchResult.responsibleName}'/>",
 "responsiblefunction" : "<c:out value='${searchResult.responsibleFunction.content}'/>",
 "responsibleunit" : "<c:out value='${searchResult.responsibleUnit.content}'/>",
+"responsiblegender" : "<c:out value='${searchResult.responsibleGender.localizedName}'/>",
+"responsibledefault" : "<c:if test="${searchResult.defaultSignature}"><spring:message code="label.true" /></c:if><c:if test="${not searchResult.defaultSignature}"><spring:message code="label.false" /></c:if>",
 "actions" :
-" <a  class=\"btn btn-default btn-xs\" href=\"${pageContext.request.contextPath}/qubdocs/managedocumentsignature/documentsignature/search/view/${searchResult.externalId}\"><spring:message code='label.view'/></a>" +
+" <a  class=\"btn btn-default btn-xs\" href=\"${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/search/view/${searchResult.externalId}\"><spring:message code='label.view'/></a>" +
                 "" },
             </c:forEach>
     ];
@@ -150,6 +160,8 @@ ${portal.toolkit()}
 			{ data: 'responsiblename' },
 			{ data: 'responsiblefunction' },
 			{ data: 'responsibleunit' },
+			{ data: 'responsiblegender' },
+			{ data: 'responsibledefault' },
 			{ data: 'actions' }
 			
 		],

@@ -4,6 +4,7 @@ external class .org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 external class .org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
 external class .org.fenixedu.academic.domain.degree.DegreeType;
 external class .org.fenixedu.academic.domain.Degree;
+external class .org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
 
 public class DocumentTemplate {
     //String reportKey;				// Existed in the oddjet connector 
@@ -27,31 +28,6 @@ public class DocumentPrinterConfiguration {
 	Boolean openOfficeConverting;
 }
 
-public class DocumentSignature {
-	String responsibleName;
-	LocalizedString responsibleFunction;
-	LocalizedString responsibleUnit;
-}
-
-relation DocumentSignatureBennu {
-	DocumentSignature playsRole documentSignatures {
- 		multiplicity *;
- 	}
- 	
- 	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu {
-        multiplicity 1..1;
-    }
-}
-
-relation DocumentSignatureAdministrativeOffice {
-	DocumentSignature playsRole documentsSignature {
- 		multiplicity  0..1;
- 	}
- 	
- 	.org.fenixedu.academic.domain.administrativeOffice.AdministrativeOffice playsRole administrativeOffice {
-        multiplicity 0..1;
-    }
-}
 
 
 relation DocumentTemplateBennu {

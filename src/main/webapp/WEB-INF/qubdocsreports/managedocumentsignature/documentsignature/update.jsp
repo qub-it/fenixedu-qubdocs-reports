@@ -25,14 +25,14 @@ ${portal.toolkit()}
 
 <%-- TITLE --%>
 <div class="page-header">
-	<h1><spring:message code="label.manageDocumentSignature.createDocumentSignature" />
+	<h1><spring:message code="label.manageDocumentSignature.updateDocumentSignature" />
 		<small></small>
 	</h1>
 </div>
 
 <%-- NAVIGATION --%>
 <div class="well well-sm" style="display:inline-block">
-	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocs/managedocumentsignature/documentsignature/"  ><spring:message code="label.event.back" /></a>
+	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/read/${documentSignature.externalId}" ><spring:message code="label.event.back" /></a>
 |&nbsp;&nbsp;</div>
 	<c:if test="${not empty infoMessages}">
 				<div class="alert alert-info" role="alert">
@@ -65,6 +65,22 @@ ${portal.toolkit()}
 <form method="post" class="form-horizontal">
 <div class="panel panel-default">
   <div class="panel-body">
+
+<div class="form-group row">
+	<div class="col-sm-2 control-label"><spring:message code="label.DocumentSignature.responsibleGender"/></div> 
+
+	<div class="col-sm-4">
+		<select id="documentSignature_responsibleGender" class="form-control" name="responsiblegender">
+			<c:forEach items="${responsibleGenderValues}" var="field">
+				<option value="<c:out value='${field}'/>"><c:out value='${field.localizedName}'/></option>
+			</c:forEach>
+		</select>
+		<script>
+			$("#documentSignature_responsibleGender").val('<c:out value='${not empty param.responsiblegender ? param.responsiblegender : documentSignature.responsibleGender }'/>');
+		</script>	
+	</div>
+</div>
+
 <div class="form-group row">
 <div class="col-sm-2 control-label"><spring:message code="label.DocumentSignature.responsibleName"/></div> 
 
@@ -76,16 +92,31 @@ ${portal.toolkit()}
 <div class="col-sm-2 control-label"><spring:message code="label.DocumentSignature.responsibleFunction"/></div> 
 
 <div class="col-sm-10">
-<input id="documentSignature_responsibleFunction" class="form-control" type="text" name="responsiblefunction"  bennu-localized-string value='${not empty param.responsiblefunction ? param.responsiblefunction : "{}" } '/> 
+<input id="documentSignature_responsibleFunction" class="form-control" type="text" name="responsiblefunction"  bennu-localized-string value='${not empty param.responsiblefunction ? param.responsiblefunction : documentSignature.responsibleFunction.json() } '/> 
 </div>
 </div>		
 <div class="form-group row">
 <div class="col-sm-2 control-label"><spring:message code="label.DocumentSignature.responsibleUnit"/></div> 
 
 <div class="col-sm-10">
-<input id="documentSignature_responsibleUnit" class="form-control" type="text" name="responsibleunit"  bennu-localized-string value='${not empty param.responsibleunit ? param.responsibleunit : "{}" } '/> 
+<input id="documentSignature_responsibleUnit" class="form-control" type="text" name="responsibleunit"  bennu-localized-string value='${not empty param.responsibleunit ? param.responsibleunit : documentSignature.responsibleUnit.json() } '/> 
 </div>
-</div>		
+</div>
+
+<div class="form-group row">
+	<div class="col-sm-2 control-label"><spring:message code="label.DocumentSignature.responsibleDefault"/></div> 
+	
+	<div class="col-sm-2">
+	<select id="documentSignature_responsibleDefault" name=responsibledefault class="form-control">
+	<option value="false"><spring:message code="label.no"/></option>
+	<option value="true"><spring:message code="label.yes"/></option>				
+	</select>
+		<script>
+			$("#documentSignature_responsibleDefault").val('<c:out value='${not empty param.responsibledefault ? param.responsibledefault : documentSignature.defaultSignature }'/>');
+		</script>	
+	</div>
+</div>	
+	
   </div>
   <div class="panel-footer">
 		<input type="submit" class="btn btn-default" role="button" value="<spring:message code="label.submit" />"/>

@@ -46,7 +46,7 @@ import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntrie
 import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumInformationDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.DegreeCurricularPlanInformationDataProvider;
-import org.fenixedu.qubdocs.academic.documentRequests.providers.DocumentSignatureDataProvider;
+import org.fenixedu.qubdocs.academic.documentRequests.providers.DocumentSignerDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.EnrolmentsDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.ExtraCurricularCoursesDataProvider;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.LocalizedDatesProvider;
@@ -93,7 +93,7 @@ public class DocumentPrinter implements ReportPrinter {
             generator
                     .registerDataProvider(new EnrolmentsDataProvider(registration, executionYear, documentRequest.getLanguage()));
 
-            generator.registerDataProvider(new DocumentSignatureDataProvider());
+            generator.registerDataProvider(new DocumentSignerDataProvider(documentRequest));
 
             generator.registerDataProvider(new ConclusionInformationDataProvider(registration, programConclusion));
 
