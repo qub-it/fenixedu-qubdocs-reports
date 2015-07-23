@@ -139,11 +139,13 @@ public class DocumentSignatureController extends FenixeduQubdocsReportsBaseContr
             //call the Atomic delete function
             deleteDocumentSignature(documentSignature);
             addInfoMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE,
-                    "label.info.documentPurposeTypes.successfulDelete", responsibleName), model);
+                    "label.info.documentSignature.successfulDelete", responsibleName), model);
             return redirect("/qubdocsreports/managedocumentsignature/documentsignature/", model, redirectAttributes);
         } catch (DomainException ex) {
             //Add error messages to the list
-            addErrorMessage("Error deleting the DocumentSignature due to " + ex.getMessage(), model);
+            addErrorMessage(
+                    BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.delete")
+                            + ex.getLocalizedMessage(), model);
         }
 
         //The default mapping is the same Read View
