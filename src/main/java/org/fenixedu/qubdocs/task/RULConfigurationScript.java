@@ -13,7 +13,7 @@ import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSig
 import org.fenixedu.bennu.scheduler.custom.CustomTask;
 import org.fenixedu.commons.i18n.LocalizedString;
 
-public class FFConfigurationScript extends CustomTask {
+public class RULConfigurationScript extends CustomTask {
 
     final private static Locale pt = new Locale("pt", "PT");
     final private static Locale en = new Locale("en", "GB");
@@ -21,6 +21,7 @@ public class FFConfigurationScript extends CustomTask {
     @Override
     public void runTask() throws Exception {
         Map<String, LocalizedString> documentPurposeTypes = new HashMap<String, LocalizedString>();
+        /*
         documentPurposeTypes.put("FAMILY_BENEFITS", new LocalizedString(pt, "Prestações Familiares").with(en, "Family Benefits"));
         documentPurposeTypes.put("IRS", new LocalizedString(pt, "IRS").with(en, "Taxes"));
         documentPurposeTypes.put("ADSE", new LocalizedString(pt, "ADSE").with(en, "ADSE"));
@@ -32,6 +33,7 @@ public class FFConfigurationScript extends CustomTask {
         documentPurposeTypes.put("PROFESSIONAL", new LocalizedString(pt, "Fins Profissionais").with(en, "Professional purposes"));
         documentPurposeTypes.put("PPRE", new LocalizedString(pt, "PPRE").with(en, "PPRE"));
         documentPurposeTypes.put("OTHER", new LocalizedString(pt, "Outra").with(en, "Other"));
+        */
 
         for (Entry<String, LocalizedString> entry : documentPurposeTypes.entrySet()) {
             DocumentPurposeTypeInstance dpti;
@@ -53,9 +55,11 @@ public class FFConfigurationScript extends CustomTask {
                 .forEach(dpti -> dpti.setActive(false));
 
         /* DocumentSigners */
-        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Helena Barreira", new LocalizedString(pt,
-                "Chefe do Núcleo de Planeamento e Gestão Académica"), new LocalizedString(pt, "Faculdade de Farmácia"),
-                Gender.FEMALE);
+
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Carlos Sirgado", new LocalizedString(pt,
+                "Diretor do Departamento dos Assuntos Académicos"),
+                new LocalizedString(pt, "Reitoria da Universidade de Lisboa"), Gender.MALE);
+
     }
 
 }
