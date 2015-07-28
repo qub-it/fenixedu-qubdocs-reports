@@ -57,6 +57,10 @@ public class FMDConfigurationScript extends CustomTask {
         /* DocumentSigners */
         DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Conceição Manso", new LocalizedString(pt,
                 "Responsável dos Serviços Académicos"), new LocalizedString(pt, "Faculdade de Medicina Dentária"), Gender.FEMALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Eduardo Brunheta", new LocalizedString(pt,
+                "Assistente Técnico"), new LocalizedString(pt, "Faculdade de Medicina Dentária"), Gender.MALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Cristina Fernandes", new LocalizedString(
+                pt, "Diretora Executiva"), new LocalizedString(pt, "Faculdade de Medicina Dentária"), Gender.FEMALE);
     }
 
 }
