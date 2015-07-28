@@ -41,6 +41,8 @@ import com.qubit.terra.docs.util.helpers.IDocumentHelper;
 
 public class DateHelper implements IDocumentHelper {
 
+    Locale pt = new Locale("pt");
+
     public String numericDate(final LocalDate localDate) {
         return localDate.toString("dd/MM/yyyy");
     }
@@ -54,10 +56,15 @@ public class DateHelper implements IDocumentHelper {
     }
 
     public LocalizedString extendedDate(final LocalDate localDate) {
-    	LocalizedString i18NString = new LocalizedString();
+        LocalizedString i18NString = new LocalizedString();
         for (Locale locale : CoreConfiguration.supportedLocales()) {
-            String message = BundleUtil.getString("resources.FenixeduQubdocsReportsResources", locale, "message.DateHelper.extendedDate", localDate.toString("dd", locale),
-                    localDate.toString("MMMM", locale), localDate.toString("yyyy", locale));
+            String month = localDate.toString("MMMM", locale);
+            if (locale.getLanguage().equals("pt")) {
+                month = month.toLowerCase(); // Java does not follow the Portuguese Language Orthographic Agreement of 1990
+            }
+            String message =
+                    BundleUtil.getString("resources.FenixeduQubdocsReportsResources", locale, "message.DateHelper.extendedDate",
+                            localDate.toString("dd", locale), month, localDate.toString("yyyy", locale));
             i18NString = i18NString.with(locale, message);
         }
         return i18NString;
