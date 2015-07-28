@@ -29,6 +29,7 @@ package org.fenixedu.qubdocs.ui.manage;
 
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.fenixedu.academic.domain.EnrolmentEvaluation;
@@ -59,6 +60,9 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
 
     @Autowired
     private HttpSession session;
+    
+    @Autowired
+    private HttpServletRequest request;
 
     @RequestMapping(value = "/create/{scpId}", method = RequestMethod.GET)
     public String create(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan, final Model model) {
