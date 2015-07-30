@@ -125,6 +125,18 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 		<c:if test="${documentPurposeTypeInstance.active}"><spring:message code="label.true" /></c:if><c:if test="${not documentPurposeTypeInstance.active}"><spring:message code="label.false" /></c:if>
 	</td> 
 </tr>
+<tr>
+	<th scope="row" class="col-xs-3"><spring:message code="label.DocumentPurposeTypeInstance.serviceRequestTypes"/></th> 
+	<td>
+		<c:if test="${not empty documentPurposeTypeInstance.serviceRequestTypesSet}">
+			<ul class="list-group col-xs-4">
+			<c:forEach items="${documentPurposeTypeInstance.serviceRequestTypesSet}" var="serviceRequestType">
+				<li class="list-group-item"><c:out value='${serviceRequestType.name.content}'/></li>
+			</c:forEach>
+			</ul>
+		</c:if>
+	</td> 
+</tr>
 </tbody>
 </table>
 </form>

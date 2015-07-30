@@ -55,10 +55,12 @@ import org.springframework.http.ResponseEntity;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.FenixeduQubdocsReportsSpringConfiguration;
+
 import pt.ist.fenixframework.Atomic;
 
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsController;
+import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeTypeInstance;
 
 //@Component("org.fenixedu.qubdocs.ui.documentPurposeTypes") <-- Use for duplicate controller name disambiguation
@@ -226,6 +228,10 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
     public String create(Model model) {
         model.addAttribute("documentPurposeTypeValues",
                 org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType.values());
+        model.addAttribute(
+                "DocumentPurposeTypeInstance_serviceRequestTypes_options",
+                Stream.concat(ServiceRequestType.findDeclarations(), ServiceRequestType.findCertificates()).collect(
+                        Collectors.toList()));
 
         //IF ANGULAR, initialize the Bean
         //DocumentPurposeTypeInstanceBean bean = new DocumentPurposeTypeInstanceBean();
@@ -296,7 +302,8 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
             @RequestParam(value = "code", required = false) java.lang.String code,
             @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name,
             @RequestParam(value = "documentpurposetype", required = false) org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType documentPurposeType,
-            @RequestParam(value = "active", required = false) java.lang.Boolean active, Model model,
+            @RequestParam(value = "active", required = false) java.lang.Boolean active, @RequestParam(
+                    value = "serviceRequestTypes", required = false) List<ServiceRequestType> serviceRequestTypes, Model model,
             RedirectAttributes redirectAttributes) {
         /*
         *  Creation Logic
@@ -305,7 +312,7 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
         try {
 
             DocumentPurposeTypeInstance documentPurposeTypeInstance =
-                    createDocumentPurposeTypeInstance(code, name, documentPurposeType, active);
+                    createDocumentPurposeTypeInstance(code, name, documentPurposeType, active, serviceRequestTypes);
 
             //Success Validation
             //Add the bean to be used in the View
@@ -335,7 +342,7 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
     public DocumentPurposeTypeInstance createDocumentPurposeTypeInstance(java.lang.String code,
             org.fenixedu.commons.i18n.LocalizedString name,
             org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType documentPurposeType,
-            java.lang.Boolean active) {
+            java.lang.Boolean active, List<ServiceRequestType> serviceRequestTypes) {
 
         // @formatter: off
 
@@ -355,6 +362,9 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
         DocumentPurposeTypeInstance documentPurposeTypeInstance =
                 DocumentPurposeTypeInstance.create(code, name, documentPurposeType);
         documentPurposeTypeInstance.setActive(active);
+        for (ServiceRequestType serviceRequestType : serviceRequestTypes) {
+            documentPurposeTypeInstance.addServiceRequestTypes(serviceRequestType);
+        }
 
         return documentPurposeTypeInstance;
     }
@@ -367,6 +377,10 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
     public String update(@PathVariable("oid") DocumentPurposeTypeInstance documentPurposeTypeInstance, Model model) {
         model.addAttribute("documentPurposeTypeValues",
                 org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType.values());
+        model.addAttribute(
+                "DocumentPurposeTypeInstance_serviceRequestTypes_options",
+                Stream.concat(ServiceRequestType.findDeclarations(), ServiceRequestType.findCertificates()).collect(
+                        Collectors.toList()));
         setDocumentPurposeTypeInstance(documentPurposeTypeInstance, model);
 
         //IF ANGULAR, initialize the Bean
@@ -441,7 +455,8 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
             @RequestParam(value = "code", required = false) java.lang.String code,
             @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name,
             @RequestParam(value = "documentpurposetype", required = false) org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType documentPurposeType,
-            @RequestParam(value = "active", required = false) java.lang.Boolean active, Model model,
+            @RequestParam(value = "active", required = false) java.lang.Boolean active, @RequestParam(
+                    value = "serviceRequestTypes", required = false) List<ServiceRequestType> serviceRequestTypes, Model model,
             RedirectAttributes redirectAttributes) {
 
         setDocumentPurposeTypeInstance(documentPurposeTypeInstance, model);
@@ -451,7 +466,7 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
             *  UpdateLogic here
             */
 
-            updateDocumentPurposeTypeInstance(code, name, documentPurposeType, active, model);
+            updateDocumentPurposeTypeInstance(code, name, documentPurposeType, active, serviceRequestTypes, model);
 
             /*Succes Update */
 
@@ -481,7 +496,7 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
     @Atomic
     public void updateDocumentPurposeTypeInstance(java.lang.String code, org.fenixedu.commons.i18n.LocalizedString name,
             org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType documentPurposeType,
-            java.lang.Boolean active, Model model) {
+            java.lang.Boolean active, List<ServiceRequestType> serviceRequestTypes, Model model) {
 
         // @formatter: off				
         /*
@@ -495,10 +510,7 @@ public class DocumentPurposeTypeInstanceController extends FenixeduQubdocsReport
         //Instead, use individual SETTERS and validate "CheckRules" in the end
         // @formatter: on
 
-        getDocumentPurposeTypeInstance(model).setCode(code);
-        getDocumentPurposeTypeInstance(model).setName(name);
-        getDocumentPurposeTypeInstance(model).setDocumentPurposeType(documentPurposeType);
-        getDocumentPurposeTypeInstance(model).setActive(active);
+        getDocumentPurposeTypeInstance(model).edit(code, name, documentPurposeType, active, serviceRequestTypes);
     }
 
 }

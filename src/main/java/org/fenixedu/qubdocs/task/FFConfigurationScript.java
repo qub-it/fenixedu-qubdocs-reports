@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.administrativeOffice.AdministrativeOffice;
 import org.fenixedu.academic.domain.person.Gender;
+import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeTypeInstance;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner;
@@ -36,11 +39,11 @@ public class FFConfigurationScript extends CustomTask {
         for (Entry<String, LocalizedString> entry : documentPurposeTypes.entrySet()) {
             DocumentPurposeTypeInstance dpti;
             if (DocumentPurposeTypeInstance.findUnique(entry.getKey()) == null) {
-                if (DocumentPurposeType.valueOf(entry.getKey()) != null) {
-                    dpti =
-                            DocumentPurposeTypeInstance.create(entry.getKey(), entry.getValue(),
-                                    DocumentPurposeType.valueOf(entry.getKey()));
-                } else {
+                // Enum availability must be tested through Exception handling unfortunetely
+                try {
+                    DocumentPurposeType documentPurposeType = DocumentPurposeType.valueOf(entry.getKey());
+                    dpti = DocumentPurposeTypeInstance.create(entry.getKey(), entry.getValue(), documentPurposeType);
+                } catch (IllegalArgumentException iae) {
                     dpti = DocumentPurposeTypeInstance.create(entry.getKey(), entry.getValue());
                 }
             } else {
@@ -48,6 +51,13 @@ public class FFConfigurationScript extends CustomTask {
                 dpti.setName(entry.getValue());
             }
             dpti.setActive(true);
+            for (ServiceRequestType srt : dpti.getServiceRequestTypesSet()) {
+                dpti.removeServiceRequestTypes(srt);
+            }
+            for (ServiceRequestType srt : Stream.concat(ServiceRequestType.findDeclarations(),
+                    ServiceRequestType.findCertificates()).collect(Collectors.toList())) {
+                dpti.addServiceRequestTypes(srt);
+            }
         }
         DocumentPurposeTypeInstance.findActives().filter(dpti -> !documentPurposeTypes.containsKey(dpti.getCode()))
                 .forEach(dpti -> dpti.setActive(false));

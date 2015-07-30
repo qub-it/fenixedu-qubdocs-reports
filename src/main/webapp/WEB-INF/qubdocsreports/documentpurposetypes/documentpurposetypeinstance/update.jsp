@@ -117,7 +117,38 @@ ${portal.toolkit()}
 		$("#documentPurposeTypeInstance_active").val('<c:out value='${not empty param.active ? param.active : documentPurposeTypeInstance.active }'/>');
 	</script>	
 </div>
-</div>		
+</div>
+
+<div class="form-group row">
+	<div class="col-sm-2 control-label">
+		<spring:message code="label.DocumentPurposeTypeInstance.serviceRequestTypes" />
+	</div>
+
+	<div class="col-sm-2">
+		<select id="documentPurposeTypeInstance_serviceRequestTypes" class="js-example-basic-single" name="serviceRequestTypes" multiple="multiple">
+			<option value="">&nbsp;</option>
+			<%-- empty option remove it if you don't want to have it or give it a label CHANGE_ME --%>
+		</select>
+		<script>
+		<%-- CHANGE_ME --%> <%-- INSERT YOUR FORMAT FOR element --%>
+			var service_request_type_options = [
+				<c:forEach items="${DocumentPurposeTypeInstance_serviceRequestTypes_options}" var="element">   // THIS _FIELD_NAME__options must be added in the Controller.java 
+					{
+						text :"<c:out value='${element.name.content}'/>",  //Format the Output for the HTML Option
+						id : "<c:out value='${element.externalId}'/>" //Define the ID for the HTML Option
+					},
+				</c:forEach>
+			];
+			
+			var selectedOptions = [
+				<c:forEach items="${documentPurposeTypeInstance.serviceRequestTypes}" var="element" varStatus="loop"><c:out value='${element.externalId}'/>    ${!loop.last ? ',' : ''}	</c:forEach>
+			];
+			//Init Select2Options
+			initSelect2Multiple("#documentPurposeTypeInstance_serviceRequestTypes",service_request_type_options, selectedOptions); //
+		</script>
+	</div>
+</div>
+		
   </div>
   <div class="panel-footer">
 		<input type="submit" class="btn btn-default" role="button" value="<spring:message code="label.submit" />"/>
