@@ -24,19 +24,17 @@ public class FLConfigurationScript extends CustomTask {
     @Override
     public void runTask() throws Exception {
         Map<String, LocalizedString> documentPurposeTypes = new HashMap<String, LocalizedString>();
-        /*
+        documentPurposeTypes.put("FAMILY_ALLOWANCE", new LocalizedString(pt, "Abono de Família").with(en, "Family Allowance"));
         documentPurposeTypes.put("FAMILY_BENEFITS", new LocalizedString(pt, "Prestações Familiares").with(en, "Family Benefits"));
         documentPurposeTypes.put("IRS", new LocalizedString(pt, "IRS").with(en, "Taxes"));
-        documentPurposeTypes.put("ADSE", new LocalizedString(pt, "ADSE").with(en, "ADSE"));
+        documentPurposeTypes.put("ADSE_ADM_SAD_SSMJ", new LocalizedString(pt, "ADSE/ADM/SAD/SSMJ").with(en, "ADSE/ADM/SAD/SSMJ"));
         documentPurposeTypes.put("SOCIAL_SECURITY", new LocalizedString(pt, "Segurança Social").with(en, "Social Security"));
         documentPurposeTypes.put("MILITARY", new LocalizedString(pt, "Fins Militares").with(en, "Military Purposes"));
-        documentPurposeTypes.put("PUBLIC_TRANSPORTS",
-                new LocalizedString(pt, "Transportes Públicos").with(en, "Public Transports"));
         documentPurposeTypes.put("STUDY_SCHOLARSHIP", new LocalizedString(pt, "Bolsa de Estudo").with(en, "Scholarship"));
         documentPurposeTypes.put("PROFESSIONAL", new LocalizedString(pt, "Fins Profissionais").with(en, "Professional purposes"));
         documentPurposeTypes.put("PPRE", new LocalizedString(pt, "PPRE").with(en, "PPRE"));
+        documentPurposeTypes.put("IMMIGRATION", new LocalizedString(pt, "SEF").with(en, "Immigration"));
         documentPurposeTypes.put("OTHER", new LocalizedString(pt, "Outra").with(en, "Other"));
-        */
 
         for (Entry<String, LocalizedString> entry : documentPurposeTypes.entrySet()) {
             DocumentPurposeTypeInstance dpti;
@@ -56,15 +54,14 @@ public class FLConfigurationScript extends CustomTask {
             for (ServiceRequestType srt : dpti.getServiceRequestTypesSet()) {
                 dpti.removeServiceRequestTypes(srt);
             }
-            if (dpti.getCode().equals("SEF") || dpti.getCode().equals("PPRE")) {
-                for (ServiceRequestType srt : ServiceRequestType.findCertificates().collect(Collectors.toList())) {
-                    dpti.addServiceRequestTypes(srt);
-                }
+            if (dpti.getCode().equals("IMMIGRATION") || dpti.getCode().equals("PPRE")) {
+                dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("SCHOOL_REGISTRATION_CERTIFICATE").get());
+                dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("ENROLMENT_CERTIFICATE").get());
             } else {
-                for (ServiceRequestType srt : Stream.concat(ServiceRequestType.findDeclarations(),
-                        ServiceRequestType.findCertificates()).collect(Collectors.toList())) {
-                    dpti.addServiceRequestTypes(srt);
-                }
+                dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("SCHOOL_REGISTRATION_CERTIFICATE").get());
+                dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("SCHOOL_REGISTRATION_DECLARATION").get());
+                dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("ENROLMENT_CERTIFICATE").get());
+                dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("ENROLMENT_DECLARATION").get());
             }
         }
         DocumentPurposeTypeInstance.findActives().filter(dpti -> !documentPurposeTypes.containsKey(dpti.getCode()))

@@ -54,10 +54,10 @@ public class FFConfigurationScript extends CustomTask {
             for (ServiceRequestType srt : dpti.getServiceRequestTypesSet()) {
                 dpti.removeServiceRequestTypes(srt);
             }
-            for (ServiceRequestType srt : Stream.concat(ServiceRequestType.findDeclarations(),
-                    ServiceRequestType.findCertificates()).collect(Collectors.toList())) {
-                dpti.addServiceRequestTypes(srt);
-            }
+            dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("SCHOOL_REGISTRATION_CERTIFICATE").get());
+            dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("SCHOOL_REGISTRATION_DECLARATION").get());
+            dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("ENROLMENT_CERTIFICATE").get());
+            dpti.addServiceRequestTypes(ServiceRequestType.findUniqueByCode("ENROLMENT_DECLARATION").get());
         }
         DocumentPurposeTypeInstance.findActives().filter(dpti -> !documentPurposeTypes.containsKey(dpti.getCode()))
                 .forEach(dpti -> dpti.setActive(false));
