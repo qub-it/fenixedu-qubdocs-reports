@@ -80,7 +80,7 @@
 ////        FI_LOOKUP.put("FMD", "503013366");
 ////        FI_LOOKUP.put("FL", "502657456");
 ////        FI_LOOKUP.put("FF", "502659807");
-//        FI_LOOKUP.put("RUL", "510739024");
+////        FI_LOOKUP.put("RUL", "510739024");
 ////        FI_LOOKUP.put("FMV", "502286326");
 //    }
 //
@@ -98,68 +98,68 @@
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("DIPLOMA_REQUEST", academicServiceRequestType("DIPLOMA_REQUEST"),
 //                            documentRequestType("DIPLOMA_REQUEST"), "Carta de Curso", "", ServiceRequestCategory.CERTIFICATES,
-//                            true, true, false, false, "", true);
+//                            false, true, false, false, "", true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CARTA_CURSO_2_VIA", academicServiceRequestType(""), documentRequestType(""),
-//                            "Carta de Curso - 2º Via", "", ServiceRequestCategory.CERTIFICATES, true, true, false, false, "",
+//                            "Carta de Curso - 2º Via", "", ServiceRequestCategory.CERTIFICATES, false, true, false, false, "",
 //                            true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CARTA_TITULO_AGREGACAO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Carta de Título - Agregação", "", ServiceRequestCategory.CERTIFICATES, true, true, false, false, "",
-//                            true);
+//                            "Carta de Título - Agregação", "", ServiceRequestCategory.CERTIFICATES, false, true, false, false,
+//                            "", true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CARTA_TITULO_HABILITACAO_COORDENACAO_CIENTIFICA", academicServiceRequestType(""),
 //                            documentRequestType(""), "Carta de Título - Habilitação para Coordenação Científica", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", true);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CARTA_TITULO_2_VIA", academicServiceRequestType(""), documentRequestType(""),
-//                            "Carta de Título - 2º Via", "", ServiceRequestCategory.CERTIFICATES, true, true, false, false, "",
+//                            "Carta de Título - 2º Via", "", ServiceRequestCategory.CERTIFICATES, false, true, false, false, "",
 //                            true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PROCESSO_RECONHECIMENTO_GRAU", academicServiceRequestType(""),
 //                            documentRequestType(""), "Processos de Reconhecimento de Grau", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", true);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PROCESSO_EQUIVALENCIA_GRAU", academicServiceRequestType(""),
 //                            documentRequestType(""), "Processos de Equivalência de Grau", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", true);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_RECONHECIMENTO_GRAU", academicServiceRequestType(""),
-//                            documentRequestType(""), "Certidão de Reconhecimento", "", ServiceRequestCategory.CERTIFICATES, true,
-//                            true, false, false, "", true);
+//                            documentRequestType(""), "Certidão de Reconhecimento", "", ServiceRequestCategory.CERTIFICATES,
+//                            false, true, false, false, "", true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_EQUIVALENCIA_GRAU", academicServiceRequestType(""),
-//                            documentRequestType(""), "Certidão de Equivalência", "", ServiceRequestCategory.CERTIFICATES, true,
+//                            documentRequestType(""), "Certidão de Equivalência", "", ServiceRequestCategory.CERTIFICATES, false,
 //                            true, false, false, "", true);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PEDIDO_REGISTO_GRAUS_DL_341_2007", academicServiceRequestType(""),
 //                            documentRequestType(""), "Pedido de Registo de Graus - DL n.º 341/2007, de 12 outubro", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PROVAS_AVALIACAO_CAPACIDADE_M23_ADMISSAO", academicServiceRequestType(""),
 //                            documentRequestType(""),
 //                            "Provas de capacidade para frequência em Maiores de 23 anos — Admissão a provas", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
@@ -168,24 +168,24 @@
 //                            academicServiceRequestType(""),
 //                            documentRequestType(""),
 //                            "Provas de capacidade para frequência em Maiores de 23 anos — Reclamação da classificação das provas",
-//                            "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("REGISTRY_DIPLOMA_REQUEST", academicServiceRequestType("REGISTRY_DIPLOMA_REQUEST"),
 //                            documentRequestType("REGISTRY_DIPLOMA_REQUEST"), "Certidão de Registo", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_REGISTO_2_VIA", academicServiceRequestType(""), documentRequestType(""),
-//                            "Certidão de Registo - 2º Via", "", ServiceRequestCategory.CERTIFICATES, true, true, false, false,
+//                            "Certidão de Registo - 2º Via", "", ServiceRequestCategory.CERTIFICATES, false, true, false, false,
 //                            "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("SUPLEMENTO_DIPLOMA_2_VIA", academicServiceRequestType(""), documentRequestType(""),
-//                            "Suplemento ao Diploma - 2º Via", "", ServiceRequestCategory.CERTIFICATES, true, true, false, false,
+//                            "Suplemento ao Diploma - 2º Via", "", ServiceRequestCategory.CERTIFICATES, false, true, false, false,
 //                            "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD").isEmpty()) {
@@ -193,73 +193,73 @@
 //                    createServiceRequestType("CERTIDAO_REGISTO_CURSO_POS_GRADUADO_ESPECIALIZACAO",
 //                            academicServiceRequestType(""), documentRequestType(""),
 //                            "Certidão de Registo de Curso pós-graduado de especialização", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("DEGREE_FINALIZATION_CERTIFICATE", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("DEGREE_FINALIZATION_CERTIFICATE"), "Certidão de Conclusão", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_OBTENCAO_TITULO_AGREGADO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certidão de título de agregado e das capacidades ciêntificas", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_CONCLUSAO_CURSO_DOUTORAMENTO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certidão de conclusão do curso de Doutoramento", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_CONCLUSAO_CURSO_MESTRADO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certidão de conclusão do curso de Mestrado", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_PROVAS_APTIDAO_PEDAGOGICA", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certidão de Provas de Aptidão Pedagógica e Capacidade Ciêntifica", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_CONCLUSAO_CURSO_ESPECIALIZACAO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certidão de conclusão do curso de Especialização", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("SCHOOL_REGISTRATION_CERTIFICATE", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("SCHOOL_REGISTRATION_CERTIFICATE"), "Certidão de Matrícula", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("ENROLMENT_CERTIFICATE", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("ENROLMENT_CERTIFICATE"), "Certidão de Inscrição", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_FREQUENCIA_EXAME", academicServiceRequestType(""),
-//                            documentRequestType(""), "Certidão de Frequência", "", ServiceRequestCategory.CERTIFICATES, true,
+//                            documentRequestType(""), "Certidão de Frequência", "", ServiceRequestCategory.CERTIFICATES, false,
 //                            true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_CONDUTA_ACADEMICA", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certidão de Conduta Académica", "", ServiceRequestCategory.CERTIFICATES,
-//                            true, true, false, false, "", false);
+//                            false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIFICADO_NARRATIVA_TEOR", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certificado de narrativa ou de teor", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
@@ -268,50 +268,50 @@
 //                            academicServiceRequestType(""),
 //                            documentRequestType(""),
 //                            "Certificado de aprovação no processo de avaliação da capacidade para a frequência do Ensino Superior de Maiores de 23 anos",
-//                            "", ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            "", ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PROGRAM_CERTIFICATE", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("PROGRAM_CERTIFICATE"),
 //                            "Certificado de cargas horárias e conteúdos programáticos", "", ServiceRequestCategory.CERTIFICATES,
-//                            true, true, false, false, "", false);
+//                            false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PHOTOCOPY", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("PHOTOCOPY"), "Certidão por Fotocópia", "", ServiceRequestCategory.CERTIFICATES,
-//                            true, true, false, false, "", false);
+//                            false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PEDIDO_CREDITACAO_CONHECIMENTOS_COMPETENCIAS", academicServiceRequestType(""),
 //                            documentRequestType(""), "Pedido de Creditação de Conhecimentos e Competências", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("DIPLOMA_CURSO_DOUTORAMENTO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Diploma — Curso de doutoramento (componente curricular) ", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("DIPLOMA_CURSO_MESTRADO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Diploma — Curso de mestrado (componente curricular)", "", ServiceRequestCategory.CERTIFICATES, true,
-//                            true, false, false, "", false);
+//                            "Diploma — Curso de mestrado (componente curricular)", "", ServiceRequestCategory.CERTIFICATES,
+//                            false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("DIPLOMA_CURSO_ESPECIALIZACAO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Diploma — Curso de especialização", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("ADMISSAO_PROVAS_ACADEMICAS_AGREGACAO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Admissão a Provas Académicas — Agregação", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
@@ -320,188 +320,189 @@
 //                            academicServiceRequestType(""),
 //                            documentRequestType(""),
 //                            "Admissão a Provas Académicas — Habilitação para o Exercício de Atividades de Coordenação Científica",
-//                            "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("ADMISSAO_PROVAS_ACADEMICAS_DOUTORAMENTO_ART_33_DL_74_2006",
 //                            academicServiceRequestType(""), documentRequestType(""),
 //                            "Admissão a Provas Académicas — Doutoramento art. 33.º do DL n.º 74/2006", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("ADMISSAO_PROVAS_ACADEMICAS_DOUTORAMENTO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Admissão a Provas Académicas — Doutoramento", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("ADMISSAO_PROVAS_ACADEMICAS_MESTRADO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Admissão a Provas Académicas — Mestrado ", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PEDIDO_CREDITACAO_COMPETENCIAS_ACADEMICAS", academicServiceRequestType(""),
 //                            documentRequestType(""), "Pedido de creditação de Competências Académicas", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PEDIDO_CREDITACAO_COMPETENCIAS_PROFISSIONAIS", academicServiceRequestType(""),
 //                            documentRequestType(""), "Pedido de creditação de Competências Profissionais", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_DOUTORAMENTO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Candidatura: Doutoramento", "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "Candidatura: Doutoramento", "", ServiceRequestCategory.SERVICES, false, true, false, false, "",
+//                            false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_MESTRADO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Candidatura: Mestrado", "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "Candidatura: Mestrado", "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_REINGRESSO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Candidatura: Reingresso", "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "Candidatura: Reingresso", "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_REINGRESSO_ALUNOS_ULISBOA", academicServiceRequestType(""),
 //                            documentRequestType(""), "Candidatura: Reingresso (Alunos da ULisboa)", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_TRANSFERENCIA", academicServiceRequestType(""),
-//                            documentRequestType(""), "Candidatura: Transferência", "", ServiceRequestCategory.SERVICES, true,
+//                            documentRequestType(""), "Candidatura: Transferência", "", ServiceRequestCategory.SERVICES, false,
 //                            true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_TRANSFERENCIA_ALUNOS_ULISBOA", academicServiceRequestType(""),
 //                            documentRequestType(""), "Candidatura: Transferência (Alunos ULisboa)", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_MUDANCA_CURSO", academicServiceRequestType(""),
-//                            documentRequestType(""), "Candidatura: Mudança de Curso", "", ServiceRequestCategory.SERVICES, true,
+//                            documentRequestType(""), "Candidatura: Mudança de Curso", "", ServiceRequestCategory.SERVICES, false,
 //                            true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_MUDANCA_CURSO_ALUNOS_ULISBOA", academicServiceRequestType(""),
 //                            documentRequestType(""), "Candidatura: Mudança de Curso (Alunos ULisboa)", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_OUTRO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Candidatura: Outro concurso especial de acesso", "", ServiceRequestCategory.SERVICES, true, true,
+//                            "Candidatura: Outro concurso especial de acesso", "", ServiceRequestCategory.SERVICES, false, true,
 //                            false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_OUTRO_ALUNOS_ULISBOA", academicServiceRequestType(""),
 //                            documentRequestType(""), "Candidatura: Outro concurso especial de acesso (Alunos ULisboa)", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CANDIDATURA_UNIDADES_CURRICULARES_ISOLADAS", academicServiceRequestType(""),
 //                            documentRequestType(""), "Candidatura: Unidades Curriculares Isoladas", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PRATICA_ATOS_FORA_PRAZO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Prática de Atos Fora do Prazo", "", ServiceRequestCategory.SERVICES, true, true, false, true,
+//                            "Prática de Atos Fora do Prazo", "", ServiceRequestCategory.SERVICES, false, true, false, true,
 //                            "Nº de dias", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("AVERBAMENTO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Averbamento", "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "Averbamento", "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("REVISAO_PROVAS_CAUCAO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Revisão de provas — caução", "", ServiceRequestCategory.SERVICES, true, true, false, false, "",
+//                            "Revisão de provas — caução", "", ServiceRequestCategory.SERVICES, false, true, false, false, "",
 //                            false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PEDIDO_PERMUTA", academicServiceRequestType(""), documentRequestType(""),
-//                            "Pedido de permuta", "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "Pedido de permuta", "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("VALIDACAO_PROCESSOS_ACESSO_M23_OUTRAS_INSTITUICOES",
 //                            academicServiceRequestType(""), documentRequestType(""),
 //                            "Validação de processos de acesso de Maiores de 23 anos (outras Instituições)", "",
-//                            ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMV").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("_2_VIA_LOGBOOK", academicServiceRequestType(""), documentRequestType(""),
-//                            "2º Via do logbook", "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "2º Via do logbook", "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("FOTOCOPIA", academicServiceRequestType(""), documentRequestType(""), "Fotocópia",
-//                            "", ServiceRequestCategory.SERVICES, true, true, false, false, "", false);
+//                            "", ServiceRequestCategory.SERVICES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("TAXA_ENVIO_CORREIO", academicServiceRequestType(""), documentRequestType(""),
-//                            "Taxa de envio por correio  ", "", ServiceRequestCategory.SERVICES, true, true, false, false, "",
+//                            "Taxa de envio por correio  ", "", ServiceRequestCategory.SERVICES, false, true, false, false, "",
 //                            false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("TAXA_DEVOLUCAO_CHEQUE", academicServiceRequestType(""), documentRequestType(""),
-//                            "Taxa por devolução de cheque  ", "", ServiceRequestCategory.SERVICES, true, true, false, false, "",
+//                            "Taxa por devolução de cheque  ", "", ServiceRequestCategory.SERVICES, false, true, false, false, "",
 //                            false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PORTES_CORREIO_NACIONAL", academicServiceRequestType(""), documentRequestType(""),
-//                            "Portes de Correio (Nacional)", "", ServiceRequestCategory.SERVICES, true, true, false, false, "",
+//                            "Portes de Correio (Nacional)", "", ServiceRequestCategory.SERVICES, false, true, false, false, "",
 //                            false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("PORTES_CORREIO_INTERNACIONAL", academicServiceRequestType(""),
 //                            documentRequestType(""), "Portes de Correio (Internacional)", "", ServiceRequestCategory.SERVICES,
-//                            true, true, false, false, "", false);
+//                            false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("ENROLMENT_DECLARATION", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("ENROLMENT_DECLARATION"), "Declaração de Inscrição", "",
-//                            ServiceRequestCategory.DECLARATIONS, true, false, false, false, "", false);
+//                            ServiceRequestCategory.DECLARATIONS, false, false, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FMD, FF, FMV, FL, RUL").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("SCHOOL_REGISTRATION_DECLARATION", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("SCHOOL_REGISTRATION_DECLARATION"), "Declaração de Matrícula", "",
-//                            ServiceRequestCategory.DECLARATIONS, true, false, false, false, "", false);
+//                            ServiceRequestCategory.DECLARATIONS, false, false, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FF").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("APPROVEMENT_MOBILITY_CERTIFICATE", academicServiceRequestType("DOCUMENT"),
 //                            documentRequestType("APPROVEMENT_MOBILITY_CERTIFICATE"), "Certidão de Aproveitamento", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //        if (!fromAcronymsToFinantialInstitutionList("FF").isEmpty()) {
 //            final ServiceRequestType serviceRequestType =
 //                    createServiceRequestType("CERTIDAO_APROVEITAMENTO_ESCOLAR_TRANSICAO_ANO", academicServiceRequestType(""),
 //                            documentRequestType(""), "Certidão de Aproveitamento Escolar / Transição de Ano", "",
-//                            ServiceRequestCategory.CERTIFICATES, true, true, false, false, "", false);
+//                            ServiceRequestCategory.CERTIFICATES, false, true, false, false, "", false);
 //        }
 //    }
 //
@@ -560,10 +561,10 @@
 //        final LocalizedString name = new LocalizedString(pt(), namePT).with(en(), nameEN);
 //        if (academicServiceRequestType != null) {
 //            createdServiceRequestType =
-//                    ServiceRequestType.createLegacy(code, name, true, academicServiceRequestType, documentRequestType, payable,
+//                    ServiceRequestType.createLegacy(code, name, active, academicServiceRequestType, documentRequestType, payable,
 //                            category);
 //        } else {
-//            createdServiceRequestType = ServiceRequestType.create(code, name, true, payable, category);
+//            createdServiceRequestType = ServiceRequestType.create(code, name, active, payable, category);
 //        }
 //
 //        if (detailed) {
