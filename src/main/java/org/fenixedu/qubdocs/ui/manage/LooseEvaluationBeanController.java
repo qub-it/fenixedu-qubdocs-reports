@@ -44,6 +44,7 @@ import org.fenixedu.academic.domain.Grade;
 import org.fenixedu.academic.domain.GradeScale;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.exceptions.DomainException;
+import org.fenixedu.academic.util.EnrolmentEvaluationState;
 import org.fenixedu.bennu.TupleDataSourceBean;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -183,6 +184,7 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
 
     @Atomic
     private void deleteEnrolment(EnrolmentEvaluation enrolmentEvaluation) {
+        enrolmentEvaluation.setEnrolmentEvaluationState(EnrolmentEvaluationState.TEMPORARY_OBJ);
         enrolmentEvaluation.delete();
     }
 }
