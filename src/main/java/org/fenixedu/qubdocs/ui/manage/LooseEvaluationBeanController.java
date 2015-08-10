@@ -27,20 +27,30 @@
 
 package org.fenixedu.qubdocs.ui.manage;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.EnrolmentEvaluation;
+import org.fenixedu.academic.domain.EvaluationSeason;
+import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.Grade;
 import org.fenixedu.academic.domain.GradeScale;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.exceptions.DomainException;
+import org.fenixedu.bennu.TupleDataSourceBean;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.spring.portal.BennuSpringController;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsController;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
@@ -48,8 +58,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.google.common.collect.Sets;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixframework.Atomic;
 
@@ -58,56 +72,117 @@ import pt.ist.fenixframework.Atomic;
 @RequestMapping("/looseevaluation")
 public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseController {
 
+    private static final Comparator<EvaluationSeason> COMPARE_EVALUATION_SEASON_BY_NAME = (a, b) -> {
+        int c = a.getName().getContent().compareTo(b.getName().getContent());
+
+        return c != 0 ? c : a.getExternalId().compareTo(b.getExternalId());
+    };
+
     @Autowired
     private HttpSession session;
-    
+
     @Autowired
     private HttpServletRequest request;
 
     @RequestMapping(value = "/create/{scpId}", method = RequestMethod.GET)
     public String create(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan, final Model model) {
         model.addAttribute("studentCurricularPlan", studentCurricularPlan);
-        model.addAttribute("LooseEvaluationBean_enrolment_options", studentCurricularPlan.getEnrolmentsSet());
-        model.addAttribute("typeValues", org.fenixedu.academic.domain.EvaluationSeason.all().collect(Collectors.toSet()));
+        model.addAttribute(
+                "LooseEvaluationBean_enrolment_options",
+                studentCurricularPlan.getEnrolmentsSet().stream().sorted(Enrolment.COMPARATOR_BY_NAME_AND_ID)
+                        .collect(Collectors.toList()));
+        model.addAttribute("typeValues",
+                EvaluationSeason.all().sorted(COMPARE_EVALUATION_SEASON_BY_NAME).collect(Collectors.toList()));
+        model.addAttribute(
+                "gradeScaleValues",
+                Arrays.<GradeScale> asList(GradeScale.values()).stream()
+                        .map(l -> new TupleDataSourceBean(((GradeScale) l).name(), ((GradeScale) l).getDescription()))
+                        .collect(Collectors.<TupleDataSourceBean> toList()));
 
-        return "fenixedu-qubdocs-reports/manage/looseevaluationbean/create";
-    }
-
-    @RequestMapping(value = "/create/{scpId}", method = RequestMethod.POST)
-    public RedirectView create(
-            @PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan,
-            @RequestParam(value = "enrolment", required = false) org.fenixedu.academic.domain.Enrolment enrolment,
-            @RequestParam(value = "availabledate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") org.joda.time.LocalDate availableDate,
-            @RequestParam(value = "examdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") org.joda.time.LocalDate examDate,
-            @RequestParam(value = "grade", required = false) String grade,
-            @RequestParam(value = "type", required = false) org.fenixedu.academic.domain.EvaluationSeason type,
-            Model model) {
-
-        try {
-            createLooseEvaluation(enrolment, availableDate, examDate, Grade.createGrade(grade, GradeScale.TYPE20), type);
-        } catch (DomainException e) {
-            e.printStackTrace();
-            throw e;
-        }
+        model.addAttribute(
+                "improvementSemesterValues",
+                ExecutionSemester.readNotClosedPublicExecutionPeriods().stream()
+                        .sorted(Collections.reverseOrder(ExecutionSemester.COMPARATOR_BY_BEGIN_DATE))
+                        .collect(Collectors.toList()));
 
         final String url =
                 String.format("/academicAdministration/studentEnrolments.do?scpID=%s&method=prepare",
                         studentCurricularPlan.getExternalId());
 
-        String checksumUrl = GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(), url, session);
-        return new RedirectView(checksumUrl, true);
+        String backUrl = GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(), url, session);
+        model.addAttribute("backUrl", backUrl);
+
+        final List<EnrolmentEvaluation> evaluations = studentCurricularPlan.getEnrolmentsSet().stream().map(l -> l.getEvaluationsSet()).reduce((a, c) -> Sets.union(a, c))
+                .orElse(Sets.newHashSet()).stream().filter(l -> l.getMarkSheet() == null).collect(Collectors.toList());
+
+        model.addAttribute("evaluationsSet", evaluations);
+        
+        return "fenixedu-qubdocs-reports/manage/looseevaluationbean/create";
+    }
+
+    @RequestMapping(value = "/create/{scpId}", method = RequestMethod.POST)
+    public String create(
+            @PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan,
+            @RequestParam(value = "enrolment", required = false) Enrolment enrolment,
+            @RequestParam(value = "availabledate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate availableDate,
+            @RequestParam(value = "examdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate examDate,
+            @RequestParam(value = "gradescale", required = false) GradeScale gradeScale, @RequestParam(value = "grade",
+                    required = false) String grade, @RequestParam(value = "type", required = false) EvaluationSeason type,
+            @RequestParam(value = "improvementsemester", required = false) ExecutionSemester improvementSemester, Model model, 
+            final RedirectAttributes redirectAttributes) {
+
+        try {
+            
+            if(!checkIfAllGradesAreSameScale(enrolment, gradeScale)) {
+                addErrorMessage(BundleUtil.getString("resources.FenixeduQubdocsReportsResources", "error.LooseEvaluationBean.grade.not.same.scale"), model);
+                return create(studentCurricularPlan, model);
+            }
+            
+            createLooseEvaluation(enrolment, examDate, Grade.createGrade(grade, gradeScale), type, improvementSemester);
+            return redirect("/looseevaluation/create/" + studentCurricularPlan.getExternalId(), model, redirectAttributes);
+        } catch (final DomainException e) {
+            addErrorMessage(e.getLocalizedMessage(), model);
+            return create(studentCurricularPlan, model);
+        }
+    }
+
+    private boolean checkIfAllGradesAreSameScale(Enrolment enrolment, GradeScale gradeScale) {
+        boolean result = true;
+        for (final EnrolmentEvaluation enrolmentEvaluation : enrolment.getEvaluationsSet()) {
+            result &= enrolmentEvaluation.getGradeScale() == gradeScale;
+        }
+        
+        return result;
     }
 
     @Atomic
-    public void createLooseEvaluation(org.fenixedu.academic.domain.Enrolment enrolment, org.joda.time.LocalDate availableDate,
-            org.joda.time.LocalDate examDate, org.fenixedu.academic.domain.Grade grade,
-            org.fenixedu.academic.domain.EvaluationSeason type) {
+    public void createLooseEvaluation(Enrolment enrolment, LocalDate examDate, Grade grade, EvaluationSeason type,
+            ExecutionSemester improvementSemester) {
 
         final EnrolmentEvaluation evaluation = new EnrolmentEvaluation(enrolment, type);
+        if (type.isImprovement()) {
+            evaluation.setExecutionPeriod(improvementSemester);
+        }
 
-        evaluation.edit(Authenticate.getUser().getPerson(), grade, availableDate.toDateTimeAtStartOfDay().toDate(), examDate
-                .toDateTimeAtStartOfDay().toDate());
-
+        evaluation.edit(Authenticate.getUser().getPerson(), grade, new Date(), examDate.toDateTimeAtStartOfDay().toDate());
         evaluation.confirmSubmission(Authenticate.getUser().getPerson(), "");
+    }
+    
+    @RequestMapping(value = "/delete/{scpId}/{evaluationId}", method = RequestMethod.POST)
+    public String delete(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan, @PathVariable("evaluationId") EnrolmentEvaluation enrolmentEvaluation, 
+            Model model, final RedirectAttributes redirectAttributes) {
+        
+        try {
+            deleteEnrolment(enrolmentEvaluation);
+        } catch (final DomainException e) {
+            addErrorMessage(e.getLocalizedMessage(), model);
+        }
+        
+        return redirect("/looseevaluation/create/" + studentCurricularPlan.getExternalId(), model, redirectAttributes);
+    }
+
+    @Atomic
+    private void deleteEnrolment(EnrolmentEvaluation enrolmentEvaluation) {
+        enrolmentEvaluation.delete();
     }
 }
