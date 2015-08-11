@@ -60,20 +60,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
+
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
+import pt.ist.fenixframework.Atomic;
 
 import com.google.common.collect.Sets;
 
 import edu.emory.mathcs.backport.java.util.Collections;
-import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
-import pt.ist.fenixframework.Atomic;
 
 //@SpringFunctionality(app = DomainController.class, title = "label.title.manage")
 @BennuSpringController(value = FenixeduQubdocsReportsController.class)
 @RequestMapping("/looseevaluation")
 public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseController {
 
-    private static final Comparator<EvaluationSeason> COMPARE_EVALUATION_SEASON_BY_NAME = (a, b) -> {
+    private static final Comparator<EvaluationSeason> COMPARE_EVALUATION_SEASON_BY_NAME = (a, b) ->
+    {
         int c = a.getName().getContent().compareTo(b.getName().getContent());
 
         return c != 0 ? c : a.getExternalId().compareTo(b.getExternalId());
@@ -85,12 +86,14 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
     @Autowired
     private HttpServletRequest request;
 
-    @RequestMapping(value = "/create/{scpId}", method = RequestMethod.GET)
-    public String create(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan, final Model model) {
+    @RequestMapping(value = "/create/{scpId}/{executionSemesterId}", method = RequestMethod.GET)
+    public String create(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan,
+            @PathVariable("executionSemesterId") final ExecutionSemester executionSemester, final Model model) {
         model.addAttribute("studentCurricularPlan", studentCurricularPlan);
         model.addAttribute(
                 "LooseEvaluationBean_enrolment_options",
-                studentCurricularPlan.getEnrolmentsSet().stream().sorted(Enrolment.COMPARATOR_BY_NAME_AND_ID)
+                studentCurricularPlan.getEnrolmentsSet().stream().filter(e -> e.getExecutionPeriod() == executionSemester)
+                        .sorted((x, y) -> x.getName().getContent().compareTo(y.getName().getContent()))
                         .collect(Collectors.toList()));
         model.addAttribute("typeValues",
                 EvaluationSeason.all().sorted(COMPARE_EVALUATION_SEASON_BY_NAME).collect(Collectors.toList()));
@@ -106,6 +109,8 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
                         .sorted(Collections.reverseOrder(ExecutionSemester.COMPARATOR_BY_BEGIN_DATE))
                         .collect(Collectors.toList()));
 
+        model.addAttribute("executionSemester", executionSemester);
+
         final String url =
                 String.format("/academicAdministration/studentEnrolments.do?scpID=%s&method=prepare",
                         studentCurricularPlan.getExternalId());
@@ -113,37 +118,43 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
         String backUrl = GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(), url, session);
         model.addAttribute("backUrl", backUrl);
 
-        final List<EnrolmentEvaluation> evaluations = studentCurricularPlan.getEnrolmentsSet().stream().map(l -> l.getEvaluationsSet()).reduce((a, c) -> Sets.union(a, c))
-                .orElse(Sets.newHashSet()).stream().filter(l -> l.getMarkSheet() == null).collect(Collectors.toList());
+        final List<EnrolmentEvaluation> evaluations =
+                studentCurricularPlan.getEnrolmentsSet().stream().filter(e -> e.getExecutionPeriod() == executionSemester)
+                        .map(l -> l.getEvaluationsSet()).reduce((a, c) -> Sets.union(a, c)).orElse(Sets.newHashSet()).stream()
+                        .filter(l -> l.getMarkSheet() == null).collect(Collectors.toList());
 
         model.addAttribute("evaluationsSet", evaluations);
-        
+
         return "fenixedu-qubdocs-reports/manage/looseevaluationbean/create";
     }
 
-    @RequestMapping(value = "/create/{scpId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/create/{scpId}/{executionSemesterId}", method = RequestMethod.POST)
     public String create(
             @PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan,
+            @PathVariable("executionSemesterId") final ExecutionSemester executionSemester,
             @RequestParam(value = "enrolment", required = false) Enrolment enrolment,
             @RequestParam(value = "availabledate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate availableDate,
             @RequestParam(value = "examdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate examDate,
             @RequestParam(value = "gradescale", required = false) GradeScale gradeScale, @RequestParam(value = "grade",
                     required = false) String grade, @RequestParam(value = "type", required = false) EvaluationSeason type,
-            @RequestParam(value = "improvementsemester", required = false) ExecutionSemester improvementSemester, Model model, 
+            @RequestParam(value = "improvementsemester", required = false) ExecutionSemester improvementSemester, Model model,
             final RedirectAttributes redirectAttributes) {
 
         try {
-            
-            if(!checkIfAllGradesAreSameScale(enrolment, gradeScale)) {
-                addErrorMessage(BundleUtil.getString("resources.FenixeduQubdocsReportsResources", "error.LooseEvaluationBean.grade.not.same.scale"), model);
-                return create(studentCurricularPlan, model);
+
+            if (!checkIfAllGradesAreSameScale(enrolment, gradeScale)) {
+                addErrorMessage(BundleUtil.getString("resources.FenixeduQubdocsReportsResources",
+                        "error.LooseEvaluationBean.grade.not.same.scale"), model);
+                return create(studentCurricularPlan, executionSemester, model);
             }
-            
+
             createLooseEvaluation(enrolment, examDate, Grade.createGrade(grade, gradeScale), type, improvementSemester);
-            return redirect("/looseevaluation/create/" + studentCurricularPlan.getExternalId(), model, redirectAttributes);
+            return redirect(
+                    "/looseevaluation/create/" + studentCurricularPlan.getExternalId() + "/" + executionSemester.getExternalId(),
+                    model, redirectAttributes);
         } catch (final DomainException e) {
             addErrorMessage(e.getLocalizedMessage(), model);
-            return create(studentCurricularPlan, model);
+            return create(studentCurricularPlan, executionSemester, model);
         }
     }
 
@@ -152,7 +163,7 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
         for (final EnrolmentEvaluation enrolmentEvaluation : enrolment.getEvaluationsSet()) {
             result &= enrolmentEvaluation.getGradeScale() == gradeScale;
         }
-        
+
         return result;
     }
 
@@ -168,18 +179,22 @@ public class LooseEvaluationBeanController extends FenixeduQubdocsReportsBaseCon
         evaluation.edit(Authenticate.getUser().getPerson(), grade, new Date(), examDate.toDateTimeAtStartOfDay().toDate());
         evaluation.confirmSubmission(Authenticate.getUser().getPerson(), "");
     }
-    
-    @RequestMapping(value = "/delete/{scpId}/{evaluationId}", method = RequestMethod.POST)
-    public String delete(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan, @PathVariable("evaluationId") EnrolmentEvaluation enrolmentEvaluation, 
-            Model model, final RedirectAttributes redirectAttributes) {
-        
+
+    @RequestMapping(value = "/delete/{scpId}/{evaluationId}/{executionSemesterId}", method = RequestMethod.POST)
+    public String delete(@PathVariable("scpId") final StudentCurricularPlan studentCurricularPlan,
+            @PathVariable("evaluationId") EnrolmentEvaluation enrolmentEvaluation,
+            @PathVariable("executionSemesterId") final ExecutionSemester executionSemester, Model model,
+            final RedirectAttributes redirectAttributes) {
+
         try {
             deleteEnrolment(enrolmentEvaluation);
         } catch (final DomainException e) {
             addErrorMessage(e.getLocalizedMessage(), model);
         }
-        
-        return redirect("/looseevaluation/create/" + studentCurricularPlan.getExternalId(), model, redirectAttributes);
+
+        return redirect(
+                "/looseevaluation/create/" + studentCurricularPlan.getExternalId() + "/" + executionSemester.getExternalId(),
+                model, redirectAttributes);
     }
 
     @Atomic

@@ -27,33 +27,52 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<spring:url var="datatablesUrl" value="/javaScript/dataTables/media/js/jquery.dataTables.latest.min.js"/>
-<spring:url var="datatablesBootstrapJsUrl" value="/javaScript/dataTables/media/js/jquery.dataTables.bootstrap.min.js"></spring:url>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
+<spring:url var="datatablesUrl"
+	value="/javaScript/dataTables/media/js/jquery.dataTables.latest.min.js" />
+<spring:url var="datatablesBootstrapJsUrl"
+	value="/javaScript/dataTables/media/js/jquery.dataTables.bootstrap.min.js"></spring:url>
 <script type="text/javascript" src="${datatablesUrl}"></script>
 <script type="text/javascript" src="${datatablesBootstrapJsUrl}"></script>
-<spring:url var="datatablesCssUrl" value="/CSS/dataTables/dataTables.bootstrap.min.css"/>
+<spring:url var="datatablesCssUrl"
+	value="/CSS/dataTables/dataTables.bootstrap.min.css" />
 
-<link rel="stylesheet" href="${datatablesCssUrl}"/>
-<spring:url var="datatablesI18NUrl" value="/javaScript/dataTables/media/i18n/${portal.locale.language}.json"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/CSS/dataTables/dataTables.bootstrap.min.css"/>
+<link rel="stylesheet" href="${datatablesCssUrl}" />
+<spring:url var="datatablesI18NUrl"
+	value="/javaScript/dataTables/media/i18n/${portal.locale.language}.json" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/CSS/dataTables/dataTables.bootstrap.min.css" />
 
 <!-- Choose ONLY ONE:  bennuToolkit OR bennuAngularToolkit -->
 <%-- ${portal.angularToolkit()} --%>
 ${portal.toolkit()}
 
-<link href="${pageContext.request.contextPath}/static/academicTreasury/css/dataTables.responsive.css" rel="stylesheet"/>
-<script src="${pageContext.request.contextPath}/static/academicTreasury/js/dataTables.responsive.js"></script>
-<link href="${pageContext.request.contextPath}/webjars/datatables-tools/2.2.4/css/dataTables.tableTools.css" rel="stylesheet"/>
-<script src="${pageContext.request.contextPath}/webjars/datatables-tools/2.2.4/js/dataTables.tableTools.js"></script>
-<link href="${pageContext.request.contextPath}/webjars/select2/4.0.0-rc.2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="${pageContext.request.contextPath}/webjars/select2/4.0.0-rc.2/dist/js/select2.min.js"></script>						
-<script type="text/javascript" src="${pageContext.request.contextPath}/webjars/bootbox/4.4.0/bootbox.js" ></script>
-<script src="${pageContext.request.contextPath}/static/academicTreasury/js/omnis.js"></script>
+<link
+	href="${pageContext.request.contextPath}/static/academicTreasury/css/dataTables.responsive.css"
+	rel="stylesheet" />
+<script
+	src="${pageContext.request.contextPath}/static/academicTreasury/js/dataTables.responsive.js"></script>
+<link
+	href="${pageContext.request.contextPath}/webjars/datatables-tools/2.2.4/css/dataTables.tableTools.css"
+	rel="stylesheet" />
+<script
+	src="${pageContext.request.contextPath}/webjars/datatables-tools/2.2.4/js/dataTables.tableTools.js"></script>
+<link
+	href="${pageContext.request.contextPath}/webjars/select2/4.0.0-rc.2/dist/css/select2.min.css"
+	rel="stylesheet" />
+<script
+	src="${pageContext.request.contextPath}/webjars/select2/4.0.0-rc.2/dist/js/select2.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/webjars/bootbox/4.4.0/bootbox.js"></script>
+<script
+	src="${pageContext.request.contextPath}/static/academicTreasury/js/omnis.js"></script>
 
-<script src="${pageContext.request.contextPath}/webjars/angular-sanitize/1.3.11/angular-sanitize.js"></script>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/webjars/angular-ui-select/0.11.2/select.min.css" />
-<script src="${pageContext.request.contextPath}/webjars/angular-ui-select/0.11.2/select.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/webjars/angular-sanitize/1.3.11/angular-sanitize.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/webjars/angular-ui-select/0.11.2/select.min.css" />
+<script
+	src="${pageContext.request.contextPath}/webjars/angular-ui-select/0.11.2/select.min.js"></script>
 
 
 <%-- TITLE --%>
@@ -66,9 +85,11 @@ ${portal.toolkit()}
 
 <%-- NAVIGATION --%>
 <div class="well well-sm" style="display: inline-block">
+<%--
 	<a class="" href="${pageContext.request.contextPath}/${backUrl}"><span
 		class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<spring:message
 			code="label.event.back" /></a> |&nbsp;&nbsp;
+ --%>
 </div>
 <c:if test="${not empty infoMessages}">
 	<div class="alert alert-info" role="alert">
@@ -100,31 +121,46 @@ ${portal.toolkit()}
 
 <script type="text/javascript">
 	  function processDelete(externalId) {
-	    url = "${pageContext.request.contextPath}/looseevaluation/delete/${studentCurricularPlan.externalId}/" + externalId;
+	    url = "${pageContext.request.contextPath}/looseevaluation/delete/${studentCurricularPlan.externalId}/" + externalId + "/${executionSemester.externalId}";
 	    $("#deleteForm").attr("action", url);
 	    $('#deleteModal').modal('toggle')
 	  }
 </script>
 
 <div class="modal fade" id="deleteModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <form id ="deleteForm" action="#" method="POST">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"><spring:message code="label.confirmation"/></h4>
-      </div>
-      <div class="modal-body">
-        <p><spring:message code = "label.manage.createLooseEvaluationBean.confirmDelete"/></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code = "label.close"/></button>
-        <button id="deleteButton" class ="btn btn-danger" type="submit"> <spring:message code = "label.delete"/></button>
-      </div>
-      </form>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form id="deleteForm" action="#" method="POST">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">
+						<spring:message code="label.confirmation" />
+					</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						<spring:message
+							code="label.manage.createLooseEvaluationBean.confirmDelete" />
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						<spring:message code="label.close" />
+					</button>
+					<button id="deleteButton" class="btn btn-danger" type="submit">
+						<spring:message code="label.delete" />
+					</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 
 <form method="post" class="form-horizontal">
@@ -159,21 +195,16 @@ ${portal.toolkit()}
 			--%>
 			<div class="form-group row">
 				<div class="col-sm-2 control-label">
-					<spring:message code="label.LooseEvaluationBean.examDate" />
+					<spring:message code="label.LooseEvaluationBean.grade" />
 				</div>
 
-				<div class="col-sm-10">
-					<input id="looseEvaluationBean_examDate" class="form-control"
-						type="text" name="examdate" bennu-date
-						value="${not empty param.examdate ? param.examdate : looseEvaluationBean.examDate }" />
+				<div class="col-sm-1">
+					<input id="looseEvaluationBean_grade" class="form-control"
+						type="text" name="grade"
+						value="${not empty param.grade ? param.grade : looseEvaluationBean.grade }" />
 				</div>
-			</div>
-			<div class="form-group row">
-				<div class="col-sm-2 control-label">
-					<spring:message code="label.LooseEvaluationBean.grade.type" />
-				</div>
-
-				<div class="col-sm-4">
+				
+				<div class="col-sm-2">
 					<select id="looseEvaluationBean_gradescale" class="form-control"
 						name="gradescale">
 						<option value=""></option>
@@ -189,13 +220,13 @@ ${portal.toolkit()}
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-2 control-label">
-					<spring:message code="label.LooseEvaluationBean.grade" />
+					<spring:message code="label.LooseEvaluationBean.examDate" />
 				</div>
 
-				<div class="col-sm-10">
-					<input id="looseEvaluationBean_grade" class="form-control"
-						type="text" name="grade"
-						value="${not empty param.grade ? param.grade : looseEvaluationBean.grade }" />
+				<div class="col-sm-4">
+					<input id="looseEvaluationBean_examDate" class="form-control"
+						type="text" name="examdate" bennu-date
+						value="${not empty param.examdate ? param.examdate : looseEvaluationBean.examDate }" />
 				</div>
 			</div>
 			<div class="form-group row">
@@ -209,7 +240,8 @@ ${portal.toolkit()}
 						<option value=""></option>
 						<%-- empty option remove it if you don't want to have it or give it a label --%>
 						<c:forEach items="${typeValues}" var="field">
-							<option value="${field.externalId}" ng-improvement="${field.improvement}">${field.name.content}</option>
+							<option value="${field.externalId}"
+								ng-improvement="${field.improvement}">${field.name.content}</option>
 						</c:forEach>
 					</select>
 					<script>
@@ -219,14 +251,16 @@ ${portal.toolkit()}
 			</div>
 			<script type="text/javascript">
 			</script>
-			<div class="form-group row" id="looseEvaluationBean_improvementSemesterRow">
+			<div class="form-group row"
+				id="looseEvaluationBean_improvementSemesterRow">
 				<div class="col-sm-2 control-label">
-					<spring:message code="label.LooseEvaluationBean.improvementSemester" />
+					<spring:message
+						code="label.LooseEvaluationBean.improvementSemester" />
 				</div>
 
 				<div class="col-sm-4">
-					<select id="looseEvaluationBean_improvementSemester" class="form-control"
-						name="improvementsemester">
+					<select id="looseEvaluationBean_improvementSemester"
+						class="form-control" name="improvementsemester">
 						<option value=""></option>
 						<%-- empty option remove it if you don't want to have it or give it a label --%>
 						<c:forEach items="${improvementSemesterValues}" var="field">
@@ -237,45 +271,58 @@ ${portal.toolkit()}
 						$("#looseEvaluationBean_improvementSemester").val("${not empty param.improvementsemester ? param.improvementsemester : looseEvaluationBean.improvementSemester }");
 					</script>
 				</div>
-			</div>			
+			</div>
 		</div>
 		<div class="panel-footer">
 			<input type="submit" class="btn btn-default" role="button"
 				value="<spring:message code="label.submit" />" />
 		</div>
 	</div>
-	
+
 	<c:choose>
 		<c:when test="${not empty evaluationsSet}">
-			<table id="evaluationsSetTable" class="table responsive table-bordered table-hover">
+			<table id="evaluationsSetTable"
+				class="table table-bordered table-hover">
 				<thead>
 					<tr>
 						<%--!!!  Field names here --%>
-						<th><spring:message code="label.LooseEvaluationBean.enrolmentEvaluation.enrolment"/></th>
-						<th><spring:message code="label.LooseEvaluationBean.enrolmentEvaluation.enrolment.executionSemester"/></th>
-						<th><spring:message code="label.LooseEvaluationBean.enrolmentEvaluation.evaluationSeason"/></th>
-						<th><spring:message code="label.LooseEvaluationBean.enrolmentEvaluation.examDate"/></th>
-						<th><spring:message code="label.LooseEvaluationBean.enrolmentEvaluation.grade"/></th>
-						<th><spring:message code="label.LooseEvaluationBean.enrolmentEvaluation.improvementSemester"/></th>
-	<%-- Operations Column --%>
+						<th><spring:message
+								code="label.LooseEvaluationBean.enrolmentEvaluation.enrolment.code" /></th>
+						<th><spring:message
+								code="label.LooseEvaluationBean.enrolmentEvaluation.enrolment" /></th>
+						<th><spring:message
+								code="label.LooseEvaluationBean.enrolmentEvaluation.enrolment.executionSemester" /></th>
+						<th><spring:message
+								code="label.LooseEvaluationBean.enrolmentEvaluation.evaluationSeason" /></th>
+						<th><spring:message
+								code="label.LooseEvaluationBean.enrolmentEvaluation.examDate" /></th>
+						<th><spring:message
+								code="label.LooseEvaluationBean.enrolmentEvaluation.grade" /></th>
+						<th><spring:message
+								code="label.LooseEvaluationBean.enrolmentEvaluation.improvementSemester" /></th>
+						<%-- Operations Column --%>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					
+
 				</tbody>
 			</table>
 		</c:when>
 		<c:otherwise>
-					<div class="alert alert-warning" role="alert">
-						
-						<p> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;</span>			<spring:message code="label.noResultsFound" /></p>
-						
-					</div>	
-			
+			<div class="alert alert-warning" role="alert">
+
+				<p>
+					<span class="glyphicon glyphicon-exclamation-sign"
+						aria-hidden="true">&nbsp;</span>
+					<spring:message code="label.noResultsFound" />
+				</p>
+
+			</div>
+
 		</c:otherwise>
 	</c:choose>
-	
+
 </form>
 
 
@@ -288,6 +335,7 @@ $(document).ready(function() {
 	                           				<%-- Field access / formatting  here CHANGE_ME --%>
 	                           				{
 	                           				"DT_RowId" : '<c:out value='${searchResult.externalId}'/>',
+	                           "code" : "<c:out value='${searchResult.enrolment.code}'/>",
 	                           "enrolment" : "<c:out value='${searchResult.enrolment.name.content}'/>",
 	                           "executionSemester" : "<c:out value='${searchResult.enrolment.executionPeriod.qualifiedName}'/>",
 	                           "evaluationSeason" : "<c:out value='${searchResult.evaluationSeason.name.content}'/>",
@@ -306,7 +354,7 @@ $(document).ready(function() {
 		enrolment_options = [
 			<c:forEach items="${LooseEvaluationBean_enrolment_options}" var="element"> 
 				{
-					text : "${element.name}",
+					text : "${element.code} - ${element.name}",
 					id : "${element.externalId}"
 				},
 			</c:forEach>
@@ -336,12 +384,15 @@ $(document).ready(function() {
 		$("#looseEvaluationBean_improvementSemesterRow").hide();
 		
 		
+		$("#looseEvaluationBean_type").select2().select2('val', "${param.type}");
+		
 		
 		
 		var table = $('#evaluationsSetTable').DataTable({language : {
 			url : "${datatablesI18NUrl}",			
 		},
 		"columns": [
+			{ data: 'code' },
 			{ data: 'enrolment' },
 			{ data: 'executionSemester' },
 			{ data: 'evaluationSeason' },
