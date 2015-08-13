@@ -125,6 +125,12 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 	</td> 
 </tr>
 <tr>
+	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.language"/></th> 
+	<td>
+		<c:out value='${academicServiceRequestTemplate.language.displayLanguage}'/>
+	</td> 
+</tr>
+<tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.custom"/></th> 
 	<td>
 		<c:if test="${academicServiceRequestTemplate.custom}"><spring:message code="label.true" /></c:if><c:if test="${not academicServiceRequestTemplate.custom}"><spring:message code="label.false" /></c:if>
