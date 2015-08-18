@@ -27,6 +27,7 @@
 
 package org.fenixedu.qubdocs.domain;
 
+import java.io.File;
 import java.util.Set;
 
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -38,22 +39,34 @@ import com.google.common.collect.Sets;
 import com.qubit.terra.docs.core.IDocumentTemplateService;
 
 public class DocumentPrinterConfiguration extends DocumentPrinterConfiguration_Base implements IDocumentTemplateService {
-	
-	private static String DEFAULT_FONTS_PATH = "/usr/share/fonts";
-    
+
+    private static String DEFAULT_FONTS_PATH = "C:\\Windows\\Fonts";
+
+    @Override
+    public String getFontsPath() {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            String path = System.getenv("WINDIR");
+            File fontDirectory = new File(path, "Fonts");
+            return fontDirectory.getAbsolutePath();
+        } else {
+            //HACK: THIS SHOULD BE VIA PROPERTY ??!?!?!?!
+            return "/usr/share/fonts";
+        }
+    }
+
     private DocumentPrinterConfiguration() {
         super();
         setBennu(Bennu.getInstance());
-        setFontsPath(DEFAULT_FONTS_PATH);
+        //setFontsPath(DEFAULT_FONTS_PATH);
         setOpenOfficeConverting(true);
     }
 
-	@Override
-	public boolean isOpenOfficeConverting() {
-		return getOpenOfficeConverting() != null && getOpenOfficeConverting();
-	}
+    @Override
+    public boolean isOpenOfficeConverting() {
+        return getOpenOfficeConverting() != null && getOpenOfficeConverting();
+    }
 
-	@Override
+    @Override
     public Set<? extends DocumentTemplate> readAllDocuments() {
         return Bennu.getInstance().getDocumentTemplatesSet();
     }
@@ -62,20 +75,20 @@ public class DocumentPrinterConfiguration extends DocumentPrinterConfiguration_B
     public Set<? extends DocumentTemplate> readActiveDocuments() {
         return Sets.filter(readAllDocuments(), DocumentTemplate.filters.active(true));
     }
-	
+
     @Atomic(mode = TxMode.SPECULATIVE_READ)
-	public static DocumentPrinterConfiguration getInstance() {
-		if (Bennu.getInstance().getDocumentPrinterConfiguration() == null) {
-			return initialize();
-		}
-		return Bennu.getInstance().getDocumentPrinterConfiguration();
-	}
-	
+    public static DocumentPrinterConfiguration getInstance() {
+        if (Bennu.getInstance().getDocumentPrinterConfiguration() == null) {
+            return initialize();
+        }
+        return Bennu.getInstance().getDocumentPrinterConfiguration();
+    }
+
     private static DocumentPrinterConfiguration initialize() {
         if (Bennu.getInstance().getDocumentPrinterConfiguration() == null) {
             return new DocumentPrinterConfiguration();
         }
         return Bennu.getInstance().getDocumentPrinterConfiguration();
     }
-    
+
 }

@@ -156,8 +156,12 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 </tr>
 <tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.AcademicServiceRequestTemplate.documentTemplateFile"/></th> 
-	<td>
-		<c:out value='${academicServiceRequestTemplate.documentTemplateFile.displayName}'/>
+	<td>		
+        <a
+            href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/search/download/${academicServiceRequestTemplate.documentTemplateFile.externalId}">
+                                                    
+            <c:out value='${academicServiceRequestTemplate.documentTemplateFile.displayName}'/>
+        </a>
 	</td> 
 </tr>
 </tbody>
