@@ -83,10 +83,4 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
         return null;
     }
 
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

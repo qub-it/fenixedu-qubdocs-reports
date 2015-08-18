@@ -108,9 +108,4 @@ public class CurriculumEntriesDataProvider implements IReportDataProvider {
         return curriculumEntries;
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 }

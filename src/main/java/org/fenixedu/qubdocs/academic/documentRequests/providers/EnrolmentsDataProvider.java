@@ -203,10 +203,4 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         return registration.getDegree().isEmpty();
     }
 
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

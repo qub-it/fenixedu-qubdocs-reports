@@ -59,9 +59,9 @@ public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
     protected Boolean includeAllRegistrations;
     protected Boolean includeSubstitutionCreditations;
 
-    public ExtraCurricularCoursesDataProvider(final Registration registration, final CycleType cycleType,
-            final Locale locale, final CurriculumEntryRemarksDataProvider remarksDataProvider,
-            final Boolean includeAllRegistrations, final Boolean includeSubstitutionCreditations) {
+    public ExtraCurricularCoursesDataProvider(final Registration registration, final CycleType cycleType, final Locale locale,
+            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Boolean includeAllRegistrations,
+            final Boolean includeSubstitutionCreditations) {
         this.registration = registration;
         this.cycleType = cycleType;
         this.remarksDataProvider = remarksDataProvider;
@@ -121,29 +121,30 @@ public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
                     if (curriculumLine.isDismissal() && !((Dismissal) curriculumLine).getCredits().isSubstitution()) {
                         continue;
                     }
-                    
+
                     if (curriculumLine.isDismissal() && !includeSubstitutionCreditations) {
                         continue;
                     }
 
-                    curriculumEntries.addAll(CurriculumEntry.transform(registration, curriculumLine.getCurriculum().getCurriculumEntries(),
-                            remarksDataProvider));
+                    curriculumEntries.addAll(CurriculumEntry.transform(registration, curriculumLine.getCurriculum()
+                            .getCurriculumEntries(), remarksDataProvider));
                 }
             }
-            
-            if(registration.getDegree().isFirstCycle() && registration.getLastStudentCurricularPlan().getCycle(CycleType.SECOND_CYCLE) != null) {
+
+            if (registration.getDegree().isFirstCycle()
+                    && registration.getLastStudentCurricularPlan().getCycle(CycleType.SECOND_CYCLE) != null) {
                 CycleCurriculumGroup cycle = registration.getLastStudentCurricularPlan().getCycle(CycleType.SECOND_CYCLE);
-                
+
                 Collection<CurriculumLine> approvedCurriculumLines = cycle.getApprovedCurriculumLines();
-                
+
                 for (final CurriculumLine curriculumLine : approvedCurriculumLines) {
-                    if(curriculumLine.isEnrolment() && !((Enrolment) curriculumLine).isSourceOfAnyCreditsInCurriculum()) {
-                        curriculumEntries.addAll(CurriculumEntry.transform(registration, curriculumLine.getCurriculum().getCurriculumEntries(),
-                                remarksDataProvider));
+                    if (curriculumLine.isEnrolment() && !((Enrolment) curriculumLine).isSourceOfAnyCreditsInCurriculum()) {
+                        curriculumEntries.addAll(CurriculumEntry.transform(registration, curriculumLine.getCurriculum()
+                                .getCurriculumEntries(), remarksDataProvider));
                     }
                 }
             }
-            
+
         }
 
         return this.curriculumEntries;
@@ -152,11 +153,5 @@ public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
     public boolean isEmpty() {
         return getCurriculumEntries().isEmpty();
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

@@ -9,7 +9,7 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 public class UserReportDataProvider implements IReportDataProvider {
 
     protected static final String KEY = "user";
-    
+
     @Override
     public boolean handleKey(final String key) {
         return KEY.equals(key);
@@ -27,9 +27,4 @@ public class UserReportDataProvider implements IReportDataProvider {
         return null;
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 }

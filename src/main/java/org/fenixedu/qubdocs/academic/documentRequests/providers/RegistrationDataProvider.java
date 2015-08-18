@@ -36,13 +36,13 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 public class RegistrationDataProvider implements IReportDataProvider {
 
     protected static final String KEY = "registration";
-    
+
     protected Registration registration;
-    
+
     public RegistrationDataProvider(final Registration registration) {
         this.registration = registration;
     }
-    
+
     @Override
     public boolean handleKey(final String key) {
         return KEY.equals(key);
@@ -50,18 +50,12 @@ public class RegistrationDataProvider implements IReportDataProvider {
 
     @Override
     public void registerFieldsAndImages(IDocumentFieldsData arg0) {
-        
+
     }
 
     @Override
     public Object valueForKey(final String key) {
         return handleKey(key) ? registration : null;
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

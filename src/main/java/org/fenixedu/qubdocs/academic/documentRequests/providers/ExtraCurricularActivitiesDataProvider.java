@@ -45,27 +45,29 @@ public class ExtraCurricularActivitiesDataProvider implements IReportDataProvide
 
     protected static final String KEY = "extraCurricularActivities";
     protected static final String KEY_FOR_LIST = "extraCurricularActivitiesList";
-    
-    protected final Comparator<ExtraCurricularActivity> EXTRA_CURRICULAR_ACTIVITY_COMPARATOR = new Comparator<ExtraCurricularActivity>() {
 
-        @Override
-        public int compare(ExtraCurricularActivity o1, ExtraCurricularActivity o2) {
-            int resultByType = o1.getType().getName().getContent(locale).compareTo(o2.getType().getName().getContent(locale));
-            
-            if(resultByType != 0) {
-                return resultByType;
-            }
-            
-            return o1.getStart().compareTo(o2.getStart());
-        }
-        
-    };
-    
+    protected final Comparator<ExtraCurricularActivity> EXTRA_CURRICULAR_ACTIVITY_COMPARATOR =
+            new Comparator<ExtraCurricularActivity>() {
+
+                @Override
+                public int compare(ExtraCurricularActivity o1, ExtraCurricularActivity o2) {
+                    int resultByType =
+                            o1.getType().getName().getContent(locale).compareTo(o2.getType().getName().getContent(locale));
+
+                    if (resultByType != 0) {
+                        return resultByType;
+                    }
+
+                    return o1.getStart().compareTo(o2.getStart());
+                }
+
+            };
+
     protected Student student;
     protected TreeSet<ExtraCurricularActivity> activities;
     protected Interval interval;
     protected Locale locale;
-    
+
     public ExtraCurricularActivitiesDataProvider(final Student student, final Interval interval, final Locale locale) {
         this.student = student;
         this.interval = interval;
@@ -84,41 +86,35 @@ public class ExtraCurricularActivitiesDataProvider implements IReportDataProvide
 
     @Override
     public Object valueForKey(String key) {
-        if(KEY.equals(key)) {
+        if (KEY.equals(key)) {
             return this;
-        } else if(KEY_FOR_LIST.equals(key)) {
+        } else if (KEY_FOR_LIST.equals(key)) {
             return this.getActivities();
         }
-        
+
         return null;
     }
-    
+
     public boolean isEmpty() {
         return getActivities().isEmpty();
     }
 
     public Set<ExtraCurricularActivity> getActivities() {
-        if(activities == null) {
+        if (activities == null) {
             TreeSet<ExtraCurricularActivity> result = Sets.newTreeSet(EXTRA_CURRICULAR_ACTIVITY_COMPARATOR);
-            
+
             for (ExtraCurricularActivity extraCurricularActivity : student.getExtraCurricularActivitySet()) {
-                if(!interval.overlaps(extraCurricularActivity.getActivityInterval())) {
+                if (!interval.overlaps(extraCurricularActivity.getActivityInterval())) {
                     continue;
                 }
-                
+
                 result.add(extraCurricularActivity);
             }
-            
+
             activities = result;
         }
-        
+
         return activities;
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

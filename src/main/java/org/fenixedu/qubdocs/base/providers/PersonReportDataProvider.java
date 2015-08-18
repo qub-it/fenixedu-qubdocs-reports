@@ -33,18 +33,28 @@ import org.fenixedu.qubdocs.util.DocsStringUtils;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
+import com.qubit.terra.docs.util.IReportFieldsProvider;
 
 public class PersonReportDataProvider implements IReportDataProvider {
-    
+
     protected static final String KEY = "person";
     protected static final String HAS_SOCIAL_SECURITY_NUMBER = "hasSocialSecurityNumber";
-    
+
+    public static final IReportFieldsProvider fields = new IReportFieldsProvider() {
+
+        @Override
+        public void registerFieldsMetadata(IFieldsExporter exporter) {
+            // TODO Auto-generated method stub            
+        }
+
+    };
+
     protected Person person;
-    
+
     public PersonReportDataProvider(final Person person) {
         this.person = person;
     }
-    
+
     @Override
     public boolean handleKey(final String key) {
         return KEY.equals(key) || HAS_SOCIAL_SECURITY_NUMBER.equals(key);
@@ -56,23 +66,17 @@ public class PersonReportDataProvider implements IReportDataProvider {
 
     @Override
     public Object valueForKey(final String key) {
-        if(KEY.equals(key)) {
-        	return person;
-        } else if(HAS_SOCIAL_SECURITY_NUMBER.equals(key)) {
-        	return !DocsStringUtils.isEmpty(person.getSocialSecurityNumber());
+        if (KEY.equals(key)) {
+            return person;
+        } else if (HAS_SOCIAL_SECURITY_NUMBER.equals(key)) {
+            return !DocsStringUtils.isEmpty(person.getSocialSecurityNumber());
         }
-        
+
         return null;
     }
 
     public void checkData() {
-        
-    }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
 }

@@ -290,10 +290,4 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         return !degreeType.isBolonhaType() && degreeType.isDegree();
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

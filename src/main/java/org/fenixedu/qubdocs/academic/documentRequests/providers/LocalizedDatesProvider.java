@@ -34,11 +34,10 @@ import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
-
 public class LocalizedDatesProvider implements IReportDataProvider {
 
     protected static final String KEY = "localizedDate";
-    
+
     @Override
     public boolean handleKey(final String key) {
         return KEY.equals(key);
@@ -52,21 +51,15 @@ public class LocalizedDatesProvider implements IReportDataProvider {
 
     @Override
     public Object valueForKey(final String keys) {
-        return handleKey(keys) ? this : null; 
+        return handleKey(keys) ? this : null;
     }
-    
+
     public LocalDate nowDate() {
         return new LocalDate();
     }
-    
+
     public DateTime nowDateTime() {
         return new DateTime();
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
-        
 }

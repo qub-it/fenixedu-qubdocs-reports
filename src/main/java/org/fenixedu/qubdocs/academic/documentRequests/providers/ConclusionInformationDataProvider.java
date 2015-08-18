@@ -138,10 +138,12 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
         protected EctsGraduationGradeConversionTable getGraduationEctsConversionTable() {
             final ExecutionYear conclusionYear = conclusionBean.getConclusionYear();
-            final Collection<CycleCourseGroup> parentCycleCourseGroups = programConclusion.groupFor(registration.getLastDegreeCurricularPlan()).get().getParentCycleCourseGroups();
+            final Collection<CycleCourseGroup> parentCycleCourseGroups =
+                    programConclusion.groupFor(registration.getLastDegreeCurricularPlan()).get().getParentCycleCourseGroups();
 
             EctsGraduationGradeConversionTable graduationGradeConversionTable =
-                    EctsTableIndex.getGraduationGradeConversionTable(registration.getDegree(), !parentCycleCourseGroups.isEmpty() ? parentCycleCourseGroups.iterator().next().getCycleType() : null,
+                    EctsTableIndex.getGraduationGradeConversionTable(registration.getDegree(),
+                            !parentCycleCourseGroups.isEmpty() ? parentCycleCourseGroups.iterator().next().getCycleType() : null,
                             conclusionYear.getAcademicInterval(), new DateTime());
             return graduationGradeConversionTable;
         }
@@ -222,11 +224,5 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             return getDismissalCredits().compareTo(BigDecimal.ZERO) > 0;
         }
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

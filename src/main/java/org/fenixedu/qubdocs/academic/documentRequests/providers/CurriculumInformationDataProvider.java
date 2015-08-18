@@ -53,10 +53,4 @@ public class CurriculumInformationDataProvider implements IReportDataProvider {
         return curriculum.getCurricularYear();
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
