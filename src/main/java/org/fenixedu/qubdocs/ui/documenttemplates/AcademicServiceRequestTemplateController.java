@@ -47,6 +47,7 @@ import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
 import org.fenixedu.commons.StringNormalizer;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.domain.DocumentTemplateFile;
 import org.fenixedu.qubdocs.domain.serviceRequests.AcademicServiceRequestTemplate;
 import org.fenixedu.qubdocs.dto.documenttemplates.AcademicServiceRequestTemplateBean;
@@ -381,137 +382,45 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
 
     @RequestMapping(value = _CREATECUSTOMTEMPLATE_URI, method = RequestMethod.GET)
     public String createcustomtemplate(Model model) {
-        model.addAttribute("AcademicServiceRequestTemplate_serviceRequestType_options",
-                new ArrayList<org.fenixedu.academic.domain.serviceRequests.ServiceRequestType>()); // CHANGE_ME - MUST DEFINE RELATION
-        //model.addAttribute("AcademicServiceRequestTemplate_serviceRequestType_options", org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findAll()); // CHANGE_ME - MUST DEFINE RELATION
-
-        //IF ANGULAR, initialize the Bean
-        //AcademicServiceRequestTemplateBean bean = new AcademicServiceRequestTemplateBean();
-        //this.setAcademicServiceRequestTemplateBean(bean, model);
+        model.addAttribute("AcademicServiceRequestTemplate_language_options", CoreConfiguration.supportedLocales());
+        model.addAttribute(
+                "AcademicServiceRequestTemplate_serviceRequestType_options",
+                org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
+                        .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
 
         return "qubdocsreports/documenttemplates/academicservicerequesttemplate/createcustomtemplate";
     }
 
-    //
-//                   THIS SHOULD BE USED ONLY WHEN USING ANGULAR 
-    //
-//                          // @formatter: off
-//              
-//                  private static final String _CREATECUSTOMTEMPLATEPOSTBACK_URI ="/createcustomtemplatepostback";
-//                  public static final String  CREATECUSTOMTEMPLATEPOSTBACK_URL = CONTROLLER_URL + _CREATECUSTOMTEMPLATEPOSTBACK_URI;
-//                  @RequestMapping(value = _CREATECUSTOMTEMPLATEPOSTBACK_URI, method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-//                      public @ResponseBody String createcustomtemplatepostback(@RequestParam(value = "bean", required = false) AcademicServiceRequestTemplateBean bean,
-//                      Model model) {
-    //
-//                      // Do validation logic ?!?!
-//                      //if (something_wrong){
-//                      //                 return new ResponseEntity<String>(<MESSAGE_FROM_BUNDLE>,HttpStatus.BAD_REQUEST);
-//                      //}
-//                      this.setAcademicServiceRequestTemplateBean(bean, model);
-//                      return new ResponseEntity<String>(getBeanJson(bean), HttpStatus.OK);
-//                  }
-//                  
-//                  @RequestMapping(value = CREATECUSTOMTEMPLATE, method = RequestMethod.POST)
-//                      public String createcustomtemplate(@RequestParam(value = "bean", required = false) AcademicServiceRequestTemplateBean bean,
-//                      Model model, RedirectAttributes redirectAttributes ) {
-    //
-//                      /*
-//                      *  Creation Logic
-//                      */
-//                      
-//                      try
-//                      {
-    //
-//                          AcademicServiceRequestTemplate academicServiceRequestTemplate = createAcademicServiceRequestTemplate(... get properties from bean ...,model);
-//                          
-//                      //Success Validation
-//                       //Add the bean to be used in the View
-//                      model.addAttribute("academicServiceRequestTemplate",academicServiceRequestTemplate);
-//                      return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/" + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
-//                      }
-//                      catch (Exception de)
-//                      {
-    //
-//                          /*
-//                           * If there is any error in validation 
-//                           *
-//                           * Add a error / warning message
-//                           * 
-//                           * addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.create") + de.getLocalizedMessage(),model);
-//                           * addWarningMessage(" Warning creating due to "+ ex.getLocalizedMessage(),model); */
-//                          
-//                          addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.create") + de.getLocalizedMessage(),model);
-//                          this.setAcademicServiceRequestTemplateBean(bean, model);                
-//                          return "qubdocsreports/documenttemplates/academicservicerequesttemplate/createcustomtemplate";
-//                          
-//                      }
-//                  }
-//                          // @formatter: on
-
-//                  
     @RequestMapping(value = _CREATECUSTOMTEMPLATE_URI, method = RequestMethod.POST)
-    public String createcustomtemplate(
-            @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name,
-            @RequestParam(value = "description", required = false) org.fenixedu.commons.i18n.LocalizedString description,
-            @RequestParam(value = "language", required = false) java.util.Locale language,
-            @RequestParam(value = "servicerequesttype", required = false) org.fenixedu.academic.domain.serviceRequests.ServiceRequestType serviceRequestType,
-            @RequestParam(value = "documentTemplateFile", required = true) MultipartFile documentTemplateFile, Model model,
+    public String createcustomtemplate(@RequestParam(value = "name", required = true) LocalizedString name, @RequestParam(
+            value = "description", required = true) LocalizedString description, @RequestParam(value = "language",
+            required = true) Locale language,
+            @RequestParam(value = "servicerequesttype", required = true) ServiceRequestType serviceRequestType, @RequestParam(
+                    value = "documentTemplateFile", required = true) MultipartFile documentTemplateFile, Model model,
             RedirectAttributes redirectAttributes) {
-        /*
-        *  Creation Logic
-        */
-
         try {
-
             AcademicServiceRequestTemplate academicServiceRequestTemplate =
                     createAcademicServiceRequestTemplate(name, description, language, serviceRequestType, documentTemplateFile);
 
-            //Success Validation
-            //Add the bean to be used in the View
             model.addAttribute("academicServiceRequestTemplate", academicServiceRequestTemplate);
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/"
                     + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
         } catch (Exception de) {
-
-            // @formatter: off
-            /*
-             * If there is any error in validation 
-             *
-             * Add a error / warning message
-             * 
-             * addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.create") + de.getLocalizedMessage(),model);
-             * addWarningMessage(" Warning creating due to "+ ex.getLocalizedMessage(),model); */
-            // @formatter: on
-
             addErrorMessage(
                     BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
                             + de.getLocalizedMessage(), model);
-            return createcustomtemplate(model);
         }
+        return createcustomtemplate(model);
     }
 
     @Atomic
-    public AcademicServiceRequestTemplate createAcademicServiceRequestTemplate(org.fenixedu.commons.i18n.LocalizedString name,
-            org.fenixedu.commons.i18n.LocalizedString description, java.util.Locale language,
-            org.fenixedu.academic.domain.serviceRequests.ServiceRequestType serviceRequestType, MultipartFile documentTemplateFile) {
-
-        // @formatter: off
-
-        /*
-         * Modify the creation code here if you do not want to create
-         * the object with the default constructor and use the setter
-         * for each field
-         * 
-         */
-
-        // CHANGE_ME It's RECOMMENDED to use "Create service" in DomainObject
-        //AcademicServiceRequestTemplate academicServiceRequestTemplate = academicServiceRequestTemplate.create(fields_to_create);
-
-        //Instead, use individual SETTERS and validate "CheckRules" in the end
-        // @formatter: on
-
+    public AcademicServiceRequestTemplate createAcademicServiceRequestTemplate(LocalizedString name, LocalizedString description,
+            java.util.Locale language, ServiceRequestType serviceRequestType, MultipartFile documentTemplateFile)
+            throws IOException {
         AcademicServiceRequestTemplate academicServiceRequestTemplate =
                 AcademicServiceRequestTemplate.createCustom(name, description, language, serviceRequestType);
+        DocumentTemplateFile.create(academicServiceRequestTemplate, documentTemplateFile.getOriginalFilename(),
+                documentTemplateFile.getBytes());
         return academicServiceRequestTemplate;
     }
 
