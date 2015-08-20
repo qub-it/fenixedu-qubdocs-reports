@@ -77,11 +77,16 @@ public class DocumentPrinter implements ReportPrinter {
             final CycleType requestedCycle = requestedCycle(registration, documentRequest);
             final ProgramConclusion programConclusion = programConclusion(registration, documentRequest);
 
+            AcademicServiceRequestTemplate academicServiceRequestTemplate = documentRequest.getAcademicServiceRequestTemplate();
+            if (academicServiceRequestTemplate == null) {
+                academicServiceRequestTemplate =
+                        AcademicServiceRequestTemplate.findTemplateFor(documentRequest.getLanguage(),
+                                documentRequest.getServiceRequestType(), documentRequest.getDegreeType(), programConclusion,
+                                documentRequest.getDegree());
+            }
+
             final FenixEduDocumentGenerator generator =
-                    FenixEduDocumentGenerator.create(AcademicServiceRequestTemplate.findTemplateFor(
-                            documentRequest.getLanguage(), documentRequest.getServiceRequestType(),
-                            documentRequest.getDegreeType(), programConclusion, documentRequest.getDegree()),
-                            FenixEduDocumentGenerator.PDF);
+                    FenixEduDocumentGenerator.create(academicServiceRequestTemplate, FenixEduDocumentGenerator.PDF);
 
             generator.registerDataProvider(new PersonReportDataProvider(documentRequest.getStudent().getPerson()));
             generator.registerDataProvider(new RegistrationDataProvider(registration));
