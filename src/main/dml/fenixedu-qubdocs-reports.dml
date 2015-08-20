@@ -56,6 +56,13 @@ public class DocumentPrinterConfiguration {
 }
 
 
+relation AcademicServiceRequestAcademicServiceRequestTemplate {
+    .org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest playsRole academicServiceRequests {
+        multiplicity *;
+    }
+ 
+    serviceRequests.AcademicServiceRequestTemplate playsRole academicServiceRequestTemplate;
+}
 
 relation DocumentTemplateBennu {
  	DocumentTemplate playsRole documentTemplates {
