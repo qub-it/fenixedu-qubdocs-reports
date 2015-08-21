@@ -7,6 +7,7 @@
  *  - Copyright © 2015 Universidade de Lisboa (after any Go-Live phase)
  *
  * Contributors: anil.mamede@qub-it.com
+ *               diogo.simoes@qub-it.com
  *
  * 
  * This file is part of FenixEdu QubDocs.
@@ -31,5 +32,5 @@ import org.fenixedu.bennu.spring.BennuSpringModule;
 
 @BennuSpringModule(basePackages = "org.fenixedu.qubdocs.ui", bundles = "FenixeduQubdocsReportsResources")
 public class FenixeduQubdocsReportsSpringConfiguration {
-	public static final String BUNDLE = "resources/FenixeduQubdocsReportsResources";
+    public static final String BUNDLE = "resources/FenixeduQubdocsReportsResources";
 }

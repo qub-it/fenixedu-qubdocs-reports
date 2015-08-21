@@ -7,6 +7,7 @@
  *  - Copyright © 2015 Universidade de Lisboa (after any Go-Live phase)
  *
  * Contributors: anil.mamede@qub-it.com
+ *               diogo.simoes@qub-it.com
  *
  * 
  * This file is part of FenixEdu QubDocs.

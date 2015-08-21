@@ -7,6 +7,7 @@
  *  - Copyright © 2015 Universidade de Lisboa (after any Go-Live phase)
  *
  * Contributors: anil.mamede@qub-it.com
+ *               diogo.simoes@qub-it.com
  *
  * 
  * This file is part of FenixEdu QubDocs.
@@ -49,8 +50,8 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 import com.qubit.terra.docs.util.ReportGenerator;
 
 public class DocumentTemplate extends DocumentTemplate_Base implements IDocumentTemplate {
-    
-	protected DocumentTemplate() {
+
+    protected DocumentTemplate() {
         super();
         setBennu(Bennu.getInstance());
         setCreationDate(new DateTime());
@@ -80,16 +81,16 @@ public class DocumentTemplate extends DocumentTemplate_Base implements IDocument
         check(getCreator(), "error.DocumentTemplate.creationResponsible.required");
         check(getUpdater(), "error.DocumentTemplate.updateResponsible.required");
     }
-    
+
     private static <T extends Object> void check(T subject, String exceptionCause) {
-    	if (subject == null) {
-    		throw new DomainException(exceptionCause);
-    	}
+        if (subject == null) {
+            throw new DomainException(exceptionCause);
+        }
     }
-    
+
     @Override
     public IDocumentTemplateVersion getCurrentVersion() {
-    	return getDocumentTemplateFile();
+        return getDocumentTemplateFile();
     }
 
     @Override
@@ -142,7 +143,7 @@ public class DocumentTemplate extends DocumentTemplate_Base implements IDocument
 
     public FenixEduDocumentGenerator createGenerator(final Collection<? extends IReportDataProvider> dataProviders,
             final String mimeTypeFormat) {
-    	FenixEduDocumentGenerator reportGenerator = FenixEduDocumentGenerator.create(this, mimeTypeFormat);
+        FenixEduDocumentGenerator reportGenerator = FenixEduDocumentGenerator.create(this, mimeTypeFormat);
         reportGenerator.registerDataProviders(dataProviders);
         return reportGenerator;
     }
@@ -170,5 +171,5 @@ public class DocumentTemplate extends DocumentTemplate_Base implements IDocument
         }
 
     }
-    
+
 }
