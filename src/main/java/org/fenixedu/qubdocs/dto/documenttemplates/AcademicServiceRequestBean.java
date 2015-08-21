@@ -78,7 +78,9 @@ public class AcademicServiceRequestBean implements IBean {
         Set<AcademicServiceRequestTemplate> templates =
                 AcademicServiceRequestTemplate.readCustomTemplatesFor(documentRequest.getLanguage(),
                         documentRequest.getServiceRequestType());
-        templates.add(standardTemplate);
+        if (standardTemplate != null) {
+            templates.add(standardTemplate);
+        }
         setAcademicServiceRequestTemplateDataSource(templates);
         setAcademicServiceRequestTemplate(standardTemplate);
     }
