@@ -33,11 +33,11 @@ import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.administrativeOffice.AdministrativeOffice;
 import org.fenixedu.academic.domain.person.Gender;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner;
 import org.fenixedu.bennu.FenixeduQubdocsReportsSpringConfiguration;
 import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
+import org.fenixedu.qubdocs.domain.serviceRequests.documentRequests.DocumentSigner;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsController;
 import org.springframework.ui.Model;
