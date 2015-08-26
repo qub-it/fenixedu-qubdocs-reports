@@ -34,11 +34,12 @@ public class DocumentSigner extends DocumentSigner_Base {
         setBennu(Bennu.getInstance());
     }
 
-    protected DocumentSigner(AdministrativeOffice administrativeOffice, String responsibleName,
+    protected DocumentSigner(AdministrativeOffice administrativeOffice, String responsibleName, String responsibleShortName,
             LocalizedString responsibleFunction, LocalizedString responsibleUnit, Gender responsibleGender) {
         this();
         setAdministrativeOffice(administrativeOffice);
         setResponsibleName(responsibleName);
+        setResponsibleShortName(responsibleShortName);
         setResponsibleFunction(responsibleFunction);
         setResponsibleUnit(responsibleUnit);
         setResponsibleGender(responsibleGender);
@@ -52,12 +53,14 @@ public class DocumentSigner extends DocumentSigner_Base {
     }
 
     @Atomic
-    public void edit(String responsibleName, LocalizedString responsibleFunction, LocalizedString responsibleUnit,
-            Gender responsibleGender) {
+    public void edit(String responsibleName, String responsibleShortName, LocalizedString responsibleFunction,
+            LocalizedString responsibleUnit, Gender responsibleGender, boolean responsibleDefault) {
         setResponsibleName(responsibleName);
+        setResponsibleShortName(responsibleShortName);
         setResponsibleFunction(responsibleFunction);
         setResponsibleUnit(responsibleUnit);
         setResponsibleGender(responsibleGender);
+        setDefaultSignature(responsibleDefault);
     }
 
     public boolean isDeletable() {
@@ -93,6 +96,12 @@ public class DocumentSigner extends DocumentSigner_Base {
         super.setDefaultSignature(defaultSignature);
     }
 
+    @Override
+    public String getResponsibleShortName() {
+        String shortName = super.getResponsibleShortName();
+        return (shortName == null || shortName.trim().isEmpty()) ? getResponsibleName() : shortName;
+    }
+
     // @formatter: off
     /************
      * SERVICES *
@@ -109,8 +118,10 @@ public class DocumentSigner extends DocumentSigner_Base {
 
     @Atomic
     public static DocumentSigner create(AdministrativeOffice administrativeOffice, String responsibleName,
-            LocalizedString responsibleFunction, LocalizedString responsibleUnit, Gender responsibleGender) {
-        return new DocumentSigner(administrativeOffice, responsibleName, responsibleFunction, responsibleUnit, responsibleGender);
+            String responsibleShortName, LocalizedString responsibleFunction, LocalizedString responsibleUnit,
+            Gender responsibleGender) {
+        return new DocumentSigner(administrativeOffice, responsibleName, responsibleShortName, responsibleFunction,
+                responsibleUnit, responsibleGender);
     }
 
 }

@@ -93,10 +93,9 @@ public class FLConfigurationScript extends CustomTask {
                 .forEach(dpti -> dpti.setActive(false));
 
         /* DocumentSigners */
-        DocumentSigner
-                .create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Anabela Machado", new LocalizedString(pt,
-                        "Coordenadora da Divisão dos Serviços Académicos"), new LocalizedString(pt, "Faculdade de Letras"),
-                        Gender.FEMALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Anabela Machado", "Anabela Machado",
+                new LocalizedString(pt, "Coordenadora da Divisão dos Serviços Académicos"), new LocalizedString(pt,
+                        "Faculdade de Letras"), Gender.FEMALE);
     }
 
 }

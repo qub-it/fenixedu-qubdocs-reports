@@ -50,6 +50,7 @@ public class serviceRequests.AcademicServiceRequestTemplate extends DocumentTemp
 
 public class serviceRequests.documentRequests.DocumentSigner {
     String responsibleName;
+    String responsibleShortName;
     LocalizedString responsibleFunction;
     LocalizedString responsibleUnit;
     Gender responsibleGender;
