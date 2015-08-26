@@ -37,9 +37,9 @@ import org.fenixedu.academic.domain.person.Gender;
 import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeTypeInstance;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner;
 import org.fenixedu.bennu.scheduler.custom.CustomTask;
 import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.qubdocs.domain.serviceRequests.documentRequests.DocumentSigner;
 
 public class RULConfigurationScript extends CustomTask {
 
@@ -91,9 +91,9 @@ public class RULConfigurationScript extends CustomTask {
 
         /* DocumentSigners */
 
-        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Carlos Sirgado", new LocalizedString(pt,
-                "Diretor do Departamento dos Assuntos Académicos"),
-                new LocalizedString(pt, "Reitoria da Universidade de Lisboa"), Gender.MALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Carlos Sirgado", "Carlos Sirgado",
+                new LocalizedString(pt, "Diretor do Departamento dos Assuntos Académicos"), new LocalizedString(pt,
+                        "Reitoria da Universidade de Lisboa"), Gender.MALE);
 
     }
 

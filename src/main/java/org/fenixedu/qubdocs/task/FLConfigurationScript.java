@@ -31,17 +31,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.administrativeOffice.AdministrativeOffice;
 import org.fenixedu.academic.domain.person.Gender;
 import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeType;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeTypeInstance;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner;
 import org.fenixedu.bennu.scheduler.custom.CustomTask;
 import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.qubdocs.domain.serviceRequests.documentRequests.DocumentSigner;
 
 public class FLConfigurationScript extends CustomTask {
 
@@ -95,10 +93,9 @@ public class FLConfigurationScript extends CustomTask {
                 .forEach(dpti -> dpti.setActive(false));
 
         /* DocumentSigners */
-        DocumentSigner
-                .create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Anabela Machado", new LocalizedString(pt,
-                        "Coordenadora da Divisão dos Serviços Académicos"), new LocalizedString(pt, "Faculdade de Letras"),
-                        Gender.FEMALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Anabela Machado", "Anabela Machado",
+                new LocalizedString(pt, "Coordenadora da Divisão dos Serviços Académicos"), new LocalizedString(pt,
+                        "Faculdade de Letras"), Gender.FEMALE);
     }
 
 }

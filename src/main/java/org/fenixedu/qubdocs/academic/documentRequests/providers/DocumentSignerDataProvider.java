@@ -2,7 +2,7 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import org.fenixedu.academic.domain.person.Gender;
 import org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner;
+import org.fenixedu.qubdocs.domain.serviceRequests.documentRequests.DocumentSigner;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IFieldsExporter;
