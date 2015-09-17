@@ -44,7 +44,26 @@ public class PersonReportDataProvider implements IReportDataProvider {
 
         @Override
         public void registerFieldsMetadata(IFieldsExporter exporter) {
-            // TODO Auto-generated method stub            
+            exporter.registerSimpleField("person.name", "Nome do Aluno");
+            exporter.registerSimpleField("person.givenNames", "Nomes próprios");
+            exporter.registerSimpleField("person.familyNames", "Apelidos");
+            exporter.registerSimpleField("person.female", "Se é do sexo feminino");
+            exporter.registerSimpleField("person.male", "Se é do sexo masculino");
+            exporter.registerSimpleField(
+                    "person.dateOfBirthYearMonthDay",
+                    "Data Nascimento. Data por extenso: dates.extendedDate(person.dateOfBirthYearMonthDay) Data numérica: dates.numericDate(person.dateOfBirthYearMonthDay)");
+            exporter.registerSimpleField("person.idDocumentType.localizedNameI18N", "Tipo de Doc. Identificação");
+            exporter.registerSimpleField("person.documentIdNumber", "N. Doc. Identificação");
+            exporter.registerSimpleField(
+                    "person.expirationDateOfDocumentIdYearMonthDay",
+                    "Data validade do Doc. Identificação. Data por extenso: dates.extendedDate(person.expirationDateOfDocumentIdYearMonthDay) Data numérica: dates.numericDate(person.expirationDateOfDocumentIdYearMonthDay)");
+            exporter.registerSimpleField("person.nameOfFather", "Nome do pai");
+            exporter.registerSimpleField("person.nameOfMother", "Nome da mãe");
+            exporter.registerSimpleField("person.districtOfBirth", "Naturalidade");
+            exporter.registerSimpleField("person.country.countryNationality", "Nacionalidade");
+
+//            exporter.registerCollectionField("testList_person", "Lista de itens de teste Person.");
+//            exporter.registerSimpleField("testList.test_person", "Item de teste Person.");
         }
 
     };
