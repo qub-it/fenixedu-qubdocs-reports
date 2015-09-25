@@ -53,6 +53,8 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     protected static final String KEY_FOR_TOTAL_NORMAL_ECTS = "totalNormalECTS";
     protected static final String KEY_FOR_EXTRA_ENROLMENTS = "extraEnrolmentsList";
     protected static final String KEY_FOR_STANDALONE_ENROLMENTS = "standaloneEnrolmentsList";
+    protected static final String KEY_FOR_TOTAL_STANDALONE_ENROLMENTS = "totalStandaloneEnrolments";
+    protected static final String KEY_FOR_TOTAL_STANDALONE_ECTS = "totalStandaloneECTS";
     protected static final String KEY_HAS_EXTRA_ENROLMENTS = "hasExtraEnrolments";
     protected static final String KEY_HAS_STANDALONE_ENROLMENTS = "hasStandaloneEnrolments";
 
@@ -86,6 +88,7 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         return KEY.equals(key) || KEY_FOR_LIST.equals(key) || KEY_FOR_NORMAL_ENROLMENTS.equals(key)
                 || KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)
                 || KEY_FOR_EXTRA_ENROLMENTS.equals(key) || KEY_FOR_STANDALONE_ENROLMENTS.equals(key)
+                || KEY_FOR_TOTAL_STANDALONE_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_STANDALONE_ECTS.equals(key)
                 || KEY_HAS_EXTRA_ENROLMENTS.equals(key) || KEY_HAS_STANDALONE_ENROLMENTS.equals(key);
     }
 
@@ -105,6 +108,10 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
             return this.getExtraCurriculumEntries();
         } else if (KEY_FOR_STANDALONE_ENROLMENTS.equals(key)) {
             return this.getStandaloneCurriculumEntries();
+        } else if (KEY_FOR_TOTAL_STANDALONE_ENROLMENTS.equals(key)) {
+            return getTotalStandaloneCurriculumEntries();
+        } else if (KEY_FOR_TOTAL_STANDALONE_ECTS.equals(key)) {
+            return getTotalStandaloneECTS();
         } else if (KEY_HAS_EXTRA_ENROLMENTS.equals(key)) {
             return !this.getExtraCurriculumEntries().isEmpty();
         } else if (KEY_HAS_STANDALONE_ENROLMENTS.equals(key)) {
@@ -142,6 +149,15 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         }
 
         return standaloneCurriculumEntries;
+    }
+
+    public int getTotalStandaloneCurriculumEntries() {
+        return getStandaloneCurriculumEntries().size();
+    }
+
+    public BigDecimal getTotalStandaloneECTS() {
+        return getStandaloneCurriculumEntries().stream().map(CurriculumEntry::getEctsCredits)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public Set<CurriculumEntry> getExtraCurriculumEntries() {
