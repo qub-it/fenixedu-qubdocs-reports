@@ -90,9 +90,9 @@ public class FFConfigurationScript extends CustomTask {
                 .forEach(dpti -> dpti.setActive(false));
 
         /* DocumentSigners */
-        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Helena Barreira", new LocalizedString(pt,
-                "Chefe do Núcleo de Planeamento e Gestão Académica"), new LocalizedString(pt, "Faculdade de Farmácia"),
-                Gender.FEMALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Helena Barreira", "Helena Barreira",
+                new LocalizedString(pt, "Chefe do Núcleo de Planeamento e Gestão Académica"), new LocalizedString(pt,
+                        "Faculdade de Farmácia"), Gender.FEMALE);
     }
 
 }

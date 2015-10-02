@@ -32,6 +32,7 @@ external class .org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
 external class .org.fenixedu.academic.domain.degree.DegreeType;
 external class .org.fenixedu.academic.domain.Degree;
 external class .org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
+external class .org.fenixedu.academic.domain.administrativeOffice.AdministrativeOffice;
 
 public class DocumentTemplate {
     //String reportKey;				// Existed in the oddjet connector 
@@ -45,6 +46,15 @@ public class DocumentTemplate {
 public class serviceRequests.AcademicServiceRequestTemplate extends DocumentTemplate {
 	Locale language (REQUIRED);
 	Boolean custom;
+}
+
+public class .org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner {
+    String responsibleName;
+    String responsibleShortName;
+    LocalizedString responsibleFunction;
+    LocalizedString responsibleUnit;
+    Gender responsibleGender;
+    Boolean defaultSignature;
 }
 
 public class DocumentTemplateFile extends .org.fenixedu.bennu.io.domain.GenericFile {
@@ -175,5 +185,37 @@ relation DocumentPrinterConfigurationBennu {
 	
 	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu {
         multiplicity 1..1;
+    }
+}
+
+/* DocumentSigner */
+
+relation DocumentSignerBennu {
+    .org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner playsRole documentSigners {
+        multiplicity *;
+    }
+    
+    .org.fenixedu.bennu.core.domain.Bennu playsRole bennu {
+        multiplicity 1..1;
+    }
+}
+
+relation DocumentSignerAdministrativeOffice {
+    .org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner playsRole documentSigners {
+        multiplicity  *;
+    }
+    
+    .org.fenixedu.academic.domain.administrativeOffice.AdministrativeOffice playsRole administrativeOffice {
+        multiplicity 0..1;
+    }
+}
+
+relation DocumentSignerAcademicServiceRequest {
+    .org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner playsRole documentSigner {
+        multiplicity  0..1;
+    }
+    
+    .org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest playsRole academicServiceRequests {
+        multiplicity *;
     }
 }

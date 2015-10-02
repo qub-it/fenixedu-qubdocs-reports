@@ -26,6 +26,7 @@
  * along with FenixEdu Specifications.  If not, see <http://www.gnu.org/licenses/>.
  */
  -->
+<%@page import="org.fenixedu.qubdocs.ui.manageDocumentSignature.DocumentSignatureController"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
@@ -76,11 +77,11 @@ ${portal.toolkit()}
 </div><!-- /.modal -->
 <%-- NAVIGATION --%>
 <div class="well well-sm" style="display:inline-block">
-	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/"  ><spring:message code="label.event.back" /></a>
+	<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}<%= DocumentSignatureController.SEARCH_URL %>"  ><spring:message code="label.event.back" /></a>
 |&nbsp;&nbsp;				<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;<a class="" href="#" data-toggle="modal"
 data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 				|&nbsp;&nbsp;
-	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/managedocumentsignature/documentsignature/update/${documentSignature.externalId}"  ><spring:message code="label.event.update" /></a></div>
+	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}<%= DocumentSignatureController.UPDATE_URL %>${documentSignature.externalId}"  ><spring:message code="label.event.update" /></a></div>
 	<c:if test="${not empty infoMessages}">
 				<div class="alert alert-info" role="alert">
 					
@@ -130,6 +131,12 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 	</td> 
 </tr>
 <tr>
+    <th scope="row" class="col-xs-3"><spring:message code="label.DocumentSignature.responsibleShortName"/></th> 
+    <td>
+        <c:out value='${documentSignature.responsibleShortName}'/>
+    </td> 
+</tr>
+<tr>
 	<th scope="row" class="col-xs-3"><spring:message code="label.DocumentSignature.responsibleFunction"/></th> 
 	<td>
 		<c:out value='${documentSignature.responsibleFunction.content}'/>
@@ -155,7 +162,6 @@ data-target="#deleteModal"><spring:message code="label.event.delete" /></a>
 
 <script>
 $(document).ready(function() {
-
 	
 	});
 </script>
