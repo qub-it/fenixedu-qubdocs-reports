@@ -92,8 +92,8 @@ public class FMVConfigurationScript extends CustomTask {
                 .forEach(dpti -> dpti.setActive(false));
 
         /* DocumentSigners */
-        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Cristina Pereira", new LocalizedString(pt,
-                "Chefe da Divisão Académica e Recursos Humanos"), new LocalizedString(pt, "Faculdade de Medicina Veterinária"),
-                Gender.FEMALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Cristina Pereira", "Cristina Pereira",
+                new LocalizedString(pt, "Chefe da Divisão Académica e Recursos Humanos"), new LocalizedString(pt,
+                        "Faculdade de Medicina Veterinária"), Gender.FEMALE);
     }
 }

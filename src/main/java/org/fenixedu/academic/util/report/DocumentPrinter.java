@@ -34,6 +34,7 @@ import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DegreeFinalizationCertificateRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DiplomaRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
+import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentSigner;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.ExtraCurricularCertificateRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.RegistryDiplomaRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.StandaloneEnrolmentCertificateRequest;
@@ -59,6 +60,8 @@ import org.fenixedu.qubdocs.base.providers.UserReportDataProvider;
 import org.fenixedu.qubdocs.domain.DocumentPrinterConfiguration;
 import org.fenixedu.qubdocs.domain.serviceRequests.AcademicServiceRequestTemplate;
 import org.joda.time.LocalDate;
+
+import pt.ist.fenixframework.Atomic;
 
 import com.qubit.terra.docs.core.DocumentTemplateEngine;
 import com.qubit.terra.docs.core.IDocumentTemplateService;
@@ -88,6 +91,10 @@ public class DocumentPrinter implements ReportPrinter {
 
             final FenixEduDocumentGenerator generator =
                     FenixEduDocumentGenerator.create(academicServiceRequestTemplate, FenixEduDocumentGenerator.PDF);
+
+            if (documentRequest.getDocumentSigner() == null) {
+                resetDocumentSigner(documentRequest);
+            }
 
             generator.registerDataProvider(new PersonReportDataProvider(documentRequest.getStudent().getPerson()));
             generator.registerDataProvider(new RegistrationDataProvider(registration));
@@ -154,6 +161,11 @@ public class DocumentPrinter implements ReportPrinter {
         }
 
         return null;
+    }
+
+    @Atomic
+    private void resetDocumentSigner(DocumentRequest documentRequest) {
+        documentRequest.setDocumentSigner(DocumentSigner.findDefaultDocumentSignature());
     }
 
     private ProgramConclusion programConclusion(final Registration registration, final DocumentRequest documentRequest) {

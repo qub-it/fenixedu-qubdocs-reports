@@ -91,9 +91,9 @@ public class RULConfigurationScript extends CustomTask {
 
         /* DocumentSigners */
 
-        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Carlos Sirgado", new LocalizedString(pt,
-                "Diretor do Departamento dos Assuntos Académicos"),
-                new LocalizedString(pt, "Reitoria da Universidade de Lisboa"), Gender.MALE);
+        DocumentSigner.create(AdministrativeOffice.readDegreeAdministrativeOffice(), "Carlos Sirgado", "Carlos Sirgado",
+                new LocalizedString(pt, "Diretor do Departamento dos Assuntos Académicos"), new LocalizedString(pt,
+                        "Reitoria da Universidade de Lisboa"), Gender.MALE);
 
     }
 
