@@ -66,12 +66,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pt.ist.fenixframework.Atomic;
 
-//@Component("org.fenixedu.qubdocs.ui.documentTemplates") <-- Use for duplicate controller name disambiguation
 @SpringFunctionality(app = FenixeduQubdocsReportsController.class, title = "label.title.documentTemplates",
         accessGroup = "logged")
-// CHANGE_ME accessGroup = "group1 | group2 | groupXPTO"
-//or
-//@BennuSpringController(value = FenixeduQubdocsReportsController.class)
 @RequestMapping(AcademicServiceRequestTemplateController.CONTROLLER_URL)
 public class AcademicServiceRequestTemplateController extends FenixeduQubdocsReportsBaseController {
 
@@ -81,15 +77,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
 
     @RequestMapping
     public String home(Model model) {
-        //this is the default behaviour, for handling in a Spring Functionality
         return "forward:" + CONTROLLER_URL + _SEARCHTEMPLATES_URI;
     }
-
-    // @formatter: off
-
-    /*
-    * This should be used when using AngularJS in the JSP
-    */
 
     private AcademicServiceRequestTemplateBean getAcademicServiceRequestTemplateBean(Model model) {
         return (AcademicServiceRequestTemplateBean) model.asMap().get("academicServiceRequestTemplateBean");
@@ -99,8 +88,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         model.addAttribute("academicServiceRequestTemplateBeanJson", getBeanJson(bean));
         model.addAttribute("academicServiceRequestTemplateBean", bean);
     }
-
-    // @formatter: on
 
     private AcademicServiceRequestTemplate getAcademicServiceRequestTemplate(Model model) {
         return (AcademicServiceRequestTemplate) model.asMap().get("academicServiceRequestTemplate");
@@ -115,7 +102,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         academicServiceRequestTemplate.delete();
     }
 
-//                  
     private static final String _SEARCHTEMPLATES_URI = "/searchtemplates";
     public static final String SEARCHTEMPLATES_URL = CONTROLLER_URL + _SEARCHTEMPLATES_URI;
 
@@ -128,7 +114,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         List<AcademicServiceRequestTemplate> searchtemplatesResultsDataSet =
                 filterSearchTemplates(active, name, serviceRequestType, custom);
 
-        //add the results dataSet to the model
         model.addAttribute("searchtemplatesResultsDataSet", searchtemplatesResultsDataSet);
         model.addAttribute(
                 "AcademicServiceRequestTemplate_serviceRequestType_options",
@@ -138,12 +123,7 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     }
 
     private Stream<AcademicServiceRequestTemplate> getSearchUniverseSearchTemplatesDataSet() {
-        //
-        //The initialization of the result list must be done here
-        //
-        //
         return AcademicServiceRequestTemplate.findAll();
-        //return new ArrayList<AcademicServiceRequestTemplate>().stream();
     }
 
     private List<AcademicServiceRequestTemplate> filterSearchTemplates(java.lang.Boolean active,
@@ -175,33 +155,20 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             @PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate, Model model,
             RedirectAttributes redirectAttributes) {
 
-        // CHANGE_ME Insert code here for processing viewAction
-        // If you selected multiple exists you must choose which one to use below    
         return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate" + "/"
                 + academicServiceRequestTemplate.getExternalId(), model, redirectAttributes);
     }
 
-    //
-
-    //
-    // This is the EventcreateCustomTemplate Method for Screen searchtemplates
-    //
     private static final String _SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URI = "/searchtemplates/createcustomtemplate";
     public static final String SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URL = CONTROLLER_URL
             + _SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URI;
 
     @RequestMapping(value = _SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URI)
     public String processSearchtemplatesCreateCustomTemplate(Model model, RedirectAttributes redirectAttributes) {
-        //
-        /* Put here the logic for processing Event createCustomTemplate     */
-        //doSomething();
-
-        // Now choose what is the Exit Screen    
         return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/createcustomtemplate", model,
                 redirectAttributes);
     }
 
-//                  
     private static final String _CREATESTANDARDTEMPLATE_URI = "/createstandardtemplate";
     public static final String CREATESTANDARDTEMPLATE_URL = CONTROLLER_URL + _CREATESTANDARDTEMPLATE_URI;
 
@@ -213,13 +180,10 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
                 org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
                         .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
         model.addAttribute("AcademicServiceRequestTemplate_degreeType_options", DegreeType.all().collect(Collectors.toList()));
-        model.addAttribute("AcademicServiceRequestTemplate_degree_options", new ArrayList<org.fenixedu.academic.domain.Degree>()); // CHANGE_ME - MUST DEFINE RELATION
-        //model.addAttribute("AcademicServiceRequestTemplate_degree_options", org.fenixedu.academic.domain.Degree.findAll()); // CHANGE_ME - MUST DEFINE RELATION
+        model.addAttribute("AcademicServiceRequestTemplate_degree_options", new ArrayList<org.fenixedu.academic.domain.Degree>());
         model.addAttribute("AcademicServiceRequestTemplate_programConclusion_options",
-                new ArrayList<org.fenixedu.academic.domain.degreeStructure.ProgramConclusion>()); // CHANGE_ME - MUST DEFINE RELATION
-        //model.addAttribute("AcademicServiceRequestTemplate_programConclusion_options", org.fenixedu.academic.domain.degreeStructure.ProgramConclusion.findAll()); // CHANGE_ME - MUST DEFINE RELATION
+                new ArrayList<org.fenixedu.academic.domain.degreeStructure.ProgramConclusion>());
 
-        //IF ANGULAR, initialize the Bean
         AcademicServiceRequestTemplateBean bean = new AcademicServiceRequestTemplateBean();
         bean.setLanguageDataSource(new ArrayList<Locale>(CoreConfiguration.supportedLocales()));
         bean.setServiceRequestTypeDataSource(ServiceRequestType.findActive()
@@ -227,15 +191,9 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         bean.setDegreeTypeDataSource(DegreeType.all().sorted().collect(Collectors.toList()));
         this.setAcademicServiceRequestTemplateBean(bean, model);
 
-        //return "qubdocsreports/documenttemplates/academicservicerequesttemplate/createstandardtemplate";
         return "qubdocsreports/documenttemplates/academicservicerequesttemplate/angularcreatestandardtemplate";
     }
 
-    //
-//                   THIS SHOULD BE USED ONLY WHEN USING ANGULAR 
-    //
-//                          // @formatter: off
-//              
     private static final String _CREATESTANDARDTEMPLATEPOSTBACK_URI = "/createstandardtemplatepostback";
     public static final String CREATESTANDARDTEMPLATEPOSTBACK_URL = CONTROLLER_URL + _CREATESTANDARDTEMPLATEPOSTBACK_URI;
 
@@ -250,10 +208,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             bean.setProgramConclusionDataSource(new ArrayList<ProgramConclusion>(Bennu.getInstance().getProgramConclusionSet()));
         }
 
-        // Do validation logic ?!?!
-        //if (something_wrong){
-        //                 return new ResponseEntity<String>(<MESSAGE_FROM_BUNDLE>,HttpStatus.BAD_REQUEST);
-        //}
         this.setAcademicServiceRequestTemplateBean(bean, model);
         return new ResponseEntity<String>(getBeanJson(bean), HttpStatus.OK);
     }
@@ -263,10 +217,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             @RequestParam(value = "documentTemplateFile", required = true) MultipartFile documentTemplateFile, Model model,
             RedirectAttributes redirectAttributes) {
 
-        /*
-        *  Creation Logic
-        */
-
         try {
 
             AcademicServiceRequestTemplate academicServiceRequestTemplate =
@@ -274,20 +224,10 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
                             bean.getServiceRequestType(), bean.getDegreeType(), bean.getDegree(), bean.getProgramConclusion(),
                             documentTemplateFile);
 
-            //Success Validation
-            //Add the bean to be used in the View
             model.addAttribute("academicServiceRequestTemplate", academicServiceRequestTemplate);
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/"
                     + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
         } catch (Exception de) {
-
-            /*
-             * If there is any error in validation 
-             *
-             * Add a error / warning message
-             * 
-             * addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.create") + de.getLocalizedMessage(),model);
-             * addWarningMessage(" Warning creating due to "+ ex.getLocalizedMessage(),model); */
 
             addErrorMessage(
                     BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
@@ -297,54 +237,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         }
     }
 
-//                          // @formatter: on
-
-//                  
-//    @RequestMapping(value = _CREATESTANDARDTEMPLATE_URI, method = RequestMethod.POST)
-//    public String createstandardtemplate(
-//            @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name,
-//            @RequestParam(value = "description", required = false) org.fenixedu.commons.i18n.LocalizedString description,
-//            @RequestParam(value = "language", required = false) java.util.Locale language,
-//            @RequestParam(value = "servicerequesttype", required = false) org.fenixedu.academic.domain.serviceRequests.ServiceRequestType serviceRequestType,
-//            @RequestParam(value = "degreetype", required = false) org.fenixedu.academic.domain.degree.DegreeType degreeType,
-//            @RequestParam(value = "degree", required = false) org.fenixedu.academic.domain.Degree degree,
-//            @RequestParam(value = "programconclusion", required = false) org.fenixedu.academic.domain.degreeStructure.ProgramConclusion programConclusion,
-//            @RequestParam(value = "documentTemplateFile", required = true) MultipartFile documentTemplateFile, Model model,
-//            RedirectAttributes redirectAttributes) {
-//        /*
-//        *  Creation Logic
-//        */
-//
-//        try {
-//
-//            AcademicServiceRequestTemplate academicServiceRequestTemplate =
-//                    createAcademicServiceRequestTemplate(name, description, language, serviceRequestType, degreeType, degree,
-//                            programConclusion, documentTemplateFile);
-//
-//            //Success Validation
-//            //Add the bean to be used in the View
-//            model.addAttribute("academicServiceRequestTemplate", academicServiceRequestTemplate);
-//            return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/"
-//                    + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
-//        } catch (Exception de) {
-//
-//            // @formatter: off
-//            /*
-//             * If there is any error in validation 
-//             *
-//             * Add a error / warning message
-//             * 
-//             * addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.create") + de.getLocalizedMessage(),model);
-//             * addWarningMessage(" Warning creating due to "+ ex.getLocalizedMessage(),model); */
-//            // @formatter: on
-//
-//            addErrorMessage(
-//                    BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
-//                            + de.getLocalizedMessage(), model);
-//            return createstandardtemplate(model);
-//        }
-//    }
-
     @Atomic
     public AcademicServiceRequestTemplate createAcademicServiceRequestTemplate(org.fenixedu.commons.i18n.LocalizedString name,
             org.fenixedu.commons.i18n.LocalizedString description, java.util.Locale language,
@@ -352,21 +244,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             org.fenixedu.academic.domain.degree.DegreeType degreeType, org.fenixedu.academic.domain.Degree degree,
             org.fenixedu.academic.domain.degreeStructure.ProgramConclusion programConclusion, MultipartFile documentTemplateFile)
             throws IOException {
-
-        // @formatter: off
-
-        /*
-         * Modify the creation code here if you do not want to create
-         * the object with the default constructor and use the setter
-         * for each field
-         * 
-         */
-
-        // CHANGE_ME It's RECOMMENDED to use "Create service" in DomainObject
-        //AcademicServiceRequestTemplate academicServiceRequestTemplate = academicServiceRequestTemplate.create(fields_to_create);
-
-        //Instead, use individual SETTERS and validate "CheckRules" in the end
-        // @formatter: on
 
         AcademicServiceRequestTemplate academicServiceRequestTemplate =
                 AcademicServiceRequestTemplate.create(name, description, language, serviceRequestType, degreeType,
@@ -376,7 +253,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         return academicServiceRequestTemplate;
     }
 
-//                  
     private static final String _CREATECUSTOMTEMPLATE_URI = "/createcustomtemplate";
     public static final String CREATECUSTOMTEMPLATE_URL = CONTROLLER_URL + _CREATECUSTOMTEMPLATE_URI;
 
@@ -424,7 +300,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         return academicServiceRequestTemplate;
     }
 
-//                  
     private static final String _READTEMPLATE_URI = "/readtemplate/";
     public static final String READTEMPLATE_URL = CONTROLLER_URL + _READTEMPLATE_URI;
 
@@ -434,7 +309,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         return "qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate";
     }
 
-    //
     private static final String _DELETETEMPLATE_URI = "/deletetemplate/";
     public static final String DELETETEMPLATE_URL = CONTROLLER_URL + _DELETETEMPLATE_URI;
 
@@ -451,19 +325,16 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
                     "label.info.documentTemplates.successfulDelete", templateName), model);
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplates", model,
                     redirectAttributes);
-        } catch (Exception ex) {
-            //Add error messages to the list
+        } catch (Throwable ex) {
             addErrorMessage(
                     BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.delete")
                             + ex.getLocalizedMessage(), model);
-        }
 
-        //The default mapping is the same Read View
-        return "qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/"
-                + getAcademicServiceRequestTemplate(model).getExternalId();
+            return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate" + "/"
+                    + academicServiceRequestTemplate.getExternalId(), model, redirectAttributes);
+        }
     }
 
-//                  
     private static final String _UPDATETEMPLATE_URI = "/updatetemplate/";
     public static final String UPDATETEMPLATE_URL = CONTROLLER_URL + _UPDATETEMPLATE_URI;
 
@@ -471,72 +342,10 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     public String updatetemplate(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate, Model model) {
         setAcademicServiceRequestTemplate(academicServiceRequestTemplate, model);
 
-        //IF ANGULAR, initialize the Bean
-        //AcademicServiceRequestTemplateBean bean = new AcademicServiceRequestTemplateBean(academicServiceRequestTemplate);
-        //this.setAcademicServiceRequestTemplateBean(bean, model);
-
         return "qubdocsreports/documenttemplates/academicservicerequesttemplate/updatetemplate";
 
     }
 
-    //
-
-//                   THIS SHOULD BE USED ONLY WHEN USING ANGULAR 
-    //
-//                          // @formatter: off
-//              
-//                  private static final String _UPDATETEMPLATEPOSTBACK_URI ="/updatetemplatepostback/";
-//                  public static final String  UPDATETEMPLATEPOSTBACK_URL = CONTROLLER_URL + _UPDATETEMPLATEPOSTBACK_URI;
-//                  @RequestMapping(value = _UPDATETEMPLATEPOSTBACK_URI + "{oid}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-//                      public @ResponseBody ResponseEntity<String> updatetemplatepostback(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate, @RequestParam(value = "bean", required = false) AcademicServiceRequestTemplateBean bean,
-//                      Model model) {
-    //
-//                      // Do validation logic ?!?!
-//                      //if (something_wrong){
-//                      //                 return new ResponseEntity<String>(<MESSAGE_FROM_BUNDLE>,HttpStatus.BAD_REQUEST);
-//                      //}
-//                      this.setAcademicServiceRequestTemplateBean(bean, model);
-//                      return new ResponseEntity<String>(getBeanJson(bean), HttpStatus.OK);
-//                  } 
-//                  
-//                  @RequestMapping(value = _UPDATETEMPLATE_URI + "{oid}", method = RequestMethod.POST)
-//                      public String updatetemplate(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate, @RequestParam(value = "bean", required = false) AcademicServiceRequestTemplateBean bean,
-//                      Model model, RedirectAttributes redirectAttributes ) {
-//                      setAcademicServiceRequestTemplate(academicServiceRequestTemplate,model);
-    //
-//                       try
-//                       {
-//                      /*
-//                      *  UpdateLogic here
-//                      */
-//                              
-//                          updateAcademicServiceRequestTemplate( .. get fields from bean..., model);
-    //
-//                      /*Succes Update */
-    //
-//                      return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/updatetemplate/" + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
-//                      }
-//                      catch (Exception de) 
-//                      {
-//                  
-//                          /*
-//                          * If there is any error in validation 
-//                          *
-//                          * Add a error / warning message
-//                          * 
-//                          * addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.update") + de.getLocalizedMessage(),model);
-//                          * addWarningMessage(" Warning updating due to " + de.getLocalizedMessage(),model);
-//                          */
-//                                               
-//                          addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.update") + de.getLocalizedMessage(),model);
-//                          setAcademicServiceRequestTemplate(academicServiceRequestTemplate, model);
-//                          this.setAcademicServiceRequestTemplateBean(bean, model);
-    //
-//                          return "qubdocsreports/documenttemplates/academicservicerequesttemplate/updatetemplate";
-//                      }
-//                  }
-//                          // @formatter: on               
-//                  
     @RequestMapping(value = _UPDATETEMPLATE_URI + "{oid}", method = RequestMethod.POST)
     public String updatetemplate(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate,
             @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name, @RequestParam(
@@ -547,29 +356,10 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         setAcademicServiceRequestTemplate(academicServiceRequestTemplate, model);
 
         try {
-            /*
-            *  UpdateLogic here
-            */
-
             updateAcademicServiceRequestTemplate(name, description, active, model);
-
-            /*Succes Update */
-
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/updatetemplate/"
                     + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
         } catch (Exception de) {
-            // @formatter: off
-
-            /*
-            * If there is any error in validation 
-            *
-            * Add a error / warning message
-            * 
-            * addErrorMessage(BundleUtil.getString(QubdocsSpringConfiguration.BUNDLE, "label.error.update") + de.getLocalizedMessage(),model);
-            * addWarningMessage(" Warning updating due to " + de.getLocalizedMessage(),model);
-            */
-            // @formatter: on
-
             addErrorMessage(
                     BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.update")
                             + de.getLocalizedMessage(), model);
@@ -581,18 +371,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     @Atomic
     public void updateAcademicServiceRequestTemplate(org.fenixedu.commons.i18n.LocalizedString name,
             org.fenixedu.commons.i18n.LocalizedString description, java.lang.Boolean active, Model model) {
-
-        // @formatter: off              
-        /*
-         * Modify the update code here if you do not want to update
-         * the object with the default setter for each field
-         */
-
-        // CHANGE_ME It's RECOMMENDED to use "Edit service" in DomainObject
-        //getAcademicServiceRequestTemplate(model).edit(fields_to_edit);
-
-        //Instead, use individual SETTERS and validate "CheckRules" in the end
-        // @formatter: on
 
         getAcademicServiceRequestTemplate(model).setName(name);
         getAcademicServiceRequestTemplate(model).setDescription(description);
