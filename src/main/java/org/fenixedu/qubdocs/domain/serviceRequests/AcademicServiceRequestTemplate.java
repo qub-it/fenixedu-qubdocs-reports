@@ -94,7 +94,6 @@ public class AcademicServiceRequestTemplate extends AcademicServiceRequestTempla
     public static AcademicServiceRequestTemplate matchTemplateFor(final Locale language,
             final ServiceRequestType serviceRequestType, final DegreeType degreeType, final ProgramConclusion programConclusion,
             final Degree degree) {
-        AcademicServiceRequestTemplate matchedTemplate = null;
         if (serviceRequestType != null) {
             for (AcademicServiceRequestTemplate template : serviceRequestType.getAcademicServiceRequestTemplatesSet()) {
                 if (!template.getActive()) {
@@ -112,10 +111,13 @@ public class AcademicServiceRequestTemplate extends AcademicServiceRequestTempla
                 if (template.getDegree() != degree) {
                     continue;
                 }
+                if (template.getProgramConclusion() != programConclusion) {
+                    continue;
+                }
                 return template;
             }
         }
-        return matchedTemplate;
+        return null;
     }
 
     public static AcademicServiceRequestTemplate findTemplateFor(final Locale language,
