@@ -98,7 +98,7 @@ ${portal.toolkit()}
 				</div>	
 			</c:if>
 
-<form method="post" class="form-horizontal">
+<form method="post" class="form-horizontal" enctype="multipart/form-data">
 
 <div class="panel panel-default">
   <div class="panel-body">
@@ -131,6 +131,13 @@ ${portal.toolkit()}
 </div>
 </div>		
   </div>
+	<div class="form-group row">
+		<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.documentTemplateFile"/></div>
+			<div class="col-sm-4">
+				<input type="file" name="documentTemplateFile" accept=".odt, application/vnd.oasis.opendocument.text" />
+			</div>	
+		</div>
+	</div>
   <div class="panel-footer">
 		<input type="submit" class="btn btn-default" role="button" value="<spring:message code="label.submit" />"/>
 	</div>
