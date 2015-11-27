@@ -350,13 +350,14 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     public String updatetemplate(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate,
             @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name, @RequestParam(
                     value = "description", required = false) org.fenixedu.commons.i18n.LocalizedString description,
-            @RequestParam(value = "active", required = false) java.lang.Boolean active, Model model,
+            @RequestParam(value = "active", required = false) java.lang.Boolean active, @RequestParam(
+                    value = "documentTemplateFile", required = false) MultipartFile documentTemplateFile, Model model,
             RedirectAttributes redirectAttributes) {
 
         setAcademicServiceRequestTemplate(academicServiceRequestTemplate, model);
 
         try {
-            updateAcademicServiceRequestTemplate(name, description, active, model);
+            updateAcademicServiceRequestTemplate(name, description, active, documentTemplateFile, model);
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/updatetemplate/"
                     + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
         } catch (Exception de) {
@@ -370,11 +371,20 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
 
     @Atomic
     public void updateAcademicServiceRequestTemplate(org.fenixedu.commons.i18n.LocalizedString name,
-            org.fenixedu.commons.i18n.LocalizedString description, java.lang.Boolean active, Model model) {
+            org.fenixedu.commons.i18n.LocalizedString description, java.lang.Boolean active, MultipartFile documentTemplateFile,
+            Model model) throws IOException {
 
         getAcademicServiceRequestTemplate(model).setName(name);
         getAcademicServiceRequestTemplate(model).setDescription(description);
         getAcademicServiceRequestTemplate(model).setActive(active);
+
+        if (!documentTemplateFile.isEmpty()) {
+            DocumentTemplateFile oldFile = getAcademicServiceRequestTemplate(model).getDocumentTemplateFile();
+            oldFile.delete();
+
+            DocumentTemplateFile.create(getAcademicServiceRequestTemplate(model), documentTemplateFile.getOriginalFilename(),
+                    documentTemplateFile.getBytes());
+        }
     }
 
     @RequestMapping(value = "/search/download/{documentTemplateFileId}", method = RequestMethod.GET)

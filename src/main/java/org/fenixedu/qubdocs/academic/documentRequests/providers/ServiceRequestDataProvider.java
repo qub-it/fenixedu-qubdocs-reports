@@ -28,6 +28,7 @@
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import org.fenixedu.academic.domain.ExecutionYear;
+import org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
 import org.fenixedu.academic.domain.treasury.IAcademicServiceRequestAndAcademicTaxTreasuryEvent;
 import org.fenixedu.academic.domain.treasury.IAcademicTreasuryEvent;
@@ -45,11 +46,11 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
     protected static final String KEY_EXECUTION_YEAR = "executionYearName";
     protected static final String KEY_PREVIOUS_EXECUTION_YEAR = "previousExecutionYearName";
 
-    protected DocumentRequest documentRequest;
+    protected AcademicServiceRequest serviceRequest;
     protected ExecutionYear executionYear;
 
-    public ServiceRequestDataProvider(final DocumentRequest documentRequest, ExecutionYear executionYear) {
-        this.documentRequest = documentRequest;
+    public ServiceRequestDataProvider(final AcademicServiceRequest serviceRequest, ExecutionYear executionYear) {
+        this.serviceRequest = serviceRequest;
         this.executionYear = executionYear;
     }
 
@@ -67,13 +68,13 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
     public Object valueForKey(final String key) {
 
         if (KEY.equals(key)) {
-            return documentRequest;
+            return serviceRequest;
         } else if (KEY_HAS_PRICETAG.equals(key)) {
             final IAcademicServiceRequestAndAcademicTaxTreasuryEvent academicTreasuryEvent =
-                    TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(documentRequest);
+                    TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
             return (academicTreasuryEvent != null && academicTreasuryEvent.isWithDebitEntry());
         } else if (KEY_FOR_PRICE.equals(key)) {
-            return TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(documentRequest);
+            return TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
         } else if (KEY_EXECUTION_YEAR.equals(key)) {
             return executionYear.getName();
         } else if (KEY_PREVIOUS_EXECUTION_YEAR.equals(key)) {

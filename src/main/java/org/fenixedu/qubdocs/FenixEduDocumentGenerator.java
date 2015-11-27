@@ -82,9 +82,10 @@ public class FenixEduDocumentGenerator extends ReportGenerator {
         try {
             return new FenixEduDocumentGenerator(FileUtils.readFileToByteArray(new File(template)), mimeType);
         } catch (FileNotFoundException e) {
-            throw new ReportGenerationException("Error finding template", e);
+            throw new ReportGenerationException(
+                    "Template file was not found. Maybe this soft refence is inconsistent, try re-upload this template.", e);
         } catch (IOException e) {
-            throw new ReportGenerationException("Error finding template", e);
+            throw new ReportGenerationException("Error retrieving the template.", e);
         }
     }
 }
