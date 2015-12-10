@@ -29,6 +29,7 @@ package org.fenixedu.qubdocs.util.reports.helpers;
 
 import java.util.Locale;
 
+import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.FenixEduDocumentGenerator;
 
@@ -44,12 +45,28 @@ public class LanguageHelper implements IDocumentHelper {
         return i18nString.getContent(new Locale("pt", "PT"));
     }
 
-    public String en(final LocalizedString i18nString) {
-    	if (i18nString == null) {
+    public String pt(final MultiLanguageString i18nString) {
+        if (i18nString == null) {
             return FenixEduDocumentGenerator.DASH;
         }
 
-    	return i18nString.getContent(new Locale("en", "GB"));
+        return i18nString.getContent(new Locale("pt", "PT"));
+    }
+
+    public String en(final LocalizedString i18nString) {
+        if (i18nString == null) {
+            return FenixEduDocumentGenerator.DASH;
+        }
+
+        return i18nString.getContent(new Locale("en", "GB"));
+    }
+
+    public String en(final MultiLanguageString i18nString) {
+        if (i18nString == null) {
+            return FenixEduDocumentGenerator.DASH;
+        }
+
+        return i18nString.getContent(new Locale("en", "GB"));
     }
 
 }
