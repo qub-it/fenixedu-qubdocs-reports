@@ -28,6 +28,7 @@
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,9 @@ import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -79,6 +83,10 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             this.conclusionBean = bean;
         }
 
+        public RegistrationConclusionBean getConclusionBean() {
+            return conclusionBean;
+        }
+
         public LocalDate getConclusionDate() {
             return conclusionBean.getConclusionDate().toLocalDate();
         }
@@ -89,6 +97,16 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
         public String getFinalAverage() {
             return conclusionBean.getFinalGrade().getValue();
+        }
+
+        public String getRoundedFinalAverage() {
+            BigDecimal average = new BigDecimal(getFinalAverage());
+            return average.setScale(0, RoundingMode.HALF_EVEN).toString();
+        }
+
+        public LocalizedString getFinalAverageDescription() {
+            return DocsStringUtils
+                    .capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources", getRoundedFinalAverage()));
         }
 
         public BigDecimal getDismissalCredits() {
