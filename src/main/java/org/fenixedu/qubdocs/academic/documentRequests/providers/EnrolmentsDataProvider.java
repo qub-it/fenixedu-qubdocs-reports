@@ -198,8 +198,7 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
 
             Collection<? extends ICurriculumEntry> enrolments =
                     enrolmentsEntries.stream().map(Enrolment.class::cast)
-                            .filter(e -> !e.isExtraCurricular() && !e.isPropaedeutic() && !e.isStandalone())
-                            .collect(Collectors.toSet());
+                            .filter(e -> !e.getCurriculumGroup().isNoCourseGroupCurriculumGroup()).collect(Collectors.toSet());
             normalCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
         }
 
