@@ -28,24 +28,19 @@
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.math.RoundingMode;
 import java.util.List;
-import java.util.Locale;
+import java.util.stream.Collectors;
 
-import org.fenixedu.academic.domain.ExecutionYear;
-import org.fenixedu.academic.domain.degreeStructure.CycleCourseGroup;
-import org.fenixedu.academic.domain.degreeStructure.CycleType;
-import org.fenixedu.academic.domain.degreeStructure.EctsGraduationGradeConversionTable;
-import org.fenixedu.academic.domain.degreeStructure.EctsTableIndex;
+import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
+import org.fenixedu.academic.domain.studentCurriculum.CurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -56,14 +51,10 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
     protected static final String KEY = "conclusionInformation";
 
-    protected Registration registration;
-    protected ProgramConclusion programConclusion;
-
-    //protected IEctsConversionService service = EctsConversionServiceFactory.newInstance().getService();
+    protected ConclusionInformation conclusionInformation;
 
     public ConclusionInformationDataProvider(final Registration registration, final ProgramConclusion programConclusion) {
-        this.registration = registration;
-        this.programConclusion = programConclusion;
+        this.conclusionInformation = new ConclusionInformation(new RegistrationConclusionBean(registration, programConclusion));
     }
 
     @Override
@@ -79,22 +70,21 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
     @Override
     public Object valueForKey(final String key) {
         if (handleKey(key)) {
-            return conclusionInformation();
+            return this.conclusionInformation;
         }
 
         return null;
-    }
-
-    protected ConclusionInformation conclusionInformation() {
-        return new ConclusionInformation(new RegistrationConclusionBean(registration, programConclusion));
     }
 
     public class ConclusionInformation {
         protected RegistrationConclusionBean conclusionBean;
 
         public ConclusionInformation(final RegistrationConclusionBean bean) {
-
             this.conclusionBean = bean;
+        }
+
+        public RegistrationConclusionBean getConclusionBean() {
+            return conclusionBean;
         }
 
         public LocalDate getConclusionDate() {
@@ -109,109 +99,26 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             return conclusionBean.getFinalGrade().getValue();
         }
 
-        // TODO
-        public LocalizedString getPhdFinalGrade() {
-            //return GradeScaleType.findByGradeScale(GradeScale.TYPEAP).findValueByAcronym("APMB").getName();
-            return null;
+        public String getRoundedFinalAverage() {
+            BigDecimal average = new BigDecimal(getFinalAverage());
+            return average.setScale(0, RoundingMode.HALF_EVEN).toString();
         }
 
         public LocalizedString getFinalAverageDescription() {
-            return DocsStringUtils.capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources", getFinalAverage()));
-        }
-
-        public LocalizedString getGraduateTitle() {
-            LocalizedString mls = new LocalizedString();
-            for (Locale locale : CoreConfiguration.supportedLocales()) {
-                mls = mls.with(locale, registration.getGraduateTitle(programConclusion, locale));
-            }
-
-            return mls;
-        }
-
-        // TODO
-        public boolean isMobilityReferenceTable() {
-//            EctsGraduationGradeConversionTable graduationGradeConversionTable = getGraduationEctsConversionTable();
-//            return graduationGradeConversionTable.isMobilityReferenceTable();
-
-            return false;
-        }
-
-        protected EctsGraduationGradeConversionTable getGraduationEctsConversionTable() {
-            final ExecutionYear conclusionYear = conclusionBean.getConclusionYear();
-            final Collection<CycleCourseGroup> parentCycleCourseGroups = programConclusion.groupFor(registration.getLastDegreeCurricularPlan()).get().getParentCycleCourseGroups();
-
-            EctsGraduationGradeConversionTable graduationGradeConversionTable =
-                    EctsTableIndex.getGraduationGradeConversionTable(registration.getDegree(), !parentCycleCourseGroups.isEmpty() ? parentCycleCourseGroups.iterator().next().getCycleType() : null,
-                            conclusionYear.getAcademicInterval(), new DateTime());
-            return graduationGradeConversionTable;
-        }
-
-        // TODO
-        public String convertGradeToEcts(final Integer value) {
-//            Grade grade = Grade.createGrade(value.toString(), GradeScale.TYPE20);
-//            final ExecutionYear conclusionYear = conclusionBean.getConclusionYear();
-//            return service.convert(registration.getDegree(), cycleType, conclusionYear.getAcademicInterval(), grade).getValue();
-            return null;
-        }
-
-        // TODO
-        public BigDecimal getPercentageForGrade(final Integer value) {
-//            Grade grade = Grade.createGrade(value.toString(), GradeScale.TYPE20);
-//            final ExecutionYear conclusionYear = conclusionBean.getConclusionYear();
-//
-//            return service.percentage(registration.getDegree(), cycleType, conclusionYear.getAcademicInterval(), grade);
-            return null;
-        }
-
-        // TODO
-        public String getEctsGradeAverage() {
-//            Integer finalAverage = conclusionBean.getFinalAverage();
-//            Grade grade = Grade.createGrade(finalAverage.toString(), GradeScale.TYPE20);
-//            final ExecutionYear conclusionYear = conclusionBean.getConclusionYear();
-//
-//            return service.convert(registration.getDegree(), cycleType, conclusionYear.getAcademicInterval(), grade).getValue();
-            return null;
-        }
-
-        public LocalizedString getThesisTitle() {
-//            final StudentCurricularPlan lastStudentCurricularPlan = registration.getLastStudentCurricularPlan();
-//
-//            if (lastStudentCurricularPlan == null) {
-//                throw new DomainException("error.ConclusionInformationDataProvider.secondCycle.thesis.not.defined");
-//            }
-//
-//            final Enrolment thesisEnrolment = lastStudentCurricularPlan.getLatestApprovedDissertationEnrolmentWithThesis();
-//
-//            if (thesisEnrolment == null) {
-//                throw new DomainException("error.ConclusionInformationDataProvider.secondCycle.thesis.not.defined");
-//            }
-//
-//            final Thesis thesis = thesisEnrolment.getThesis();
-//
-//            if (thesis == null) {
-//                throw new DomainException("error.ConclusionInformationDataProvider.secondCycle.thesis.not.defined");
-//            }
-//
-//            LocalizedString title = thesis.getTitle();
-//            return title;
-            return null;
-        }
-
-        public LocalizedString getPhdThesisTitle() {
-            return new LocalizedString(Locale.ENGLISH, "Título da Tese de Doutoramento Teste");
+            return DocsStringUtils
+                    .capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources", getRoundedFinalAverage()));
         }
 
         public BigDecimal getDismissalCredits() {
 
-            final List<Dismissal> dismissals = registration.getLastStudentCurricularPlan().getDismissals();
+            final CurriculumGroup curriculumGroup = this.conclusionBean.getCurriculumGroup();
+            final StudentCurricularPlan studentCurricularPlan = curriculumGroup.getStudentCurricularPlan();
+            final List<Dismissal> dismissals = studentCurricularPlan.getDismissals().stream()
+                    .filter(d -> d.getCredits().isCredits() && curriculumGroup.hasCurriculumModule(d.getCurriculumGroup()))
+                    .collect(Collectors.toList());
 
             BigDecimal sum = BigDecimal.ZERO;
             for (Dismissal dismissal : dismissals) {
-
-                if (!dismissal.getCredits().isCredits()) {
-                    continue;
-                }
-
                 sum = sum.add(dismissal.getEctsCreditsForCurriculum());
             }
 
@@ -223,10 +130,10 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         }
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void registerFieldsMetadata(IFieldsExporter exporter) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

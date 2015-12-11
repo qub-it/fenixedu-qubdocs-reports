@@ -39,6 +39,7 @@ import org.fenixedu.qubdocs.util.reports.helpers.EnumerationHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.LanguageHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.MoneyHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.NumbersHelper;
+import org.fenixedu.qubdocs.util.reports.helpers.SortHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.StringsHelper;
 
 import com.qubit.terra.docs.core.DocumentTemplateEngine;
@@ -60,6 +61,7 @@ public class FenixEduDocumentGenerator extends ReportGenerator {
     private void registerHelpers() {
         registerHelper("dates", new DateHelper());
         registerHelper("lang", new LanguageHelper());
+        registerHelper("order", new SortHelper());
         registerHelper("numbers", new NumbersHelper());
         registerHelper("enumeration", new EnumerationHelper());
         registerHelper("strings", new StringsHelper());

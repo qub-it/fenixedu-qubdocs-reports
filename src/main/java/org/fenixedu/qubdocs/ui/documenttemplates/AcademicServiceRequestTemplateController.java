@@ -106,17 +106,16 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     public static final String SEARCHTEMPLATES_URL = CONTROLLER_URL + _SEARCHTEMPLATES_URI;
 
     @RequestMapping(value = _SEARCHTEMPLATES_URI)
-    public String searchTemplates(
-            @RequestParam(value = "active", required = false) java.lang.Boolean active,
+    public String searchTemplates(@RequestParam(value = "active", required = false) java.lang.Boolean active,
             @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name,
-            @RequestParam(value = "servicerequesttype", required = false) org.fenixedu.academic.domain.serviceRequests.ServiceRequestType serviceRequestType,
+            @RequestParam(value = "servicerequesttype",
+                    required = false) org.fenixedu.academic.domain.serviceRequests.ServiceRequestType serviceRequestType,
             @RequestParam(value = "custom", required = false) java.lang.Boolean custom, Model model) {
         List<AcademicServiceRequestTemplate> searchtemplatesResultsDataSet =
                 filterSearchTemplates(active, name, serviceRequestType, custom);
 
         model.addAttribute("searchtemplatesResultsDataSet", searchtemplatesResultsDataSet);
-        model.addAttribute(
-                "AcademicServiceRequestTemplate_serviceRequestType_options",
+        model.addAttribute("AcademicServiceRequestTemplate_serviceRequestType_options",
                 org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
                         .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
         return "qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplates";
@@ -133,18 +132,16 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         return getSearchUniverseSearchTemplatesDataSet()
                 .filter(academicServiceRequestTemplate -> active == null
                         || active.equals(academicServiceRequestTemplate.getActive()))
-                .filter(academicServiceRequestTemplate -> name == null
-                        || name.isEmpty()
-                        || name.getLocales()
-                                .stream()
-                                .allMatch(
-                                        locale -> academicServiceRequestTemplate.getName().getContent(locale) != null
-                                                && academicServiceRequestTemplate.getName().getContent(locale).toLowerCase()
-                                                        .contains(name.getContent(locale).toLowerCase())))
+                .filter(academicServiceRequestTemplate -> name == null || name.isEmpty()
+                        || name.getLocales().stream()
+                                .allMatch(locale -> academicServiceRequestTemplate.getName().getContent(locale) != null
+                                        && academicServiceRequestTemplate.getName().getContent(locale).toLowerCase()
+                                                .contains(name.getContent(locale).toLowerCase())))
                 .filter(academicServiceRequestTemplate -> serviceRequestType == null
                         || serviceRequestType == academicServiceRequestTemplate.getServiceRequestType())
                 .filter(academicServiceRequestTemplate -> custom == null
-                        || custom.equals(academicServiceRequestTemplate.getCustom())).collect(Collectors.toList());
+                        || custom.equals(academicServiceRequestTemplate.getCustom()))
+                .collect(Collectors.toList());
     }
 
     private static final String _SEARCHTEMPLATES_TO_VIEW_ACTION_URI = "/searchtemplates/view/";
@@ -160,8 +157,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     }
 
     private static final String _SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URI = "/searchtemplates/createcustomtemplate";
-    public static final String SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URL = CONTROLLER_URL
-            + _SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URI;
+    public static final String SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URL =
+            CONTROLLER_URL + _SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URI;
 
     @RequestMapping(value = _SEARCHTEMPLATES_TO_CREATECUSTOMTEMPLATE_URI)
     public String processSearchtemplatesCreateCustomTemplate(Model model, RedirectAttributes redirectAttributes) {
@@ -175,8 +172,7 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     @RequestMapping(value = _CREATESTANDARDTEMPLATE_URI, method = RequestMethod.GET)
     public String createstandardtemplate(Model model) {
         model.addAttribute("AcademicServiceRequestTemplate_language_options", CoreConfiguration.supportedLocales());
-        model.addAttribute(
-                "AcademicServiceRequestTemplate_serviceRequestType_options",
+        model.addAttribute("AcademicServiceRequestTemplate_serviceRequestType_options",
                 org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
                         .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
         model.addAttribute("AcademicServiceRequestTemplate_degreeType_options", DegreeType.all().collect(Collectors.toList()));
@@ -219,19 +215,17 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
 
         try {
 
-            AcademicServiceRequestTemplate academicServiceRequestTemplate =
-                    createAcademicServiceRequestTemplate(bean.getName(), bean.getDescription(), bean.getLanguage(),
-                            bean.getServiceRequestType(), bean.getDegreeType(), bean.getDegree(), bean.getProgramConclusion(),
-                            documentTemplateFile);
+            AcademicServiceRequestTemplate academicServiceRequestTemplate = createAcademicServiceRequestTemplate(bean.getName(),
+                    bean.getDescription(), bean.getLanguage(), bean.getServiceRequestType(), bean.getDegreeType(),
+                    bean.getDegree(), bean.getProgramConclusion(), documentTemplateFile);
 
             model.addAttribute("academicServiceRequestTemplate", academicServiceRequestTemplate);
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/"
                     + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
         } catch (Exception de) {
 
-            addErrorMessage(
-                    BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
-                            + de.getLocalizedMessage(), model);
+            addErrorMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
+                    + de.getLocalizedMessage(), model);
             this.setAcademicServiceRequestTemplateBean(bean, model);
             return "qubdocsreports/documenttemplates/academicservicerequesttemplate/angularcreatestandardtemplate";
         }
@@ -243,11 +237,10 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             org.fenixedu.academic.domain.serviceRequests.ServiceRequestType serviceRequestType,
             org.fenixedu.academic.domain.degree.DegreeType degreeType, org.fenixedu.academic.domain.Degree degree,
             org.fenixedu.academic.domain.degreeStructure.ProgramConclusion programConclusion, MultipartFile documentTemplateFile)
-            throws IOException {
+                    throws IOException {
 
-        AcademicServiceRequestTemplate academicServiceRequestTemplate =
-                AcademicServiceRequestTemplate.create(name, description, language, serviceRequestType, degreeType,
-                        programConclusion, degree);
+        AcademicServiceRequestTemplate academicServiceRequestTemplate = AcademicServiceRequestTemplate.create(name, description,
+                language, serviceRequestType, degreeType, programConclusion, degree);
         DocumentTemplateFile.create(academicServiceRequestTemplate, documentTemplateFile.getOriginalFilename(),
                 documentTemplateFile.getBytes());
         return academicServiceRequestTemplate;
@@ -259,8 +252,7 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     @RequestMapping(value = _CREATECUSTOMTEMPLATE_URI, method = RequestMethod.GET)
     public String createcustomtemplate(Model model) {
         model.addAttribute("AcademicServiceRequestTemplate_language_options", CoreConfiguration.supportedLocales());
-        model.addAttribute(
-                "AcademicServiceRequestTemplate_serviceRequestType_options",
+        model.addAttribute("AcademicServiceRequestTemplate_serviceRequestType_options",
                 org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
                         .sorted(Comparator.comparing(ServiceRequestType::getName)).collect(Collectors.toList()));
 
@@ -268,11 +260,11 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     }
 
     @RequestMapping(value = _CREATECUSTOMTEMPLATE_URI, method = RequestMethod.POST)
-    public String createcustomtemplate(@RequestParam(value = "name", required = true) LocalizedString name, @RequestParam(
-            value = "description", required = true) LocalizedString description, @RequestParam(value = "language",
-            required = true) Locale language,
-            @RequestParam(value = "servicerequesttype", required = true) ServiceRequestType serviceRequestType, @RequestParam(
-                    value = "documentTemplateFile", required = true) MultipartFile documentTemplateFile, Model model,
+    public String createcustomtemplate(@RequestParam(value = "name", required = true) LocalizedString name,
+            @RequestParam(value = "description", required = true) LocalizedString description,
+            @RequestParam(value = "language", required = true) Locale language,
+            @RequestParam(value = "servicerequesttype", required = true) ServiceRequestType serviceRequestType,
+            @RequestParam(value = "documentTemplateFile", required = true) MultipartFile documentTemplateFile, Model model,
             RedirectAttributes redirectAttributes) {
         try {
             AcademicServiceRequestTemplate academicServiceRequestTemplate =
@@ -282,9 +274,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/"
                     + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
         } catch (Exception de) {
-            addErrorMessage(
-                    BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
-                            + de.getLocalizedMessage(), model);
+            addErrorMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
+                    + de.getLocalizedMessage(), model);
         }
         return createcustomtemplate(model);
     }
@@ -292,7 +283,7 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     @Atomic
     public AcademicServiceRequestTemplate createAcademicServiceRequestTemplate(LocalizedString name, LocalizedString description,
             java.util.Locale language, ServiceRequestType serviceRequestType, MultipartFile documentTemplateFile)
-            throws IOException {
+                    throws IOException {
         AcademicServiceRequestTemplate academicServiceRequestTemplate =
                 AcademicServiceRequestTemplate.createCustom(name, description, language, serviceRequestType);
         DocumentTemplateFile.create(academicServiceRequestTemplate, documentTemplateFile.getOriginalFilename(),
@@ -326,9 +317,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/searchtemplates", model,
                     redirectAttributes);
         } catch (Throwable ex) {
-            addErrorMessage(
-                    BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.delete")
-                            + ex.getLocalizedMessage(), model);
+            addErrorMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.delete")
+                    + ex.getLocalizedMessage(), model);
 
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate" + "/"
                     + academicServiceRequestTemplate.getExternalId(), model, redirectAttributes);
@@ -339,7 +329,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     public static final String UPDATETEMPLATE_URL = CONTROLLER_URL + _UPDATETEMPLATE_URI;
 
     @RequestMapping(value = _UPDATETEMPLATE_URI + "{oid}", method = RequestMethod.GET)
-    public String updatetemplate(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate, Model model) {
+    public String updatetemplate(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate,
+            Model model) {
         setAcademicServiceRequestTemplate(academicServiceRequestTemplate, model);
 
         return "qubdocsreports/documenttemplates/academicservicerequesttemplate/updatetemplate";
@@ -348,22 +339,24 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
 
     @RequestMapping(value = _UPDATETEMPLATE_URI + "{oid}", method = RequestMethod.POST)
     public String updatetemplate(@PathVariable("oid") AcademicServiceRequestTemplate academicServiceRequestTemplate,
-            @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name, @RequestParam(
-                    value = "description", required = false) org.fenixedu.commons.i18n.LocalizedString description,
-            @RequestParam(value = "active", required = false) java.lang.Boolean active, @RequestParam(
-                    value = "documentTemplateFile", required = false) MultipartFile documentTemplateFile, Model model,
+            @RequestParam(value = "name", required = false) org.fenixedu.commons.i18n.LocalizedString name,
+            @RequestParam(value = "description", required = false) org.fenixedu.commons.i18n.LocalizedString description,
+            @RequestParam(value = "active", required = false) java.lang.Boolean active,
+            @RequestParam(value = "documentTemplateFile", required = false) MultipartFile documentTemplateFile, Model model,
             RedirectAttributes redirectAttributes) {
 
         setAcademicServiceRequestTemplate(academicServiceRequestTemplate, model);
 
         try {
             updateAcademicServiceRequestTemplate(name, description, active, documentTemplateFile, model);
+            addInfoMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE,
+                    "label.info.documentTemplates.successfulUpdate", name.getContent()), model);
+
             return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/updatetemplate/"
                     + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
         } catch (Exception de) {
-            addErrorMessage(
-                    BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.update")
-                            + de.getLocalizedMessage(), model);
+            addErrorMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.update")
+                    + de.getLocalizedMessage(), model);
             return updatetemplate(academicServiceRequestTemplate, model);
 
         }
@@ -392,9 +385,8 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
             HttpServletResponse response) {
         try {
             response.setContentType(documentTemplateFile.getContentType());
-            String filename =
-                    URLEncoder.encode(StringNormalizer.normalizePreservingCapitalizedLetters(documentTemplateFile.getFilename())
-                            .replaceAll("\\s", "_"), "UTF-8");
+            String filename = URLEncoder.encode(StringNormalizer
+                    .normalizePreservingCapitalizedLetters(documentTemplateFile.getFilename()).replaceAll("\\s", "_"), "UTF-8");
             response.setHeader("Content-disposition", "attachment; filename=" + filename);
             response.getOutputStream().write(documentTemplateFile.getContent());
         } catch (IOException e) {
