@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.ExecutionYear;
@@ -48,17 +49,22 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 public class EnrolmentsDataProvider implements IReportDataProvider {
     protected static final String KEY = "enrolments";
     protected static final String KEY_FOR_LIST = "enrolmentsList";
+    protected static final String KEY_FOR_REMARKS = "remarksList";
     protected static final String KEY_FOR_NORMAL_ENROLMENTS = "normalEnrolmentsList";
+    protected static final String KEY_FOR_NORMAL_REMARKS = "normalEnrolmentsRemarks";
     protected static final String KEY_FOR_TOTAL_NORMAL_ENROLMENTS = "totalNormalEnrolments";
     protected static final String KEY_FOR_TOTAL_NORMAL_ECTS = "totalNormalECTS";
     protected static final String KEY_FOR_EXTRA_ENROLMENTS = "extraEnrolmentsList";
+    protected static final String KEY_FOR_EXTRA_REMARKS = "extraEnrolmentsRemarks";
     protected static final String KEY_FOR_STANDALONE_ENROLMENTS = "standaloneEnrolmentsList";
+    protected static final String KEY_FOR_STANDALONE_REMARKS = "standaloneEnrolmentsRemarks";
     protected static final String KEY_FOR_TOTAL_STANDALONE_ENROLMENTS = "totalStandaloneEnrolments";
     protected static final String KEY_FOR_TOTAL_STANDALONE_ECTS = "totalStandaloneECTS";
     protected static final String KEY_HAS_EXTRA_ENROLMENTS = "hasExtraEnrolments";
     protected static final String KEY_HAS_STANDALONE_ENROLMENTS = "hasStandaloneEnrolments";
 
     protected Registration registration;
+    protected Set<ICurriculumEntry> enrolmentsEntries;
     protected ExecutionYear executionYear;
     protected Locale locale;
     protected TreeSet<CurriculumEntry> curriculumEntries;
@@ -67,12 +73,20 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     protected TreeSet<CurriculumEntry> standaloneCurriculumEntries;
 
     protected CurriculumEntryRemarksDataProvider remarksDataProvider = null;
+    protected CurriculumEntryRemarksDataProvider normalRemarksDataProvider = null;
+    protected CurriculumEntryRemarksDataProvider extraRemarksDataProvider = null;
+    protected CurriculumEntryRemarksDataProvider standaloneRemarksDataProvider = null;
 
-    public EnrolmentsDataProvider(final Registration registration, final ExecutionYear executionYear, final Locale locale) {
+    public EnrolmentsDataProvider(final Registration registration, final Set<ICurriculumEntry> enrolmentsEntries,
+            final ExecutionYear executionYear, final Locale locale) {
         this.registration = registration;
+        this.enrolmentsEntries = enrolmentsEntries;
         this.executionYear = executionYear;
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.normalRemarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.extraRemarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.standaloneRemarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
     }
 
     @Override
@@ -85,9 +99,11 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
 
     @Override
     public boolean handleKey(final String key) {
-        return KEY.equals(key) || KEY_FOR_LIST.equals(key) || KEY_FOR_NORMAL_ENROLMENTS.equals(key)
-                || KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)
-                || KEY_FOR_EXTRA_ENROLMENTS.equals(key) || KEY_FOR_STANDALONE_ENROLMENTS.equals(key)
+        return KEY.equals(key) || KEY_FOR_LIST.equals(key) || KEY_FOR_REMARKS.equals(key)
+                || KEY_FOR_NORMAL_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key)
+                || KEY_FOR_NORMAL_REMARKS.equals(key) || KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)
+                || KEY_FOR_EXTRA_ENROLMENTS.equals(key) || KEY_FOR_EXTRA_REMARKS.equals(key)
+                || KEY_FOR_STANDALONE_ENROLMENTS.equals(key) || KEY_FOR_STANDALONE_REMARKS.equals(key)
                 || KEY_FOR_TOTAL_STANDALONE_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_STANDALONE_ECTS.equals(key)
                 || KEY_HAS_EXTRA_ENROLMENTS.equals(key) || KEY_HAS_STANDALONE_ENROLMENTS.equals(key);
     }
@@ -98,16 +114,24 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
             return this;
         } else if (KEY_FOR_LIST.equals(key)) {
             return this.getCurriculumEntries();
+        } else if (KEY_FOR_REMARKS.equals(key)) {
+            return this.remarksDataProvider.valueForKey("curriculumEntryRemarks");
         } else if (KEY_FOR_NORMAL_ENROLMENTS.equals(key)) {
             return this.getNormalCurriculumEntries();
+        } else if (KEY_FOR_NORMAL_REMARKS.equals(key)) {
+            return this.normalRemarksDataProvider.valueForKey("curriculumEntryRemarks");
         } else if (KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key)) {
             return getTotalNormalCurriculumEntries();
         } else if (KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)) {
             return getTotalNormalECTS();
         } else if (KEY_FOR_EXTRA_ENROLMENTS.equals(key)) {
             return this.getExtraCurriculumEntries();
+        } else if (KEY_FOR_EXTRA_REMARKS.equals(key)) {
+            return this.extraRemarksDataProvider.valueForKey("curriculumEntryRemarks");
         } else if (KEY_FOR_STANDALONE_ENROLMENTS.equals(key)) {
             return this.getStandaloneCurriculumEntries();
+        } else if (KEY_FOR_STANDALONE_REMARKS.equals(key)) {
+            return this.standaloneRemarksDataProvider.valueForKey("curriculumEntryRemarks");
         } else if (KEY_FOR_TOTAL_STANDALONE_ENROLMENTS.equals(key)) {
             return getTotalStandaloneCurriculumEntries();
         } else if (KEY_FOR_TOTAL_STANDALONE_ECTS.equals(key)) {
@@ -125,7 +149,7 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         if (curriculumEntries == null) {
             curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
 
-            Collection<? extends ICurriculumEntry> enrolments = this.registration.getEnrolments(executionYear);
+            Collection<? extends ICurriculumEntry> enrolments = enrolmentsEntries;
             curriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
         }
 
@@ -136,16 +160,11 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         if (standaloneCurriculumEntries == null) {
             standaloneCurriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
 
-            Collection<? extends ICurriculumEntry> enrolmentsAux = this.registration.getEnrolments(executionYear);
-            Set<ICurriculumEntry> enrolments = new HashSet<ICurriculumEntry>();
-
-            for (ICurriculumEntry entry : enrolmentsAux) {
-                if (((Enrolment) entry).isStandalone() && !standaloneRegistration()) {
-                    enrolments.add(entry);
-                }
-            }
-
-            standaloneCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
+            Collection<? extends ICurriculumEntry> enrolments =
+                    enrolmentsEntries.stream().map(Enrolment.class::cast).filter(e -> e.isStandalone())
+                            .collect(Collectors.toSet());
+            standaloneCurriculumEntries
+                    .addAll(CurriculumEntry.transform(registration, enrolments, standaloneRemarksDataProvider));
         }
 
         return standaloneCurriculumEntries;
@@ -164,16 +183,10 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         if (extraCurriculumEntries == null) {
             extraCurriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
 
-            Collection<? extends ICurriculumEntry> enrolmentsAux = this.registration.getEnrolments(executionYear);
-            Set<ICurriculumEntry> enrolments = new HashSet<ICurriculumEntry>();
-
-            for (ICurriculumEntry entry : enrolmentsAux) {
-                if (((Enrolment) entry).isExtraCurricular()) {
-                    enrolments.add(entry);
-                }
-            }
-
-            extraCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
+            Collection<? extends ICurriculumEntry> enrolments =
+                    enrolmentsEntries.stream().map(Enrolment.class::cast).filter(e -> e.isExtraCurricular())
+                            .collect(Collectors.toSet());
+            extraCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, extraRemarksDataProvider));
         }
 
         return extraCurriculumEntries;
@@ -183,23 +196,10 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         if (normalCurriculumEntries == null) {
             normalCurriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
 
-            Collection<? extends ICurriculumEntry> enrolmentsAux = this.registration.getEnrolments(executionYear);
-            Set<ICurriculumEntry> enrolments = new HashSet<ICurriculumEntry>();
-
-            for (ICurriculumEntry entry : enrolmentsAux) {
-                if (((Enrolment) entry).isExtraCurricular()) {
-                    continue;
-                }
-
-                if (((Enrolment) entry).isPropaedeutic()) {
-                    continue;
-                }
-
-                if (!((Enrolment) entry).isStandalone() || registration.getDegree().isEmpty()) {
-                    enrolments.add(entry);
-                }
-            }
-
+            Collection<? extends ICurriculumEntry> enrolments =
+                    enrolmentsEntries.stream().map(Enrolment.class::cast)
+                            .filter(e -> !e.isExtraCurricular() && !e.isPropaedeutic() && !e.isStandalone())
+                            .collect(Collectors.toSet());
             normalCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
         }
 
