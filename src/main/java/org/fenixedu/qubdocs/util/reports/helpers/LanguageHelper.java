@@ -42,7 +42,8 @@ public class LanguageHelper implements IDocumentHelper {
             return FenixEduDocumentGenerator.DASH;
         }
 
-        return i18nString.getContent(new Locale("pt", "PT"));
+        String message = i18nString.getContent(new Locale("pt", "PT"));
+        return message != null ? message : "";
     }
 
     public String pt(final MultiLanguageString i18nString) {
@@ -50,7 +51,8 @@ public class LanguageHelper implements IDocumentHelper {
             return FenixEduDocumentGenerator.DASH;
         }
 
-        return i18nString.getContent(new Locale("pt", "PT"));
+        String message = i18nString.getContent(new Locale("pt", "PT"));
+        return message != null ? message : "";
     }
 
     public String en(final LocalizedString i18nString) {
@@ -58,7 +60,8 @@ public class LanguageHelper implements IDocumentHelper {
             return FenixEduDocumentGenerator.DASH;
         }
 
-        return i18nString.getContent(new Locale("en", "GB"));
+        String message = i18nString.getContent(new Locale("en", "GB"));
+        return message != null ? message : "";
     }
 
     public String en(final MultiLanguageString i18nString) {
@@ -66,7 +69,8 @@ public class LanguageHelper implements IDocumentHelper {
             return FenixEduDocumentGenerator.DASH;
         }
 
-        return i18nString.getContent(new Locale("en", "GB"));
+        String message = i18nString.getContent(new Locale("en", "GB"));
+        return message != null ? message : "";
     }
 
 }

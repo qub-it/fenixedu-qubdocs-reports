@@ -34,6 +34,7 @@ import org.fenixedu.academic.domain.Curriculum;
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.DegreeOfficialPublication;
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
+import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
@@ -49,9 +50,9 @@ public class ScholarPartCurriculumEntries extends CurriculumEntriesDataProvider 
     protected static final String KEY = "scholarPartCurriculumEntries";
     protected static final String KEY_LIST = "scholarPartCurriculumEntriesList";
 
-    public ScholarPartCurriculumEntries(final Registration registration, final CycleType cycleType,
+    public ScholarPartCurriculumEntries(final Registration registration, final ProgramConclusion programConclusion,
             final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale) {
-        super(registration, cycleType, remarksDataProvider, locale);
+        super(registration, programConclusion, remarksDataProvider, locale);
     }
 
     private Degree getDegree() {
@@ -72,7 +73,7 @@ public class ScholarPartCurriculumEntries extends CurriculumEntriesDataProvider 
     public Object valueForKey(final String key) {
         if (KEY.equals(key)) {
             return this;
-        } else if(KEY_LIST.equals(key)) {
+        } else if (KEY_LIST.equals(key)) {
             return getCurriculumEntries();
         }
 
@@ -80,6 +81,7 @@ public class ScholarPartCurriculumEntries extends CurriculumEntriesDataProvider 
     }
 
     // TODO
+    @Override
     protected Set<CurriculumEntry> getCurriculumEntries() {
 //        if (curriculumEntries == null) {
 //
@@ -106,7 +108,7 @@ public class ScholarPartCurriculumEntries extends CurriculumEntriesDataProvider 
 //        }
 //
 //        return curriculumEntries;
-        
+
         return Sets.newHashSet();
     }
 
@@ -115,48 +117,47 @@ public class ScholarPartCurriculumEntries extends CurriculumEntriesDataProvider 
         RegistrationConclusionBean conclusionBean = new RegistrationConclusionBean(this.registration);
         return (Curriculum) conclusionBean.getCurriculumForConclusion();
     }
-    
+
     // TODO
     public String getAverage() {
 //        return getCurriculumForConclusion().getScholarPartAverage().toString();
         return null;
     }
-    
+
     // TODO
     public String getRoundedAverage() {
 //        return getCurriculumForConclusion().getScholarPartRoundedAverage().toString();
         return null;
     }
-    
+
     public LocalizedString getRoundedAverageDescription() {
         return DocsStringUtils.capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources", getRoundedAverage()));
     }
-    
+
     // TODO
     public LocalDate getScholarPartConclusionDate() {
         // return getCurriculumForConclusion().getScholarPartConclusionDate();
         return null;
     }
- 
 
     protected DegreeOfficialPublication getDegreeOfficialPublication() {
         return getDegree().getOfficialPublication(getScholarPartConclusionDate().toDateTimeAtStartOfDay());
     }
 
     public String getDegreeOfficialPublicationName() {
-        if(getDegreeOfficialPublication() == null) {
+        if (getDegreeOfficialPublication() == null) {
             throw new DomainException("error.DegreeCurricularPlanInformationDataProvider.degreeOfficialPublication.empty");
         }
-        
+
         return getDegreeOfficialPublication().getOfficialReference();
     }
-    
+
     public LocalDate getDegreeOfficialPublicationDate() {
-        if(getDegreeOfficialPublication() == null) {
+        if (getDegreeOfficialPublication() == null) {
             throw new DomainException("error.DegreeCurricularPlanInformationDataProvider.degreeOfficialPublication.empty");
         }
-        
+
         return getDegreeOfficialPublication().getPublication();
     }
-    
+
 }

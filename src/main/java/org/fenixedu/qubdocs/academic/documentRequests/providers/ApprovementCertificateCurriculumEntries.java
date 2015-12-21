@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
+import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
@@ -46,8 +47,9 @@ public class ApprovementCertificateCurriculumEntries extends CurriculumEntriesDa
     private DocumentRequest certificateRequest;
 
     public ApprovementCertificateCurriculumEntries(final DocumentRequest certificateRequest, final Registration registration,
-            final CycleType cycleType, final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale) {
-        super(registration, cycleType, remarksDataProvider, locale);
+            final ProgramConclusion programConclusion, final CurriculumEntryRemarksDataProvider remarksDataProvider,
+            final Locale locale) {
+        super(registration, programConclusion, remarksDataProvider, locale);
 
         this.certificateRequest = certificateRequest;
     }
