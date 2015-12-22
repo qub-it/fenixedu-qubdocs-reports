@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
+import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
@@ -46,16 +47,16 @@ public class CurriculumEntriesDataProvider implements IReportDataProvider {
     protected static final String KEY = "curriculumEntries";
 
     protected Registration registration;
-    protected CycleType cycleType;
+    protected ProgramConclusion programConclusion;
     protected CurriculumEntryRemarksDataProvider remarksDataProvider;
     protected Locale locale;
 
     protected Set<CurriculumEntry> curriculumEntries;
 
-    public CurriculumEntriesDataProvider(final Registration registration, final CycleType cycleType,
+    public CurriculumEntriesDataProvider(final Registration registration, final ProgramConclusion programConclusion,
             final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale) {
         this.registration = registration;
-        this.cycleType = cycleType;
+        this.programConclusion = programConclusion;
         this.remarksDataProvider = remarksDataProvider;
         this.locale = locale;
     }
@@ -81,7 +82,7 @@ public class CurriculumEntriesDataProvider implements IReportDataProvider {
 
     protected Set<CurriculumEntry> getCurriculumEntries() {
         if (curriculumEntries == null) {
-            RegistrationConclusionBean conclusionBean = new RegistrationConclusionBean(this.registration);
+            RegistrationConclusionBean conclusionBean = new RegistrationConclusionBean(this.registration, programConclusion);
 
             final Set<ICurriculumEntry> curricularYearEntries =
                     Sets.newHashSet(conclusionBean.getCurriculumForConclusion().getCurriculumEntries());
@@ -108,9 +109,9 @@ public class CurriculumEntriesDataProvider implements IReportDataProvider {
         return curriculumEntries;
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void registerFieldsMetadata(IFieldsExporter exporter) {
+        // TODO Auto-generated method stub
+
+    }
 }

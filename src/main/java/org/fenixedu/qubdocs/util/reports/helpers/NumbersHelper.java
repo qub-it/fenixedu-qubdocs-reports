@@ -31,7 +31,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 
-import org.fenixedu.academic.util.report.DocumentPrinter;
 import org.fenixedu.qubdocs.FenixEduDocumentGenerator;
 
 import com.qubit.terra.docs.util.helpers.IDocumentHelper;

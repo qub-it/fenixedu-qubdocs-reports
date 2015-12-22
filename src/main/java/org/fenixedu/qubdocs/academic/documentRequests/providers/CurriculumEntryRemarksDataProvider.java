@@ -31,10 +31,13 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.Set;
 
+import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.IEnrolment;
+import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.organizationalStructure.Unit;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.studentCurriculum.ExternalEnrolment;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.LocalizedString;
 
@@ -68,11 +71,6 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
         entries.add(creditsRemarkEntry);
         this.key = KEY;
         this.registration = registration;
-    }
-
-    public CurriculumEntryRemarksDataProvider(final Registration registration, final String key) {
-        this(registration);
-        this.key = key;
     }
 
     @Override
@@ -173,46 +171,45 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
             return RemarkEntryType.CREDITS == type;
         }
 
-        // TODO
         public LocalizedString getDescription() {
+            LocalizedString mls = new LocalizedString();
             if (curriculumEntries.isEmpty()) {
-                LocalizedString mls = new LocalizedString();
-                for (Locale locale : CoreConfiguration.supportedLocales()) {
-                    mls = mls.with(locale, "");
-                }
+                // It is pointless to build an empty LS because the locales with empty or null values are ignored.
+                // See LS builder implementation for further details.
                 return mls;
             }
-            LocalizedString mls = new LocalizedString();
             for (Locale locale : CoreConfiguration.supportedLocales()) {
-//                String message =
-//                        BundleUtil.getStringFromResourceBundle(QubEduAcademicOfficePlugin.BUNDLE, locale,
-//                                type.getQualifiedName(), remarkNumber, institution != null ? institution.getNameI18n().getContent() : "");
+                String message =
+                        BundleUtil.getString("resources/FenixeduQubdocsReportsResources", locale, type.getQualifiedName(),
+                                remarkNumber, institution != null ? institution.getNameI18n().getContent() : "");
 
-                mls = mls.with(locale, "");
+                mls = mls.with(locale, message);
             }
-
             return mls;
         }
     }
 
-    // TODO
     public boolean isDismissal(CurriculumEntry entry) {
         if (entry.isDismissal()) {
             return true;
         }
 
         if (entry.isIEnrolment() && ((IEnrolment) entry.getICurriculumEntry()).isEnrolment()) {
-            return false;
-            // return ((Enrolment) entry.getICurriculumEntry()).hasAnyDismissal(registration.getLastStudentCurricularPlan());
+            return hasAnyDismissal(registration.getLastStudentCurricularPlan(), (Enrolment) entry.getICurriculumEntry());
         }
 
         return false;
     }
 
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
+    private boolean hasAnyDismissal(StudentCurricularPlan studentCurricularPlan, Enrolment enrolment) {
+        return studentCurricularPlan.getCreditsSet().stream()
+                .anyMatch(c -> c.getEnrolmentsSet().stream().anyMatch(ew -> ew.getIEnrolment() == enrolment));
+    }
+
+    @Override
+    public void registerFieldsMetadata(IFieldsExporter exporter) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

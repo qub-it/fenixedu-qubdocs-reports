@@ -7,6 +7,8 @@
  *  - Copyright © 2015 Universidade de Lisboa (after any Go-Live phase)
  *
  * Contributors: anil.mamede@qub-it.com
+ *               joao.amaral@qub-it.com
+ *               diogo.simoes@qub-it.com
  *
  * 
  * This file is part of FenixEdu QubDocs.
@@ -28,12 +30,13 @@
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.ExecutionYear;
@@ -47,182 +50,135 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class EnrolmentsDataProvider implements IReportDataProvider {
     protected static final String KEY = "enrolments";
-    protected static final String KEY_FOR_LIST = "enrolmentsList";
-    protected static final String KEY_FOR_NORMAL_ENROLMENTS = "normalEnrolmentsList";
-    protected static final String KEY_FOR_TOTAL_NORMAL_ENROLMENTS = "totalNormalEnrolments";
-    protected static final String KEY_FOR_TOTAL_NORMAL_ECTS = "totalNormalECTS";
-    protected static final String KEY_FOR_EXTRA_ENROLMENTS = "extraEnrolmentsList";
-    protected static final String KEY_FOR_STANDALONE_ENROLMENTS = "standaloneEnrolmentsList";
-    protected static final String KEY_FOR_TOTAL_STANDALONE_ENROLMENTS = "totalStandaloneEnrolments";
-    protected static final String KEY_FOR_TOTAL_STANDALONE_ECTS = "totalStandaloneECTS";
-    protected static final String KEY_HAS_EXTRA_ENROLMENTS = "hasExtraEnrolments";
-    protected static final String KEY_HAS_STANDALONE_ENROLMENTS = "hasStandaloneEnrolments";
 
     protected Registration registration;
     protected ExecutionYear executionYear;
     protected Locale locale;
-    protected TreeSet<CurriculumEntry> curriculumEntries;
-    protected TreeSet<CurriculumEntry> normalCurriculumEntries;
-    protected TreeSet<CurriculumEntry> extraCurriculumEntries;
-    protected TreeSet<CurriculumEntry> standaloneCurriculumEntries;
+    protected List<Enrolments> data;
 
-    protected CurriculumEntryRemarksDataProvider remarksDataProvider = null;
-
-    public EnrolmentsDataProvider(final Registration registration, final ExecutionYear executionYear, final Locale locale) {
+    public EnrolmentsDataProvider(final Registration registration, final Set<ICurriculumEntry> normalEnrolmentsEntries,
+            final Set<ICurriculumEntry> standaloneEnrolmentsEntries,
+            final Set<ICurriculumEntry> extracurricularEnrolmentsEntries, final ExecutionYear executionYear, final Locale locale) {
         this.registration = registration;
         this.executionYear = executionYear;
         this.locale = locale;
-        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        data = new ArrayList<Enrolments>();
+        if (normalEnrolmentsEntries != null && !normalEnrolmentsEntries.isEmpty()) {
+            data.add(new Enrolments("normal", locale, registration, normalEnrolmentsEntries));
+        }
+        if (standaloneEnrolmentsEntries != null && !standaloneEnrolmentsEntries.isEmpty()) {
+            data.add(new Enrolments("standalone", locale, registration, standaloneEnrolmentsEntries));
+        }
+        if (extracurricularEnrolmentsEntries != null && !extracurricularEnrolmentsEntries.isEmpty()) {
+            data.add(new Enrolments("extracurricular", locale, registration, extracurricularEnrolmentsEntries));
+        }
     }
 
     @Override
     public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
-        documentFieldsData.registerCollectionAsField(KEY_FOR_LIST);
-        documentFieldsData.registerCollectionAsField(KEY_FOR_NORMAL_ENROLMENTS);
-        documentFieldsData.registerCollectionAsField(KEY_FOR_EXTRA_ENROLMENTS);
-        documentFieldsData.registerCollectionAsField(KEY_FOR_STANDALONE_ENROLMENTS);
+        for (Enrolments enrolments : data) {
+            enrolments.registerCollections(documentFieldsData);
+        }
     }
 
     @Override
     public boolean handleKey(final String key) {
-        return KEY.equals(key) || KEY_FOR_LIST.equals(key) || KEY_FOR_NORMAL_ENROLMENTS.equals(key)
-                || KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)
-                || KEY_FOR_EXTRA_ENROLMENTS.equals(key) || KEY_FOR_STANDALONE_ENROLMENTS.equals(key)
-                || KEY_FOR_TOTAL_STANDALONE_ENROLMENTS.equals(key) || KEY_FOR_TOTAL_STANDALONE_ECTS.equals(key)
-                || KEY_HAS_EXTRA_ENROLMENTS.equals(key) || KEY_HAS_STANDALONE_ENROLMENTS.equals(key);
+        for (Enrolments enrolments : data) {
+            if (enrolments.hasKey(key)) {
+                return true;
+            }
+        }
+        return KEY.equals(key);
     }
 
     @Override
     public Object valueForKey(final String key) {
         if (KEY.equals(key)) {
             return this;
-        } else if (KEY_FOR_LIST.equals(key)) {
-            return this.getCurriculumEntries();
-        } else if (KEY_FOR_NORMAL_ENROLMENTS.equals(key)) {
-            return this.getNormalCurriculumEntries();
-        } else if (KEY_FOR_TOTAL_NORMAL_ENROLMENTS.equals(key)) {
-            return getTotalNormalCurriculumEntries();
-        } else if (KEY_FOR_TOTAL_NORMAL_ECTS.equals(key)) {
-            return getTotalNormalECTS();
-        } else if (KEY_FOR_EXTRA_ENROLMENTS.equals(key)) {
-            return this.getExtraCurriculumEntries();
-        } else if (KEY_FOR_STANDALONE_ENROLMENTS.equals(key)) {
-            return this.getStandaloneCurriculumEntries();
-        } else if (KEY_FOR_TOTAL_STANDALONE_ENROLMENTS.equals(key)) {
-            return getTotalStandaloneCurriculumEntries();
-        } else if (KEY_FOR_TOTAL_STANDALONE_ECTS.equals(key)) {
-            return getTotalStandaloneECTS();
-        } else if (KEY_HAS_EXTRA_ENROLMENTS.equals(key)) {
-            return !this.getExtraCurriculumEntries().isEmpty();
-        } else if (KEY_HAS_STANDALONE_ENROLMENTS.equals(key)) {
-            return !this.getStandaloneCurriculumEntries().isEmpty();
         }
-
+        for (Enrolments enrolments : data) {
+            if (enrolments.hasKey(key)) {
+                return enrolments.getValue(key);
+            }
+        }
         return null;
-    }
-
-    public Set<CurriculumEntry> getCurriculumEntries() {
-        if (curriculumEntries == null) {
-            curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
-
-            Collection<? extends ICurriculumEntry> enrolments = this.registration.getEnrolments(executionYear);
-            curriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
-        }
-
-        return curriculumEntries;
-    }
-
-    public Set<CurriculumEntry> getStandaloneCurriculumEntries() {
-        if (standaloneCurriculumEntries == null) {
-            standaloneCurriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
-
-            Collection<? extends ICurriculumEntry> enrolmentsAux = this.registration.getEnrolments(executionYear);
-            Set<ICurriculumEntry> enrolments = new HashSet<ICurriculumEntry>();
-
-            for (ICurriculumEntry entry : enrolmentsAux) {
-                if (((Enrolment) entry).isStandalone() && !standaloneRegistration()) {
-                    enrolments.add(entry);
-                }
-            }
-
-            standaloneCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
-        }
-
-        return standaloneCurriculumEntries;
-    }
-
-    public int getTotalStandaloneCurriculumEntries() {
-        return getStandaloneCurriculumEntries().size();
-    }
-
-    public BigDecimal getTotalStandaloneECTS() {
-        return getStandaloneCurriculumEntries().stream().map(CurriculumEntry::getEctsCredits)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public Set<CurriculumEntry> getExtraCurriculumEntries() {
-        if (extraCurriculumEntries == null) {
-            extraCurriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
-
-            Collection<? extends ICurriculumEntry> enrolmentsAux = this.registration.getEnrolments(executionYear);
-            Set<ICurriculumEntry> enrolments = new HashSet<ICurriculumEntry>();
-
-            for (ICurriculumEntry entry : enrolmentsAux) {
-                if (((Enrolment) entry).isExtraCurricular()) {
-                    enrolments.add(entry);
-                }
-            }
-
-            extraCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
-        }
-
-        return extraCurriculumEntries;
-    }
-
-    public Set<CurriculumEntry> getNormalCurriculumEntries() {
-        if (normalCurriculumEntries == null) {
-            normalCurriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
-
-            Collection<? extends ICurriculumEntry> enrolmentsAux = this.registration.getEnrolments(executionYear);
-            Set<ICurriculumEntry> enrolments = new HashSet<ICurriculumEntry>();
-
-            for (ICurriculumEntry entry : enrolmentsAux) {
-                if (((Enrolment) entry).isExtraCurricular()) {
-                    continue;
-                }
-
-                if (((Enrolment) entry).isPropaedeutic()) {
-                    continue;
-                }
-
-                if (!((Enrolment) entry).isStandalone() || registration.getDegree().isEmpty()) {
-                    enrolments.add(entry);
-                }
-            }
-
-            normalCurriculumEntries.addAll(CurriculumEntry.transform(registration, enrolments, remarksDataProvider));
-        }
-
-        return normalCurriculumEntries;
-    }
-
-    public int getTotalNormalCurriculumEntries() {
-        return getNormalCurriculumEntries().size();
-    }
-
-    public BigDecimal getTotalNormalECTS() {
-        return getNormalCurriculumEntries().stream().map(CurriculumEntry::getEctsCredits)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    protected boolean standaloneRegistration() {
-        return registration.getDegree().isEmpty();
     }
 
     @Override
     public void registerFieldsMetadata(IFieldsExporter exporter) {
         // TODO Auto-generated method stub
 
+    }
+
+    public static class Enrolments {
+        private String hasEnrolmentsKey;
+        private String enrolmentsKey;
+        private String totalsKey;
+        private String ectsKey;
+        private String remarksKey;
+
+        private Set<ICurriculumEntry> enrolmentsEntries;
+        private TreeSet<CurriculumEntry> curriculumEntries;
+        private CurriculumEntryRemarksDataProvider remarksDataProvider;
+
+        public Enrolments(final String type, final Locale locale, final Registration registration,
+                final Set<ICurriculumEntry> enrolmentsEntries) {
+            final String casedType = type.substring(0, 1).toUpperCase() + type.substring(1);
+            this.hasEnrolmentsKey = "has" + casedType + "Enrolments";
+            this.enrolmentsKey = type + "EnrolmentsList";
+            this.totalsKey = "total" + casedType + "Enrolments";
+            this.ectsKey = "total" + casedType + "ECTS";
+            this.remarksKey = type + "EnrolmentsRemarks";
+
+            this.enrolmentsEntries = enrolmentsEntries;
+            this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+            this.curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
+            this.curriculumEntries.addAll(CurriculumEntry.transform(registration, this.enrolmentsEntries, remarksDataProvider));
+        }
+
+        public Object getValue(String key) {
+            if (key.equals(hasEnrolmentsKey)) {
+                return hasEnrolements();
+            } else if (key.equals(enrolmentsKey)) {
+                return getCurriculumEntries();
+            } else if (key.equals(totalsKey)) {
+                return getTotalEntries();
+            } else if (key.equals(ectsKey)) {
+                return getTotalEcts();
+            } else if (key.equals(remarksKey)) {
+                return getRemarks();
+            }
+            return null;
+        }
+
+        private boolean hasEnrolements() {
+            return curriculumEntries.size() > 0;
+        }
+
+        private TreeSet<CurriculumEntry> getCurriculumEntries() {
+            return curriculumEntries;
+        }
+
+        private int getTotalEntries() {
+            return curriculumEntries.size();
+        }
+
+        private BigDecimal getTotalEcts() {
+            return curriculumEntries.stream().map(CurriculumEntry::getEctsCredits).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+
+        private Object getRemarks() {
+            return remarksDataProvider.valueForKey("curriculumEntryRemarks");
+        }
+
+        public void registerCollections(IDocumentFieldsData documentFieldsData) {
+            documentFieldsData.registerCollectionAsField(enrolmentsKey);
+        }
+
+        public boolean hasKey(String key) {
+            return key.equals(hasEnrolmentsKey) || key.equals(enrolmentsKey) || key.equals(totalsKey) || key.equals(ectsKey)
+                    || key.equals(remarksKey);
+        }
     }
 
 }
