@@ -76,6 +76,10 @@ public class FenixEduDocumentGenerator extends ReportGenerator {
         return this;
     }
 
+    public static FenixEduDocumentGenerator create(final byte[] template, final String mimeType) {
+        return new FenixEduDocumentGenerator(template, mimeType);
+    }
+
     public static FenixEduDocumentGenerator create(final DocumentTemplate documentTemplate, final String mimeType) {
         return new FenixEduDocumentGenerator(documentTemplate, mimeType);
     }
