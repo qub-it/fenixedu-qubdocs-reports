@@ -134,7 +134,7 @@ ${portal.toolkit()}
 	<div class="form-group row">
 		<div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.documentTemplateFile"/></div>
 			<div class="col-sm-4">
-				<input type="file" name="documentTemplateFile" accept=".odt, application/vnd.oasis.opendocument.text" />
+				<input type="file" name="documentTemplateFile" accept=".odt, application/vnd.oasis.opendocument.text, text/plain" />
 			</div>	
 		</div>
 	</div>

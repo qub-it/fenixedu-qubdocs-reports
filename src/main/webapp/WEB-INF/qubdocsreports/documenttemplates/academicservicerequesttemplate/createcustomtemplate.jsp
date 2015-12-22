@@ -190,7 +190,7 @@ ${portal.toolkit()}
                 </div>
                 <div class="col-sm-4">
                     <input type="file" name="documentTemplateFile"
-                        accept=".odt, application/vnd.oasis.opendocument.text"
+                        accept=".odt, application/vnd.oasis.opendocument.text, text/plain"
                         required />
                 </div>
             </div>
