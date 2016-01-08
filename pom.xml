@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>fenixedu-qubdocs-reports</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-service-request_RC1</version>
     <packaging>jar</packaging>
 
     <name>QubDocs Reports</name>
@@ -169,7 +169,7 @@
             <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
         </repository>
     </repositories>
-    
+
     <build>
         <plugins>
             <plugin>
