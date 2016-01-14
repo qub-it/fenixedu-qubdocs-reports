@@ -62,9 +62,14 @@ public class DateHelper implements IDocumentHelper {
             if (locale.getLanguage().equals("pt")) {
                 month = month.toLowerCase(); // Java does not follow the Portuguese Language Orthographic Agreement of 1990
             }
+            String day = String.valueOf(localDate.getDayOfMonth());
+            if (locale.getLanguage().equals("en")) {
+                day += getDayOfMonthOrdinal(localDate.getDayOfMonth());
+            }
+
             String message =
                     BundleUtil.getString("resources.FenixeduQubdocsReportsResources", locale, "message.DateHelper.extendedDate",
-                            localDate.toString("dd", locale), month, localDate.toString("yyyy", locale));
+                            day, month, localDate.toString("yyyy", locale));
             i18NString = i18NString.with(locale, message);
         }
         return i18NString;
@@ -92,6 +97,22 @@ public class DateHelper implements IDocumentHelper {
 
     public String date(final YearMonthDay yearMonthDay) {
         return yearMonthDay.toString("dd/MM/yyyy");
+    }
+
+    private String getDayOfMonthOrdinal(int day) {
+        if (day >= 11 && day <= 13) {
+            return "\u1D57\u02B0";
+        }
+        switch (day % 10) {
+        case 1:
+            return "\u02E2\u1D57";
+        case 2:
+            return "\u207F\u1D48";
+        case 3:
+            return "\u02B3\u1D48";
+        default:
+            return "\u1D57\u02B0";
+        }
     }
 
 }
