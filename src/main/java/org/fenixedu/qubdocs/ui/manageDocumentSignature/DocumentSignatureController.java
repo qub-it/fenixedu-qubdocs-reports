@@ -170,9 +170,7 @@ public class DocumentSignatureController extends FenixeduQubdocsReportsBaseContr
                     "label.info.documentSignature.successfulDelete", responsibleName), model);
             return redirect(SEARCH_URL, model, redirectAttributes);
         } catch (DomainException ex) {
-            addErrorMessage(
-                    BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.delete")
-                            + ex.getLocalizedMessage(), model);
+            addErrorMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, ex.getKey()), model);
         }
         return redirect(READ_URL + getDocumentSignature(model).getExternalId(), model, redirectAttributes);
     }
