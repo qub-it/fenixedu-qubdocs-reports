@@ -44,7 +44,6 @@ import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ConclusionInformationDataProvider implements IReportDataProvider {
@@ -128,12 +127,6 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         public boolean isDismissalCreditsGiven() {
             return getDismissalCredits().compareTo(BigDecimal.ZERO) > 0;
         }
-    }
-
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
     }
 
 }

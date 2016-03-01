@@ -31,21 +31,17 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
-import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class EnrolmentsDataProvider implements IReportDataProvider {
@@ -57,8 +53,8 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     protected List<Enrolments> data;
 
     public EnrolmentsDataProvider(final Registration registration, final Set<ICurriculumEntry> normalEnrolmentsEntries,
-            final Set<ICurriculumEntry> standaloneEnrolmentsEntries,
-            final Set<ICurriculumEntry> extracurricularEnrolmentsEntries, final ExecutionYear executionYear, final Locale locale) {
+            final Set<ICurriculumEntry> standaloneEnrolmentsEntries, final Set<ICurriculumEntry> extracurricularEnrolmentsEntries,
+            final ExecutionYear executionYear, final Locale locale) {
         this.registration = registration;
         this.executionYear = executionYear;
         this.locale = locale;
@@ -102,12 +98,6 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
             }
         }
         return null;
-    }
-
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
     }
 
     public static class Enrolments {

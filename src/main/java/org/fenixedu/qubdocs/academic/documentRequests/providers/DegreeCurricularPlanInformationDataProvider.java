@@ -29,7 +29,6 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Locale;
 
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.DegreeCurricularPlan;
@@ -39,9 +38,7 @@ import org.fenixedu.academic.domain.degree.DegreeType;
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.domain.student.Registration;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
 
 import com.google.common.collect.Sets;
@@ -289,11 +286,5 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         DegreeType degreeType = getDegree().getDegreeType();
         return !degreeType.isBolonhaType() && degreeType.isDegree();
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

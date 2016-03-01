@@ -34,7 +34,7 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 public class DocumentRequestSignatureDataProvider implements IReportDataProvider {
 
     protected static String DOCUMENT_REQUEST_SIGNATURE_KEY = "DOCUMENT_REQUEST_SIGNATURE_KEY";
-    
+
     @Override
     public boolean handleKey(final String key) {
         return key.equals(DOCUMENT_REQUEST_SIGNATURE_KEY);
@@ -47,17 +47,11 @@ public class DocumentRequestSignatureDataProvider implements IReportDataProvider
 
     @Override
     public Object valueForKey(final String key) {
-        if(handleKey(DOCUMENT_REQUEST_SIGNATURE_KEY)) {
+        if (handleKey(DOCUMENT_REQUEST_SIGNATURE_KEY)) {
             // return DocumentRequestSignature.find(AdministrativeOffice);
         }
-        
+
         return null;
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

@@ -49,10 +49,4 @@ public class DocumentSignerDataProvider implements IReportDataProvider {
         return DocumentSigner.findDefaultDocumentSignature();
     }
 
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

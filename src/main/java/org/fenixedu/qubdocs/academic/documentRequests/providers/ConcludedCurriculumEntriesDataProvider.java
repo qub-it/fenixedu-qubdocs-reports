@@ -11,7 +11,6 @@ import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvider {
@@ -27,8 +26,8 @@ public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvid
     private Collection<ICurriculumEntry> conclusions;
     private Set<CurriculumEntry> curriculumEntries;
 
-    public ConcludedCurriculumEntriesDataProvider(final Registration registration,
-            final Collection<ICurriculumEntry> conclusions, final Locale locale) {
+    public ConcludedCurriculumEntriesDataProvider(final Registration registration, final Collection<ICurriculumEntry> conclusions,
+            final Locale locale) {
         this.registration = registration;
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
@@ -72,12 +71,10 @@ public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvid
 
                 @Override
                 public int compare(final CurriculumEntry left, final CurriculumEntry right) {
-                    final String leftContent =
-                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
-                                    .getContent();
-                    final String rightContent =
-                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
-                                    .getContent();
+                    final String leftContent = left.getName().getContent(locale) != null ? left.getName()
+                            .getContent(locale) : left.getName().getContent();
+                    final String rightContent = right.getName().getContent(locale) != null ? right.getName()
+                            .getContent(locale) : right.getName().getContent();
 
                     return leftContent.compareTo(rightContent);
                 }
@@ -103,12 +100,6 @@ public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvid
 
     private Object getRemarks() {
         return remarksDataProvider.valueForKey("curriculumEntryRemarks");
-    }
-
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -6,7 +6,6 @@ import org.fenixedu.academic.domain.student.curriculum.Curriculum;
 import org.joda.time.DateTime;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class CurriculumInformationDataProvider implements IReportDataProvider {
@@ -40,9 +39,8 @@ public class CurriculumInformationDataProvider implements IReportDataProvider {
     }
 
     public Integer getPreviousCurricularYear() {
-        final Curriculum curriculum =
-                registration.getLastStudentCurricularPlan().getCurriculum(new DateTime(),
-                        executionYear.getPreviousExecutionYear());
+        final Curriculum curriculum = registration.getLastStudentCurricularPlan().getCurriculum(new DateTime(),
+                executionYear.getPreviousExecutionYear());
 
         return curriculum.getCurricularYear();
     }
@@ -52,11 +50,5 @@ public class CurriculumInformationDataProvider implements IReportDataProvider {
 
         return curriculum.getCurricularYear();
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

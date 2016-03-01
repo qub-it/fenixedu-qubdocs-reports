@@ -42,7 +42,6 @@ import org.joda.time.LocalDate;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvider {
@@ -65,9 +64,8 @@ public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvi
         this.emissionDate = emissionDate;
     }
 
-    public StandaloneCurriculumEntriesDataProvider(final Registration registration,
-            final Collection<Enrolment> sourceLines, final CurriculumEntryRemarksDataProvider remarksDataProvider,
-            final Locale locale, final LocalDate emissionDate) {
+    public StandaloneCurriculumEntriesDataProvider(final Registration registration, final Collection<Enrolment> sourceLines,
+            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale, final LocalDate emissionDate) {
         this(registration, remarksDataProvider, locale, emissionDate);
         this.sourceLines = sourceLines;
     }
@@ -111,27 +109,23 @@ public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvi
     private void collectByEntries() {
         curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
         for (Enrolment curriculumLine : sourceLines) {
-            curriculumEntries.addAll(CurriculumEntry.transform(registration, Collections.singleton(curriculumLine), remarksDataProvider));
+            curriculumEntries
+                    .addAll(CurriculumEntry.transform(registration, Collections.singleton(curriculumLine), remarksDataProvider));
         }
     }
 
     private void collectWithRegistrations() {
         curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
         final Student student = registration.getStudent();
-        
-        for(final Registration registration : student.getActiveRegistrations()) {
+
+        for (final Registration registration : student.getActiveRegistrations()) {
             Collection<CurriculumLine> standaloneCurriculumLines = registration.getStandaloneCurriculumLines();
             for (CurriculumLine curriculumLine : standaloneCurriculumLines) {
-                Collection<ICurriculumEntry> entries = curriculumLine.getCurriculum(emissionDate.toDateTimeAtStartOfDay()).getCurriculumEntries();
+                Collection<ICurriculumEntry> entries =
+                        curriculumLine.getCurriculum(emissionDate.toDateTimeAtStartOfDay()).getCurriculumEntries();
                 curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
-            }            
+            }
         }
     }
-
-	@Override
-	public void registerFieldsMetadata(IFieldsExporter exporter) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

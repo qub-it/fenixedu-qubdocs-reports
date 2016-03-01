@@ -6,13 +6,11 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.Set;
 
-import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvider {
@@ -28,8 +26,8 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
     private Collection<ICurriculumEntry> approvements;
     private Set<CurriculumEntry> curriculumEntries;
 
-    public ApprovedCurriculumEntriesDataProvider(final Registration registration,
-            final Collection<ICurriculumEntry> approvements, final Locale locale) {
+    public ApprovedCurriculumEntriesDataProvider(final Registration registration, final Collection<ICurriculumEntry> approvements,
+            final Locale locale) {
         this.registration = registration;
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
@@ -73,12 +71,10 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
 
                 @Override
                 public int compare(final CurriculumEntry left, final CurriculumEntry right) {
-                    final String leftContent =
-                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
-                                    .getContent();
-                    final String rightContent =
-                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
-                                    .getContent();
+                    final String leftContent = left.getName().getContent(locale) != null ? left.getName()
+                            .getContent(locale) : left.getName().getContent();
+                    final String rightContent = right.getName().getContent(locale) != null ? right.getName()
+                            .getContent(locale) : right.getName().getContent();
 
                     return leftContent.compareTo(rightContent);
                 }
@@ -104,12 +100,6 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
 
     private Object getRemarks() {
         return remarksDataProvider.valueForKey("curriculumEntryRemarks");
-    }
-
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
     }
 
 }

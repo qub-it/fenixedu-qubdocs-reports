@@ -179,9 +179,8 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
                 return mls;
             }
             for (Locale locale : CoreConfiguration.supportedLocales()) {
-                String message =
-                        BundleUtil.getString("resources/FenixeduQubdocsReportsResources", locale, type.getQualifiedName(),
-                                remarkNumber, institution != null ? institution.getNameI18n().getContent() : "");
+                String message = BundleUtil.getString("resources/FenixeduQubdocsReportsResources", locale,
+                        type.getQualifiedName(), remarkNumber, institution != null ? institution.getNameI18n().getContent() : "");
 
                 mls = mls.with(locale, message);
             }
@@ -204,12 +203,6 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
     private boolean hasAnyDismissal(StudentCurricularPlan studentCurricularPlan, Enrolment enrolment) {
         return studentCurricularPlan.getCreditsSet().stream()
                 .anyMatch(c -> c.getEnrolmentsSet().stream().anyMatch(ew -> ew.getIEnrolment() == enrolment));
-    }
-
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
     }
 
 }

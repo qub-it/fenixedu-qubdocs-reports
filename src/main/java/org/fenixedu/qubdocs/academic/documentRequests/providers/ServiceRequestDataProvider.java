@@ -29,13 +29,10 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentRequest;
 import org.fenixedu.academic.domain.treasury.IAcademicServiceRequestAndAcademicTaxTreasuryEvent;
-import org.fenixedu.academic.domain.treasury.IAcademicTreasuryEvent;
 import org.fenixedu.academic.domain.treasury.TreasuryBridgeAPIFactory;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class ServiceRequestDataProvider implements IReportDataProvider {
@@ -72,7 +69,7 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
         } else if (KEY_HAS_PRICETAG.equals(key)) {
             final IAcademicServiceRequestAndAcademicTaxTreasuryEvent academicTreasuryEvent =
                     TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
-            return (academicTreasuryEvent != null && academicTreasuryEvent.isWithDebitEntry());
+            return academicTreasuryEvent != null && academicTreasuryEvent.isWithDebitEntry();
         } else if (KEY_FOR_PRICE.equals(key)) {
             return TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
         } else if (KEY_EXECUTION_YEAR.equals(key)) {
@@ -82,12 +79,6 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
         }
 
         return null;
-    }
-
-    @Override
-    public void registerFieldsMetadata(IFieldsExporter exporter) {
-        // TODO Auto-generated method stub
-
     }
 
 }
