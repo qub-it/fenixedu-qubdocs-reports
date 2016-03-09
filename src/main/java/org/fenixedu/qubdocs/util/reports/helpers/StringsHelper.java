@@ -32,4 +32,8 @@ import org.fenixedu.qubdocs.util.DocsStringUtils;
 import com.qubit.terra.docs.util.helpers.IDocumentHelper;
 
 public class StringsHelper extends DocsStringUtils implements IDocumentHelper {
+
+    public String lower(String input) {
+        return input.toLowerCase();
+    }
 }

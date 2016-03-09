@@ -329,31 +329,18 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return registration.getLastStudentCurricularPlan();
     }
 
-    // TODO
-    public String getEctsGrade() {
-//        final IEctsConversionService service = EctsConversionServiceFactory.newInstance().getService();
-//
-//        if (!GradeScaleType.findByGradeScale(GradeScale.TYPE20).validateGrade(getGrade())) {
-//            return "";
-//        }
-//
-//        final Grade grade = Grade.createGrade(getGrade(), GradeScale.TYPE20);
-//        if (isDismissal()) {
-//            final CompetenceCourse competenceCourse = getCompetenceCourse();
-//            return service.convert(competenceCourse, getExecutionYear().getAcademicInterval(), grade).getValue();
-//        }
-//
-//        Grade ectsGrade =
-//                isExternal() ? service.convert(getExternalEnrolment(), grade) : service.convert(getCompetenceCourse(),
-//                        getExecutionYear().getAcademicInterval(), grade);
-//
-//        if ("NA".equals(ectsGrade.getValue())) {
-//            return "-";
-//        }
-//
-//        return ectsGrade.getValue();
+    private static Function<ICurriculumEntry, String> courseEctsGradeProvider = entry -> "";
 
-        return null;
+    public static void setCourseEctsGradeProviderProvider(Function<ICurriculumEntry, String> courseEctsGradeProvider) {
+        CurriculumEntry.courseEctsGradeProvider = courseEctsGradeProvider;
+    }
+
+    protected String getEctsGrade(ICurriculumEntry entry) {
+        return courseEctsGradeProvider.apply(entry);
+    }
+
+    public String getEctsGrade() {
+        return getEctsGrade(getICurriculumEntry());
     }
 
     public LocalizedString getDurationName() {

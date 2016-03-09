@@ -99,6 +99,14 @@ public class DateHelper implements IDocumentHelper {
         return yearMonthDay.toString("dd/MM/yyyy");
     }
 
+    public String freeMarkerDate(final LocalDate localDate) {
+        return localDate.toString("MM/dd/yyyy");
+    }
+
+    public String freeMarkerDate(final YearMonthDay yearMonthDay) {
+        return yearMonthDay.toString("MM/dd/yyyy");
+    }
+
     private String getDayOfMonthOrdinal(int day) {
         if (day >= 11 && day <= 13) {
             return "\u1D57\u02B0";

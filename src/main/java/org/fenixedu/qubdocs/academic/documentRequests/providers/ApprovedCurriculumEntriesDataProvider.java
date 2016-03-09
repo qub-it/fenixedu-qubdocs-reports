@@ -26,8 +26,8 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
     private Collection<ICurriculumEntry> approvements;
     private Set<CurriculumEntry> curriculumEntries;
 
-    public ApprovedCurriculumEntriesDataProvider(final Registration registration, final Collection<ICurriculumEntry> approvements,
-            final Locale locale) {
+    public ApprovedCurriculumEntriesDataProvider(final Registration registration,
+            final Collection<ICurriculumEntry> approvements, final Locale locale) {
         this.registration = registration;
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
@@ -71,10 +71,19 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
 
                 @Override
                 public int compare(final CurriculumEntry left, final CurriculumEntry right) {
-                    final String leftContent = left.getName().getContent(locale) != null ? left.getName()
-                            .getContent(locale) : left.getName().getContent();
-                    final String rightContent = right.getName().getContent(locale) != null ? right.getName()
-                            .getContent(locale) : right.getName().getContent();
+                    if (left.getExecutionYear() == right.getExecutionYear()) {
+                        return compareByName(left, right);
+                    }
+                    return left.getExecutionYear().compareTo(right.getExecutionYear());
+                }
+
+                public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
+                    final String leftContent =
+                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
+                                    .getContent();
+                    final String rightContent =
+                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
+                                    .getContent();
 
                     return leftContent.compareTo(rightContent);
                 }

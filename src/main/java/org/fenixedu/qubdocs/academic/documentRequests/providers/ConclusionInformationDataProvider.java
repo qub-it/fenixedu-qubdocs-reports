@@ -30,11 +30,13 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
+import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
@@ -43,6 +45,7 @@ import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
 
+import com.google.common.base.Function;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
@@ -75,6 +78,12 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         return null;
     }
 
+    private static Function<RegistrationConclusionBean, String> degreeEctsGradeProvider = conclusion -> "";
+
+    public static void setDegreeEctsGradeProviderProvider(Function<RegistrationConclusionBean, String> degreeEctsGradeProvider) {
+        ConclusionInformationDataProvider.degreeEctsGradeProvider = degreeEctsGradeProvider;
+    }
+
     public class ConclusionInformation {
         protected RegistrationConclusionBean conclusionBean;
 
@@ -103,18 +112,32 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             return average.setScale(0, RoundingMode.HALF_EVEN).toString();
         }
 
+        public String getEctsGrade() {
+            return degreeEctsGradeProvider.apply(conclusionBean);
+        }
+
         public LocalizedString getFinalAverageDescription() {
-            return DocsStringUtils
-                    .capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources", getRoundedFinalAverage()));
+            return DocsStringUtils.capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources",
+                    getRoundedFinalAverage()));
+        }
+
+        public LocalizedString getQualitativeGrade() {
+            if (conclusionBean.getDescriptiveGrade() != null && conclusionBean.getDescriptiveGrade().getExtendedValue() != null) {
+                return conclusionBean.getDescriptiveGrade().getExtendedValue();
+            }
+            return new LocalizedString();
         }
 
         public BigDecimal getDismissalCredits() {
 
             final CurriculumGroup curriculumGroup = this.conclusionBean.getCurriculumGroup();
             final StudentCurricularPlan studentCurricularPlan = curriculumGroup.getStudentCurricularPlan();
-            final List<Dismissal> dismissals = studentCurricularPlan.getDismissals().stream()
-                    .filter(d -> d.getCredits().isCredits() && curriculumGroup.hasCurriculumModule(d.getCurriculumGroup()))
-                    .collect(Collectors.toList());
+            final List<Dismissal> dismissals =
+                    studentCurricularPlan
+                            .getDismissals()
+                            .stream()
+                            .filter(d -> d.getCredits().isCredits()
+                                    && curriculumGroup.hasCurriculumModule(d.getCurriculumGroup())).collect(Collectors.toList());
 
             BigDecimal sum = BigDecimal.ZERO;
             for (Dismissal dismissal : dismissals) {
