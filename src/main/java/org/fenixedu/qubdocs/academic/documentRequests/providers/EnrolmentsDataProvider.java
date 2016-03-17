@@ -31,6 +31,7 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -53,8 +54,8 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     protected List<Enrolments> data;
 
     public EnrolmentsDataProvider(final Registration registration, final Set<ICurriculumEntry> normalEnrolmentsEntries,
-            final Set<ICurriculumEntry> standaloneEnrolmentsEntries, final Set<ICurriculumEntry> extracurricularEnrolmentsEntries,
-            final ExecutionYear executionYear, final Locale locale) {
+            final Set<ICurriculumEntry> standaloneEnrolmentsEntries,
+            final Set<ICurriculumEntry> extracurricularEnrolmentsEntries, final ExecutionYear executionYear, final Locale locale) {
         this.registration = registration;
         this.executionYear = executionYear;
         this.locale = locale;
@@ -122,7 +123,34 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
 
             this.enrolmentsEntries = enrolmentsEntries;
             this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
-            this.curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
+            this.curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
+
+                @Override
+                public int compare(final CurriculumEntry left, final CurriculumEntry right) {
+                    if (left.getExecutionYear() == right.getExecutionYear()) {
+                        return compareBySemester(left, right);
+                    }
+                    return left.getExecutionYear().compareTo(right.getExecutionYear());
+                }
+
+                public int compareBySemester(final CurriculumEntry left, final CurriculumEntry right) {
+                    if (left.getExecutionSemester() == right.getExecutionSemester()) {
+                        return compareByName(left, right);
+                    }
+                    return left.getExecutionSemester().compareTo(right.getExecutionSemester());
+                }
+
+                public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
+                    final String leftContent =
+                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
+                                    .getContent();
+                    final String rightContent =
+                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
+                                    .getContent();
+
+                    return leftContent.compareTo(rightContent);
+                }
+            });
             this.curriculumEntries.addAll(CurriculumEntry.transform(registration, this.enrolmentsEntries, remarksDataProvider));
         }
 
