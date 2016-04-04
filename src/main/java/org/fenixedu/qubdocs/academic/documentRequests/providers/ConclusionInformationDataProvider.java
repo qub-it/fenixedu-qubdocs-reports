@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import org.fenixedu.academic.domain.DegreeInfo;
+import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
@@ -97,6 +99,11 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
         public LocalDate getConclusionDate() {
             return conclusionBean.getConclusionDate().toLocalDate();
+        }
+
+        public DegreeInfo getDegreeInfo() {
+            final ExecutionYear conclusionYear = ExecutionYear.getExecutionYearByDate(conclusionBean.getConclusionDate());
+            return conclusionBean.getStudentCurricularPlan().getDegree().getMostRecentDegreeInfo(conclusionYear);
         }
 
         public String getAverage() {
