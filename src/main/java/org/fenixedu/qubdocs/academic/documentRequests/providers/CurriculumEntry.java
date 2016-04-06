@@ -287,7 +287,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public boolean isStandalone() {
-        return iCurriculumEntry instanceof Enrolment && ((Enrolment) iCurriculumEntry).isPropaedeutic();
+        return iCurriculumEntry instanceof Enrolment && ((Enrolment) iCurriculumEntry).isStandalone();
     }
 
     public String getRemarkNumbers() {

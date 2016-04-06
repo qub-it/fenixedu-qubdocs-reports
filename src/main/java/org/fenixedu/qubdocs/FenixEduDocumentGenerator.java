@@ -40,6 +40,7 @@ import org.fenixedu.qubdocs.util.reports.helpers.LanguageHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.MoneyHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.NumbersHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.SortHelper;
+import org.fenixedu.qubdocs.util.reports.helpers.CurricularHelper;
 import org.fenixedu.qubdocs.util.reports.helpers.StringsHelper;
 
 import com.qubit.terra.docs.core.DocumentTemplateEngine;
@@ -66,6 +67,7 @@ public class FenixEduDocumentGenerator extends ReportGenerator {
         registerHelper("enumeration", new EnumerationHelper());
         registerHelper("strings", new StringsHelper());
         registerHelper("money", new MoneyHelper());
+        registerHelper("curricular", new CurricularHelper());
     }
 
     public FenixEduDocumentGenerator registerDataProviders(final Collection<? extends IReportDataProvider> providers) {
@@ -85,7 +87,7 @@ public class FenixEduDocumentGenerator extends ReportGenerator {
             return new FenixEduDocumentGenerator(FileUtils.readFileToByteArray(new File(template)), mimeType);
         } catch (FileNotFoundException e) {
             throw new ReportGenerationException(
-                    "Template file was not found. Maybe this soft refence is inconsistent, try re-upload this template.", e);
+                    "Template file was not found. Maybe this soft reference is inconsistent, try re-upload this template.", e);
         } catch (IOException e) {
             throw new ReportGenerationException("Error retrieving the template.", e);
         }
