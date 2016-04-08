@@ -78,12 +78,14 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
                 }
 
                 public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
-                    final String leftContent =
+                    String leftContent =
                             left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
                                     .getContent();
-                    final String rightContent =
+                    String rightContent =
                             right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
                                     .getContent();
+                    leftContent = leftContent.toLowerCase();
+                    rightContent = rightContent.toLowerCase();
 
                     return leftContent.compareTo(rightContent);
                 }
