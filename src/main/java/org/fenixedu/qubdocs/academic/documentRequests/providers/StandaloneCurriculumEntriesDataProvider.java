@@ -27,18 +27,14 @@
 
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
+import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TreeSet;
 
-import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.student.Registration;
-import org.fenixedu.academic.domain.student.Student;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
-import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
-import org.joda.time.LocalDate;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -47,85 +43,100 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvider {
 
     protected static final String KEY = "standaloneCurriculumEntries";
-    protected static final String KEY_FOR_LIST = "standaloneCurriculumEntriesList";
+    protected static final String KEY_FOR_REMARKS = "approvementStandaloneRemarks";
+    protected static final String KEY_FOR_TOTAL_UNITS = "totalStandaloneApprovements";
+    protected static final String KEY_FOR_TOTAL_ECTS = "totalStandaloneApprovedECTS";
 
     protected Registration registration;
     protected CurriculumEntryRemarksDataProvider remarksDataProvider;
     protected Locale locale;
-    protected Collection<Enrolment> sourceLines;
-    protected TreeSet<CurriculumEntry> curriculumEntries;
-    protected LocalDate emissionDate;
+    protected Collection<ICurriculumEntry> standaloneApprovements;
+    protected Set<CurriculumEntry> curriculumEntries;
 
     public StandaloneCurriculumEntriesDataProvider(final Registration registration,
-            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale, final LocalDate emissionDate) {
+            final Collection<ICurriculumEntry> standaloneApprovements, final Locale locale) {
         this.registration = registration;
-        this.remarksDataProvider = remarksDataProvider;
         this.locale = locale;
-        this.emissionDate = emissionDate;
-    }
-
-    public StandaloneCurriculumEntriesDataProvider(final Registration registration, final Collection<Enrolment> sourceLines,
-            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale, final LocalDate emissionDate) {
-        this(registration, remarksDataProvider, locale, emissionDate);
-        this.sourceLines = sourceLines;
+        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.standaloneApprovements = standaloneApprovements;
     }
 
     @Override
     public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
-        documentFieldsData.registerCollectionAsField(KEY_FOR_LIST);
+        documentFieldsData.registerCollectionAsField(KEY);
+        documentFieldsData.registerCollectionAsField(KEY_FOR_REMARKS);
     }
 
     @Override
     public boolean handleKey(final String key) {
-        return KEY.equals(key) || KEY_FOR_LIST.equals(key);
+        if (standaloneApprovements == null || standaloneApprovements.isEmpty()) {
+            return false;
+        }
+
+        return KEY.equals(key) || KEY_FOR_REMARKS.equals(key) || KEY_FOR_TOTAL_UNITS.equals(key)
+                || KEY_FOR_TOTAL_ECTS.equals(key);
     }
 
     @Override
     public Object valueForKey(final String key) {
-        if (KEY.equals(key)) {
-            return this;
-        }
-
-        if (KEY_FOR_LIST.equals(key)) {
+        if (key.equals(KEY)) {
             return getCurriculumEntries();
+        } else if (key.equals(KEY_FOR_REMARKS)) {
+            return getRemarks();
+        } else if (key.equals(KEY_FOR_TOTAL_UNITS)) {
+            return getTotalApprovements();
+        } else if (key.equals(KEY_FOR_TOTAL_ECTS)) {
+            return getApprovedEcts();
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     protected Set<CurriculumEntry> getCurriculumEntries() {
         if (curriculumEntries == null) {
+            final Set<ICurriculumEntry> entries = Sets.newHashSet(standaloneApprovements);
+            curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
 
-            if (this.sourceLines != null && !this.sourceLines.isEmpty()) {
-                collectByEntries();
-            } else {
-                collectWithRegistrations();
-            }
+                @Override
+                public int compare(final CurriculumEntry left, final CurriculumEntry right) {
+                    if (left.getExecutionYear() == right.getExecutionYear()) {
+                        return compareByName(left, right);
+                    }
+                    return left.getExecutionYear().compareTo(right.getExecutionYear());
+                }
+
+                public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
+                    String leftContent = left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left
+                            .getName().getContent();
+                    String rightContent = right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right
+                            .getName().getContent();
+                    leftContent = leftContent.toLowerCase();
+                    rightContent = rightContent.toLowerCase();
+
+                    return leftContent.compareTo(rightContent);
+                }
+            });
+            curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
         }
-
         return curriculumEntries;
     }
 
-    private void collectByEntries() {
-        curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
-        for (Enrolment curriculumLine : sourceLines) {
-            curriculumEntries
-                    .addAll(CurriculumEntry.transform(registration, Collections.singleton(curriculumLine), remarksDataProvider));
+    private int getTotalApprovements() {
+        if (curriculumEntries == null) {
+            return 0;
         }
+        return curriculumEntries.size();
     }
 
-    private void collectWithRegistrations() {
-        curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
-        final Student student = registration.getStudent();
-
-        for (final Registration registration : student.getActiveRegistrations()) {
-            Collection<CurriculumLine> standaloneCurriculumLines = registration.getStandaloneCurriculumLines();
-            for (CurriculumLine curriculumLine : standaloneCurriculumLines) {
-                Collection<ICurriculumEntry> entries =
-                        curriculumLine.getCurriculum(emissionDate.toDateTimeAtStartOfDay()).getCurriculumEntries();
-                curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
-            }
+    private BigDecimal getApprovedEcts() {
+        if (curriculumEntries == null) {
+            return BigDecimal.ZERO;
         }
+        return curriculumEntries.stream().map(CurriculumEntry::getEctsCredits).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private Object getRemarks() {
+        return remarksDataProvider.valueForKey("curriculumEntryRemarks");
     }
 
 }
