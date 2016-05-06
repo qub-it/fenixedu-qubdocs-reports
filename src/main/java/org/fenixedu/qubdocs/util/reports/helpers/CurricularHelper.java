@@ -23,51 +23,53 @@ public class CurricularHelper implements IDocumentHelper {
     }
 
     public CycleType inferCourseHigherCycle(Enrolment enrolment, boolean competenceScope) {
-        Set<CycleCourseGroup> sample = new HashSet<CycleCourseGroup>();
-        CycleType result = null;
         if (isNormalEnrolment(enrolment)) {
             return enrolment.getParentCycleCurriculumGroup().getCycleType();
         }
         if (competenceScope) {
+            Set<CycleCourseGroup> sample = new HashSet<CycleCourseGroup>();
+            CycleType result = null;
             for (CurricularCourse course : enrolment.getCurricularCourse().getCompetenceCourse()
                     .getAssociatedCurricularCoursesSet()) {
                 sample.addAll(course.getParentCycleCourseGroups());
             }
-        } else {
-            sample.addAll(enrolment.getCurricularCourse().getParentCycleCourseGroups());
-        }
-        for (CycleCourseGroup group : sample) {
-            if (result == null) {
-                result = group.getCycleType();
-            } else if (result.isBeforeOrEquals(group.getCycleType())) {
-                result = group.getCycleType();
+            for (CycleCourseGroup group : sample) {
+                if (result == null) {
+                    result = group.getCycleType();
+                } else if (result.isBeforeOrEquals(group.getCycleType())) {
+                    result = group.getCycleType();
+                }
             }
+            return result;
+        } else {
+            return enrolment.getCurricularCourse().getDegree().getCycleTypes().stream()
+                    .sorted(CycleType.COMPARATOR_BY_GREATER_WEIGHT).findFirst().orElse(null);
         }
-        return result;
     }
 
     public CycleType inferCourseLowerCycle(Enrolment enrolment, boolean competenceScope) {
-        Set<CycleCourseGroup> sample = new HashSet<CycleCourseGroup>();
-        CycleType result = null;
         if (isNormalEnrolment(enrolment)) {
             return enrolment.getParentCycleCurriculumGroup().getCycleType();
         }
         if (competenceScope) {
+            Set<CycleCourseGroup> sample = new HashSet<CycleCourseGroup>();
+            CycleType result = null;
             for (CurricularCourse course : enrolment.getCurricularCourse().getCompetenceCourse()
                     .getAssociatedCurricularCoursesSet()) {
                 sample.addAll(course.getParentCycleCourseGroups());
             }
-        } else {
-            sample.addAll(enrolment.getCurricularCourse().getParentCycleCourseGroups());
-        }
-        for (CycleCourseGroup group : sample) {
-            if (result == null) {
-                result = group.getCycleType();
-            } else if (group.getCycleType().isBeforeOrEquals(result)) {
-                result = group.getCycleType();
+            for (CycleCourseGroup group : sample) {
+                if (result == null) {
+                    result = group.getCycleType();
+                } else if (group.getCycleType().isBeforeOrEquals(result)) {
+                    result = group.getCycleType();
+                }
             }
+            return result;
+        } else {
+            return enrolment.getCurricularCourse().getDegree().getCycleTypes().stream()
+                    .sorted(CycleType.COMPARATOR_BY_LESS_WEIGHT).findFirst().orElse(null);
         }
-        return result;
     }
 
 }
