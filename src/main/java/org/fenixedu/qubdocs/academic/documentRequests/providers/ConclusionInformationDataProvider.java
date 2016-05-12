@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import org.fenixedu.academic.domain.DegreeInfo;
+import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
@@ -99,17 +101,27 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             return conclusionBean.getConclusionDate().toLocalDate();
         }
 
+        public DegreeInfo getDegreeInfo() {
+            final ExecutionYear conclusionYear = ExecutionYear.getExecutionYearByDate(conclusionBean.getConclusionDate());
+            return conclusionBean.getRegistration().getDegree().getMostRecentDegreeInfo(conclusionYear);
+        }
+
         public String getAverage() {
-            return conclusionBean.getRawGrade().getValue();
+            return conclusionBean.getRawGrade() != null ? conclusionBean.getRawGrade().getValue() : null;
         }
 
         public String getFinalAverage() {
-            return conclusionBean.getFinalGrade().getValue();
+            return conclusionBean.getFinalGrade() != null ? conclusionBean.getFinalGrade().getValue() : null;
         }
 
         public String getRoundedFinalAverage() {
-            BigDecimal average = new BigDecimal(getFinalAverage());
-            return average.setScale(0, RoundingMode.HALF_EVEN).toString();
+            String finalAverage = getFinalAverage();
+            if (finalAverage != null) {
+                BigDecimal average = new BigDecimal(getFinalAverage());
+                return average.setScale(0, RoundingMode.HALF_EVEN).toString();
+            } else {
+                return null;
+            }
         }
 
         public String getEctsGrade() {
@@ -117,8 +129,8 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         }
 
         public LocalizedString getFinalAverageDescription() {
-            return DocsStringUtils.capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources",
-                    getRoundedFinalAverage()));
+            return getRoundedFinalAverage() != null ? DocsStringUtils.capitalize(BundleUtil.getLocalizedString(
+                    "resources.EnumerationResources", getRoundedFinalAverage())) : null;
         }
 
         public LocalizedString getQualitativeGrade() {
