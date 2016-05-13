@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.fenixedu.academic.domain.DegreeInfo;
@@ -38,6 +39,7 @@ import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
+import org.fenixedu.academic.domain.student.curriculum.ExtraCurricularActivity;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
@@ -138,6 +140,11 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
                 return conclusionBean.getDescriptiveGrade().getExtendedValue();
             }
             return new LocalizedString();
+        }
+
+        public Set<ExtraCurricularActivity> getExtraCurricularActivities() {
+            return conclusionBean.getRegistration().getStudent().getExtraCurricularActivitySet().size() > 0 ? conclusionBean
+                    .getRegistration().getStudent().getExtraCurricularActivitySet() : null;
         }
 
         public BigDecimal getDismissalCredits() {
