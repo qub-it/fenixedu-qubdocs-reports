@@ -32,6 +32,7 @@ import java.util.Collection;
 
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.DegreeCurricularPlan;
+import org.fenixedu.academic.domain.DegreeInfo;
 import org.fenixedu.academic.domain.DegreeOfficialPublication;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.degree.DegreeType;
@@ -214,60 +215,6 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         }
 
         return getDegreeOfficialPublication().getPublication();
-    }
-
-    // TODO
-    public Collection<LocalizedString> getSpecializationAreaNames() {
-//        return Collections2.transform(getDegreeOfficialPublication().getSpecializationArea(),
-//                new Function<DegreeSpecializationArea, LocalizedString>() {
-//                    public LocalizedString apply(final DegreeSpecializationArea specializationArea) {
-//                        return DocsStringUtils.toLocalizedString(specializationArea.getName());
-//                    }
-//                });
-
-        return Sets.newHashSet();
-    }
-
-    // TODO
-    public LocalizedString getPrevailingScientificArea() {
-        // return getDegree().getPrevailingScientificAreaI18N(executionYear);
-        return null;
-    }
-
-    // TODO
-    public LocalizedString getQualificationLevel() {
-        // return getDegree().getQualificationLevel(executionYear);
-        return null;
-    }
-
-    // TODO
-    public LocalizedString getLearningLanguages() {
-        // return getDegree().getMostRecentDegreeInfo(executionYear.getAcademicInterval()).getLearningLanguages();
-        return null;
-    }
-
-    // TODO
-    public LocalizedString getOfficialProgramDuration() {
-//        return getDegree().getMostRecentDegreeInfo(executionYear.getAcademicInterval()).getOfficialProgramDuration();
-        return null;
-    }
-
-    // TODO
-    public LocalizedString getStudyRegime() {
-//        return getDegree().getMostRecentDegreeInfo(executionYear.getAcademicInterval()).getStudyRegime();
-        return null;
-    }
-
-    // TODO
-    public LocalizedString getGraduationNextLevelAccess() {
-//        return getDegree().getMostRecentDegreeInfo(executionYear.getAcademicInterval()).getGraduationNextLevelAccess();
-        return null;
-    }
-
-    // TODO
-    public LocalizedString getProfessionalStatute() {
-//        return getDegree().getMostRecentDegreeInfo(executionYear.getAcademicInterval()).getProfessionalStatute();
-        return null;
     }
 
     public boolean isSecondCycle() {

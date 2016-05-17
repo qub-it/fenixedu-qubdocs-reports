@@ -107,6 +107,18 @@ public class DateHelper implements IDocumentHelper {
         return yearMonthDay.toString("MM/dd/yyyy");
     }
 
+    public String now() {
+        return numericDateTime(new DateTime());
+    }
+
+    public String today() {
+        return date(new DateTime());
+    }
+
+    public LocalizedString extendedToday() {
+        return extendedDate(new LocalDate());
+    }
+
     private String getDayOfMonthOrdinal(int day) {
         if (day >= 11 && day <= 13) {
             return "\u1D57\u02B0";
