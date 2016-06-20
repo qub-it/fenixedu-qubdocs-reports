@@ -59,6 +59,7 @@ public class ExtraCurriculumEntriesDataProvider implements IReportDataProvider {
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
         this.extracurricularApprovements = extracurricularApprovements;
+        init();
     }
 
     @Override
@@ -93,7 +94,29 @@ public class ExtraCurriculumEntriesDataProvider implements IReportDataProvider {
     }
 
     protected Set<CurriculumEntry> getCurriculumEntries() {
+        return curriculumEntries;
+    }
+
+    private int getTotalApprovements() {
         if (curriculumEntries == null) {
+            return 0;
+        }
+        return curriculumEntries.size();
+    }
+
+    private BigDecimal getApprovedEcts() {
+        if (curriculumEntries == null) {
+            return BigDecimal.ZERO;
+        }
+        return curriculumEntries.stream().map(CurriculumEntry::getEctsCredits).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private Object getRemarks() {
+        return remarksDataProvider.valueForKey("curriculumEntryRemarks");
+    }
+
+    protected void init() {
+        if (extracurricularApprovements != null) {
             final Set<ICurriculumEntry> entries = Sets.newHashSet(extracurricularApprovements);
             curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
 
@@ -120,25 +143,6 @@ public class ExtraCurriculumEntriesDataProvider implements IReportDataProvider {
             });
             curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
         }
-        return curriculumEntries;
-    }
-
-    private int getTotalApprovements() {
-        if (curriculumEntries == null) {
-            return 0;
-        }
-        return curriculumEntries.size();
-    }
-
-    private BigDecimal getApprovedEcts() {
-        if (curriculumEntries == null) {
-            return BigDecimal.ZERO;
-        }
-        return curriculumEntries.stream().map(CurriculumEntry::getEctsCredits).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private Object getRemarks() {
-        return remarksDataProvider.valueForKey("curriculumEntryRemarks");
     }
 
 }

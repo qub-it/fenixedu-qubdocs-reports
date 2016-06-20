@@ -59,6 +59,7 @@ public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvi
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
         this.standaloneApprovements = standaloneApprovements;
+        init();
     }
 
     @Override
@@ -93,31 +94,6 @@ public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvi
     }
 
     protected Set<CurriculumEntry> getCurriculumEntries() {
-        if (curriculumEntries == null) {
-            final Set<ICurriculumEntry> entries = Sets.newHashSet(standaloneApprovements);
-            curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
-
-                @Override
-                public int compare(final CurriculumEntry left, final CurriculumEntry right) {
-                    if (left.getExecutionYear() == right.getExecutionYear()) {
-                        return compareByName(left, right);
-                    }
-                    return left.getExecutionYear().compareTo(right.getExecutionYear());
-                }
-
-                public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
-                    String leftContent = left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left
-                            .getName().getContent();
-                    String rightContent = right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right
-                            .getName().getContent();
-                    leftContent = leftContent.toLowerCase();
-                    rightContent = rightContent.toLowerCase();
-
-                    return leftContent.compareTo(rightContent);
-                }
-            });
-            curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
-        }
         return curriculumEntries;
     }
 
@@ -137,6 +113,36 @@ public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvi
 
     private Object getRemarks() {
         return remarksDataProvider.valueForKey("curriculumEntryRemarks");
+    }
+
+    protected void init() {
+        if (standaloneApprovements != null) {
+            final Set<ICurriculumEntry> entries = Sets.newHashSet(standaloneApprovements);
+            curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
+
+                @Override
+                public int compare(final CurriculumEntry left, final CurriculumEntry right) {
+                    if (left.getExecutionYear() == right.getExecutionYear()) {
+                        return compareByName(left, right);
+                    }
+                    return left.getExecutionYear().compareTo(right.getExecutionYear());
+                }
+
+                public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
+                    String leftContent =
+                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
+                                    .getContent();
+                    String rightContent =
+                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
+                                    .getContent();
+                    leftContent = leftContent.toLowerCase();
+                    rightContent = rightContent.toLowerCase();
+
+                    return leftContent.compareTo(rightContent);
+                }
+            });
+            curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
+        }
     }
 
 }

@@ -32,6 +32,7 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
         this.approvements = approvements;
+        init();
     }
 
     @Override
@@ -65,7 +66,29 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
     }
 
     private Set<CurriculumEntry> getCurriculumEntries() {
+        return curriculumEntries;
+    }
+
+    private int getTotalApprovements() {
         if (curriculumEntries == null) {
+            return 0;
+        }
+        return curriculumEntries.size();
+    }
+
+    private BigDecimal getApprovedEcts() {
+        if (curriculumEntries == null) {
+            return BigDecimal.ZERO;
+        }
+        return curriculumEntries.stream().map(CurriculumEntry::getEctsCredits).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private Object getRemarks() {
+        return remarksDataProvider.valueForKey("curriculumEntryRemarks");
+    }
+
+    protected void init() {
+        if (approvements != null) {
             final Set<ICurriculumEntry> entries = Sets.newHashSet(approvements);
             curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
 
@@ -92,25 +115,6 @@ public class ApprovedCurriculumEntriesDataProvider implements IReportDataProvide
             });
             curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
         }
-        return curriculumEntries;
-    }
-
-    private int getTotalApprovements() {
-        if (curriculumEntries == null) {
-            return 0;
-        }
-        return curriculumEntries.size();
-    }
-
-    private BigDecimal getApprovedEcts() {
-        if (curriculumEntries == null) {
-            return BigDecimal.ZERO;
-        }
-        return curriculumEntries.stream().map(CurriculumEntry::getEctsCredits).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private Object getRemarks() {
-        return remarksDataProvider.valueForKey("curriculumEntryRemarks");
     }
 
 }
