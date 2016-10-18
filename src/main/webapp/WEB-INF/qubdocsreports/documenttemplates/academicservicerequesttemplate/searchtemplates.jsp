@@ -62,8 +62,17 @@ ${portal.toolkit()}
 </div>
 <%-- NAVIGATION --%>
 <div class="well well-sm" style="display:inline-block">
-	<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/createstandardtemplate"   ><spring:message code="label.event.create" /></a>
-|&nbsp;&nbsp;	<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;<a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/createcustomtemplate"  ><spring:message code="label.event.documentTemplates.createCustomTemplate" /></a>	
+	<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+    &nbsp;
+    <a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/createstandardtemplate"   ><spring:message code="label.event.create" /></a>
+    |&nbsp;&nbsp;	
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+    &nbsp;
+    <a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/createcustomtemplate"  ><spring:message code="label.event.documentTemplates.createCustomTemplate" /></a>	
+    |&nbsp;&nbsp;   
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+    &nbsp;
+    <a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/createincludetemplate"  ><spring:message code="label.event.documentTemplates.createIncludeTemplate" /></a>   
 </div>
 	<c:if test="${not empty infoMessages}">
 				<div class="alert alert-info" role="alert">
