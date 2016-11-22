@@ -23,7 +23,7 @@ public class InstitutionLogo extends InstitutionLogo_Base {
     @Override
     public void delete() {
         setUploader(null);
-        setInstitutionReportConfiguration(InstitutionReportConfiguration.getInstance());
+        setInstitutionReportConfiguration(null);
         setBennu(null);
         super.delete();
     }

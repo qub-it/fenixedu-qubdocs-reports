@@ -81,6 +81,10 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
         InstitutionReportConfiguration configuration = InstitutionReportConfiguration.getInstance();
 
         configuration.setName(institutionName);
+
+        if (configuration.getInstitutionLogo() != null) {
+            configuration.getInstitutionLogo().delete();
+        }
         InstitutionLogo institutionLogo = new InstitutionLogo(logoFile.getOriginalFilename(), logoFile.getBytes());
         configuration.setInstitutionLogo(institutionLogo);
     }
