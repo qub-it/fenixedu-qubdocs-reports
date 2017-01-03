@@ -69,7 +69,7 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
         } else if (KEY_HAS_PRICETAG.equals(key)) {
             final IAcademicServiceRequestAndAcademicTaxTreasuryEvent academicTreasuryEvent =
                     TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
-            return academicTreasuryEvent != null && academicTreasuryEvent.isWithDebitEntry();
+            return academicTreasuryEvent != null && academicTreasuryEvent.isCharged();
         } else if (KEY_FOR_PRICE.equals(key)) {
             return TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
         } else if (KEY_EXECUTION_YEAR.equals(key)) {
