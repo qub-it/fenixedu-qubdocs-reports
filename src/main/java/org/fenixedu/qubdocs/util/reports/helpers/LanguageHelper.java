@@ -33,9 +33,46 @@ import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.FenixEduDocumentGenerator;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.qubit.terra.docs.util.helpers.IDocumentHelper;
 
 public class LanguageHelper implements IDocumentHelper {
+
+    private Locale locale;
+
+    public LanguageHelper() {
+
+    }
+
+    public LanguageHelper(Locale locale) {
+        this.locale = locale;
+    }
+
+    public String i18n(final String localizedStringJson) {
+        JsonParser parser = new JsonParser();
+        JsonElement jsonElement = parser.parse(localizedStringJson);
+        LocalizedString i18nString = LocalizedString.fromJson(jsonElement);
+        return i18n(i18nString);
+    }
+
+    public String i18n(final LocalizedString i18nString) {
+        if (i18nString == null || locale == null) {
+            return FenixEduDocumentGenerator.DASH;
+        }
+
+        String message = i18nString.getContent(locale);
+        return message != null ? message : "";
+    }
+
+    public String i18n(final MultiLanguageString i18nString) {
+        if (i18nString == null || locale == null) {
+            return FenixEduDocumentGenerator.DASH;
+        }
+
+        String message = i18nString.getContent(locale);
+        return message != null ? message : "";
+    }
 
     public String pt(final LocalizedString i18nString) {
         if (i18nString == null) {

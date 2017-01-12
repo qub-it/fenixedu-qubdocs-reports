@@ -30,7 +30,6 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,6 @@ import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ExtraCurricularActivity;
-import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
@@ -48,6 +46,8 @@ import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.base.Function;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -99,6 +99,11 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             return conclusionBean;
         }
 
+        public boolean isConclusionDateBefore(String date) {
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+            return getConclusionDate().isBefore(formatter.parseLocalDate(date));
+        }
+
         public LocalDate getConclusionDate() {
             return conclusionBean.getConclusionDate().toLocalDate();
         }
@@ -131,8 +136,8 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
         }
 
         public LocalizedString getFinalAverageDescription() {
-            return getRoundedFinalAverage() != null ? DocsStringUtils.capitalize(BundleUtil.getLocalizedString(
-                    "resources.EnumerationResources", getRoundedFinalAverage())) : null;
+            return getRoundedFinalAverage() != null ? DocsStringUtils
+                    .capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources", getRoundedFinalAverage())) : null;
         }
 
         public LocalizedString getQualitativeGrade() {
@@ -151,12 +156,9 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
             final CurriculumGroup curriculumGroup = this.conclusionBean.getCurriculumGroup();
             final StudentCurricularPlan studentCurricularPlan = curriculumGroup.getStudentCurricularPlan();
-            final List<Dismissal> dismissals =
-                    studentCurricularPlan
-                            .getDismissals()
-                            .stream()
-                            .filter(d -> d.getCredits().isCredits()
-                                    && curriculumGroup.hasCurriculumModule(d.getCurriculumGroup())).collect(Collectors.toList());
+            final List<Dismissal> dismissals = studentCurricularPlan.getDismissals().stream()
+                    .filter(d -> d.getCredits().isCredits() && curriculumGroup.hasCurriculumModule(d.getCurriculumGroup()))
+                    .collect(Collectors.toList());
 
             BigDecimal sum = BigDecimal.ZERO;
             for (Dismissal dismissal : dismissals) {
