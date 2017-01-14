@@ -291,43 +291,6 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         return academicServiceRequestTemplate;
     }
 
-    private static final String _CREATEINCLUDETEMPLATE_URI = "/createincludetemplate";
-    public static final String CREATEINCLUDETEMPLATE_URL = CONTROLLER_URL + _CREATEINCLUDETEMPLATE_URI;
-
-    @RequestMapping(value = _CREATEINCLUDETEMPLATE_URI, method = RequestMethod.GET)
-    public String createincludetemplate(Model model) {
-        model.addAttribute("AcademicServiceRequestTemplate_language_options", CoreConfiguration.supportedLocales());
-
-        return "qubdocsreports/documenttemplates/academicservicerequesttemplate/createincludetemplate";
-    }
-
-    @RequestMapping(value = _CREATEINCLUDETEMPLATE_URI, method = RequestMethod.POST)
-    public String createincludetemplate(@RequestParam(value = "name", required = true) LocalizedString name,
-            @RequestParam(value = "description", required = true) LocalizedString description,
-            @RequestParam(value = "language", required = true) Locale language,
-            @RequestParam(value = "documentTemplateFile", required = true) MultipartFile documentTemplateFile, Model model,
-            RedirectAttributes redirectAttributes) {
-        try {
-            LocalizedString fullNames = new LocalizedString();
-            for (Locale locale : name.getLocales()) {
-                String fullName = QUB_INCLUDE_PREFIX + name.getContent(locale);
-                fullNames = fullNames.append(new LocalizedString(locale, fullName));
-            }
-            ServiceRequestType serviceRequestType = ServiceRequestType.findByCode("QUB_INCLUDE_VARIABLES").findAny().orElse(null);
-
-            AcademicServiceRequestTemplate academicServiceRequestTemplate = createAcademicServiceRequestTemplate(fullNames,
-                    description, language, serviceRequestType, documentTemplateFile);
-
-            model.addAttribute("academicServiceRequestTemplate", academicServiceRequestTemplate);
-            return redirect("/qubdocsreports/documenttemplates/academicservicerequesttemplate/readtemplate/"
-                    + getAcademicServiceRequestTemplate(model).getExternalId(), model, redirectAttributes);
-        } catch (Exception de) {
-            addErrorMessage(BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "label.error.create")
-                    + de.getLocalizedMessage(), model);
-        }
-        return createincludetemplate(model);
-    }
-
     private static final String _READTEMPLATE_URI = "/readtemplate/";
     public static final String READTEMPLATE_URL = CONTROLLER_URL + _READTEMPLATE_URI;
 

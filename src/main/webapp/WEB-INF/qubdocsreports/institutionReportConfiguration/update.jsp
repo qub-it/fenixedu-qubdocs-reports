@@ -28,7 +28,7 @@ ${portal.toolkit()}
 
 <%-- TITLE --%>
 <div class="page-header">
-	<h1><spring:message code="label.administration.base.manageVatType.updateVatType" />
+	<h1><spring:message code="label.institutionReportConfiguration.update" />
 		<small></small>
 	</h1>
 </div>

@@ -69,10 +69,6 @@ ${portal.toolkit()}
     <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
     &nbsp;
     <a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/createcustomtemplate"  ><spring:message code="label.event.documentTemplates.createCustomTemplate" /></a>	
-    |&nbsp;&nbsp;   
-    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-    &nbsp;
-    <a class="" href="${pageContext.request.contextPath}/qubdocsreports/documenttemplates/academicservicerequesttemplate/createincludetemplate"  ><spring:message code="label.event.documentTemplates.createIncludeTemplate" /></a>   
 </div>
 	<c:if test="${not empty infoMessages}">
 				<div class="alert alert-info" role="alert">
