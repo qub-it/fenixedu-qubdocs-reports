@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -9,7 +9,7 @@
  * Contributors: anil.mamede@qub-it.com
  *               diogo.simoes@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -30,10 +30,8 @@ package org.fenixedu.qubdocs.domain;
 
 import org.fenixedu.academic.domain.accessControl.academicAdministration.AcademicAccessRule;
 import org.fenixedu.academic.domain.accessControl.academicAdministration.AcademicOperationType;
-import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 
 import com.qubit.terra.docs.core.IDocumentTemplateVersion;
@@ -49,11 +47,12 @@ public class DocumentTemplateFile extends DocumentTemplateFile_Base implements I
         setBennu(Bennu.getInstance());
     }
 
-    protected DocumentTemplateFile(final DocumentTemplate documentTemplate, final String filename, final byte[] content) {
+    protected DocumentTemplateFile(final DocumentTemplate documentTemplate, final String filename, final byte[] content,
+            final User uploader) {
         this();
         init(filename, filename, content);
         setDocumentTemplate(documentTemplate);
-        setUploader(Authenticate.getUser());
+        setUploader(uploader);
     }
 
     @Override
@@ -65,12 +64,20 @@ public class DocumentTemplateFile extends DocumentTemplateFile_Base implements I
     }
 
     @Override
-    public boolean isAccessible(User user) {
+    public boolean isAccessible(final User user) {
         return AcademicAccessRule.isMember(user, AcademicOperationType.MANAGE_DOCUMENTS, null, null);
     }
 
     @Atomic
-    public static DocumentTemplateFile create(final DocumentTemplate documentTemplate, final String filename, final byte[] content) {
-        return new DocumentTemplateFile(documentTemplate, filename, content);
+    public static DocumentTemplateFile create(final DocumentTemplate documentTemplate, final String filename,
+            final byte[] content, final User uploader) {
+        return new DocumentTemplateFile(documentTemplate, filename, content, uploader);
     }
+
+    @Atomic
+    public static DocumentTemplateFile create(final DocumentTemplate documentTemplate, final String filename,
+            final byte[] content) {
+        return create(documentTemplate, filename, content, Authenticate.getUser());
+    }
+
 }

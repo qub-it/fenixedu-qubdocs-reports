@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -9,7 +9,7 @@
  * Contributors: anil.mamede@qub-it.com
  *               diogo.simoes@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -37,24 +37,25 @@ import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.degree.DegreeType;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
-import org.fenixedu.academic.domain.util.Email;
 import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.commons.i18n.LocalizedString;
 
 import pt.ist.fenixframework.Atomic;
 
-import com.google.common.base.Predicate;
-
 public class AcademicServiceRequestTemplate extends AcademicServiceRequestTemplate_Base {
 
-    protected AcademicServiceRequestTemplate(final LocalizedString name, final LocalizedString description) {
+    protected AcademicServiceRequestTemplate(final LocalizedString name, final LocalizedString description, final User creator) {
         super();
+        setCreator(creator);
+        setUpdater(creator);
         init(name, description);
     }
 
-    protected AcademicServiceRequestTemplate(final LocalizedString name, final LocalizedString description,
-            final Locale language, final boolean custom) {
-        this(name, description);
+    protected AcademicServiceRequestTemplate(final LocalizedString name, final LocalizedString description, final Locale language,
+            final boolean custom, final User creator) {
+        this(name, description, creator);
         setLanguage(language);
         setCustom(custom);
     }
@@ -87,7 +88,7 @@ public class AcademicServiceRequestTemplate extends AcademicServiceRequestTempla
      *     ||||||ServiceRequestType+DegreeType+ProgramConclusion
      *       ||||ServiceRequestType+DegreeType+Degree
      *         ||ServiceRequestType+DegreeType+Degree+ProgramConclusion
-     *         
+     *
      * Custom Templates have no specificity and are just arranged by ServiceType.
      */
 
@@ -150,7 +151,7 @@ public class AcademicServiceRequestTemplate extends AcademicServiceRequestTempla
 
     public static Set<AcademicServiceRequestTemplate> readCustomTemplatesFor(final Locale language,
             final ServiceRequestType serviceRequestType) {
-        Set<AcademicServiceRequestTemplate> customTemplates = new HashSet<AcademicServiceRequestTemplate>();
+        Set<AcademicServiceRequestTemplate> customTemplates = new HashSet<>();
         for (AcademicServiceRequestTemplate template : serviceRequestType.getAcademicServiceRequestTemplatesSet()) {
             if (template.getCustom() && template.getActive() && template.getLanguage().equals(language)) {
                 customTemplates.add(template);
@@ -162,16 +163,16 @@ public class AcademicServiceRequestTemplate extends AcademicServiceRequestTempla
     @Atomic
     public static AcademicServiceRequestTemplate create(final LocalizedString name, final LocalizedString description,
             final Locale language, final ServiceRequestType serviceRequestType, final DegreeType degreeType,
-            final ProgramConclusion programConclusion, final Degree degree) {
+            final ProgramConclusion programConclusion, final Degree degree, final User creator) {
         AcademicServiceRequestTemplate oldTemplate =
                 matchTemplateFor(language, serviceRequestType, degreeType, programConclusion, degree);
         if (oldTemplate != null) {
             oldTemplate.setActive(false);
         }
-        AcademicServiceRequestTemplate template =
-                new AcademicServiceRequestTemplate((name == null || name.isEmpty() ? serviceRequestType.getName() : name),
-                        (description == null || description.isEmpty() ? buildTemplateDescription(degreeType, programConclusion,
-                                degree) : description), language, false);
+        AcademicServiceRequestTemplate template = new AcademicServiceRequestTemplate(
+                name == null || name.isEmpty() ? serviceRequestType.getName() : name, description == null
+                        || description.isEmpty() ? buildTemplateDescription(degreeType, programConclusion, degree) : description,
+                language, false, creator);
         template.setServiceRequestType(serviceRequestType);
         template.setDegreeType(degreeType);
         template.setProgramConclusion(programConclusion);
@@ -180,11 +181,20 @@ public class AcademicServiceRequestTemplate extends AcademicServiceRequestTempla
     }
 
     @Atomic
+    public static AcademicServiceRequestTemplate create(final LocalizedString name, final LocalizedString description,
+            final Locale language, final ServiceRequestType serviceRequestType, final DegreeType degreeType,
+            final ProgramConclusion programConclusion, final Degree degree) {
+        return create(name, description, language, serviceRequestType, degreeType, programConclusion, degree,
+                Authenticate.getUser());
+    }
+
+    @Atomic
     public static AcademicServiceRequestTemplate createCustom(final LocalizedString name, final LocalizedString description,
             final Locale language, final ServiceRequestType serviceRequestType) {
         AcademicServiceRequestTemplate template =
-                new AcademicServiceRequestTemplate((name == null || name.isEmpty() ? serviceRequestType.getName() : name),
-                        (description == null || description.isEmpty() ? new LocalizedString() : description), language, true);
+                new AcademicServiceRequestTemplate(name == null || name.isEmpty() ? serviceRequestType.getName() : name,
+                        description == null || description.isEmpty() ? new LocalizedString() : description, language, true,
+                        Authenticate.getUser());
         template.setServiceRequestType(serviceRequestType);
         return template;
     }
