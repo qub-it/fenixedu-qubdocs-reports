@@ -31,6 +31,7 @@ import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
 import org.fenixedu.academic.domain.treasury.IAcademicServiceRequestAndAcademicTaxTreasuryEvent;
 import org.fenixedu.academic.domain.treasury.TreasuryBridgeAPIFactory;
+import org.fenixedu.qubdocs.util.reports.helpers.MoneyHelper;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -43,6 +44,7 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
     protected static final String KEY = "serviceRequest";
     protected static final String KEY_HAS_PRICETAG = "hasPricetag";
     protected static final String KEY_FOR_PRICE = "serviceRequestPrice";
+    protected static final String KEY_FOR_PRICE_TAG = "priceTag";
     protected static final String KEY_FOR_EXECUTION_YEAR_INFORMATION = "executionYearInformation";
     //Remove this pass to methods in bean
     protected static final String KEY_EXECUTION_YEAR = "executionYearName";
@@ -62,7 +64,7 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
 
     @Override
     public boolean handleKey(final String key) {
-        return KEY.equals(key) || KEY_HAS_PRICETAG.equals(key) || KEY_FOR_PRICE.equals(key)
+        return KEY.equals(key) || KEY_HAS_PRICETAG.equals(key) || KEY_FOR_PRICE.equals(key) || KEY_FOR_PRICE_TAG.equals(key)
                 || KEY_FOR_EXECUTION_YEAR_INFORMATION.equals(key) || KEY_EXECUTION_YEAR.equals(key)
                 || KEY_PREVIOUS_EXECUTION_YEAR.equals(key);
     }
@@ -76,6 +78,14 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
             final IAcademicServiceRequestAndAcademicTaxTreasuryEvent academicTreasuryEvent =
                     TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
             return academicTreasuryEvent != null && academicTreasuryEvent.isCharged();
+        } else if (KEY_FOR_PRICE_TAG.equals(key)) {
+            MoneyHelper helper = new MoneyHelper();
+            IAcademicServiceRequestAndAcademicTaxTreasuryEvent event =
+                    TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
+            if (event != null && event.isCharged()) {
+                return "Emolumento: " + helper.total(event);
+            }
+            return "";
         } else if (KEY_FOR_PRICE.equals(key)) {
             return TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
             //Remove this pass to bean
