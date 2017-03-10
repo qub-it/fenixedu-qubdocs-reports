@@ -30,12 +30,13 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
 
     public static final String CONTROLLER_URL = "/qubdocsreports/institutionconfiguration";
 
-    private void setInstitutionConfiguration(InstitutionReportConfiguration institutionReportConfiguration, Model model) {
+    private void setInstitutionConfiguration(final InstitutionReportConfiguration institutionReportConfiguration,
+            final Model model) {
         model.addAttribute("institutionReportConfiguration", institutionReportConfiguration);
     }
 
     @RequestMapping
-    public String home(Model model) {
+    public String home(final Model model) {
         return "forward:" + CONTROLLER_URL + _READ_URI;
     }
 
@@ -43,7 +44,7 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
     public static final String READ_URL = CONTROLLER_URL + _READ_URI;
 
     @RequestMapping(value = _READ_URI)
-    public String read(Model model) {
+    public String read(final Model model) {
         setInstitutionConfiguration(InstitutionReportConfiguration.getInstance(), model);
         return "qubdocsreports/institutionReportConfiguration/read";
     }
@@ -52,20 +53,23 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
     public static final String UPDATE_URL = CONTROLLER_URL + _UPDATE_URI;
 
     @RequestMapping(value = _UPDATE_URI, method = RequestMethod.GET)
-    public String update(Model model) {
+    public String update(final Model model) {
         setInstitutionConfiguration(InstitutionReportConfiguration.getInstance(), model);
 
         return "qubdocsreports/institutionReportConfiguration/update";
     }
 
     @RequestMapping(value = _UPDATE_URI, method = RequestMethod.POST)
-    public String update(@RequestParam(value = "institution", required = true) String institutionName,
-            @RequestParam(value = "logoFile", required = false) MultipartFile logoFile, Model model,
-            RedirectAttributes redirectAttributes) {
+    public String update(@RequestParam(value = "institutionName", required = true) final String institutionName,
+            @RequestParam(value = "institutionShortName", required = true) final String institutionShortName,
+            @RequestParam(value = "institutionAddress", required = true) final String institutionAddress,
+            @RequestParam(value = "institutionSite", required = true) final String institutionSite,
+            @RequestParam(value = "logoFile", required = false) final MultipartFile logoFile, final Model model,
+            final RedirectAttributes redirectAttributes) {
         try {
             InstitutionReportConfiguration configuration = InstitutionReportConfiguration.getInstance();
 
-            update(institutionName, logoFile);
+            update(institutionName, institutionShortName, institutionAddress, institutionSite, logoFile);
 
             setInstitutionConfiguration(configuration, model);
             return redirect(READ_URL, model, redirectAttributes);
@@ -77,10 +81,14 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
     }
 
     @Atomic
-    private void update(String institutionName, MultipartFile logoFile) throws IOException {
+    private void update(final String institutionName, final String institutionShortName, final String institutionAddress,
+            final String institutionSite, final MultipartFile logoFile) throws IOException {
         InstitutionReportConfiguration configuration = InstitutionReportConfiguration.getInstance();
 
         configuration.setName(institutionName);
+        configuration.setShortName(institutionShortName);
+        configuration.setAddress(institutionAddress);
+        configuration.setSite(institutionSite);
 
         if (logoFile.getBytes().length == 0) {
             return;
@@ -97,8 +105,8 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
     public static final String DOWNLOAD_URL = CONTROLLER_URL + _DOWNLOAD_URI;
 
     @RequestMapping(value = _DOWNLOAD_URI + "/{logoFileId}", method = RequestMethod.GET)
-    public void processSearchToDownloadAction(@PathVariable("logoFileId") InstitutionLogo institutionLogo,
-            HttpServletResponse response) {
+    public void processSearchToDownloadAction(@PathVariable("logoFileId") final InstitutionLogo institutionLogo,
+            final HttpServletResponse response) {
         try {
             response.setContentType(institutionLogo.getContentType());
             String filename = URLEncoder.encode(

@@ -84,6 +84,24 @@ ${portal.toolkit()}
 	                </td> 
                 </tr>
                 <tr>
+                    <th scope="row" class="col-xs-3"><spring:message code="label.InstitutionReportConfiguration.shortName"/></th> 
+                    <td>
+                        <c:out value='${institutionReportConfiguration.shortName}'/>
+                    </td> 
+                </tr>
+                <tr>
+                    <th scope="row" class="col-xs-3"><spring:message code="label.InstitutionReportConfiguration.address"/></th> 
+                    <td>
+                        <c:out value='${institutionReportConfiguration.address}'/>
+                    </td> 
+                </tr>
+                <tr>
+                    <th scope="row" class="col-xs-3"><spring:message code="label.InstitutionReportConfiguration.site"/></th> 
+                    <td>
+                        <c:out value='${institutionReportConfiguration.site}'/>
+                    </td> 
+                </tr>
+                <tr>
 	               <th scope="row" class="col-xs-3"><spring:message code="label.InstitutionReportConfiguration.logo"/></th> 
 	               <td>
                        <a href="${pageContext.request.contextPath}<%= InstitutionConfigurationController.DOWNLOAD_URL %>/${institutionReportConfiguration.institutionLogo.externalId}">

@@ -78,9 +78,30 @@ ${portal.toolkit()}
                 <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.name"/></div> 
 
                 <div class="col-sm-10">
-	               <input id="InstitutionReportConfiguration_name" class="form-control" type="text" name="institution"  value='<c:out value='${not empty param.institution ? param.institution : institutionReportConfiguration.name }'/>' required />
+	               <input id="InstitutionReportConfiguration_name" class="form-control" type="text" name="institutionName"  value='<c:out value='${not empty param.institutionName ? param.institutionName : institutionReportConfiguration.name }'/>' required />
                 </div>	
             </div>		
+            <div class="form-group row">
+                <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.shortName"/></div> 
+
+                <div class="col-sm-10">
+                   <input id="InstitutionReportConfiguration_shortName" class="form-control" type="text" name="institutionShortName"  value='<c:out value='${not empty param.institutionShortName ? param.institutionShortName : institutionReportConfiguration.shortName }'/>' required />
+                </div>  
+            </div>      
+            <div class="form-group row">
+                <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.address"/></div> 
+
+                <div class="col-sm-10">
+                   <input id="InstitutionReportConfiguration_name" class="form-control" type="text" name="institutionAddress"  value='<c:out value='${not empty param.institutionAddress ? param.institutionAddress : institutionReportConfiguration.address }'/>' required />
+                </div>  
+            </div>      
+            <div class="form-group row">
+                <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.site"/></div> 
+
+                <div class="col-sm-10">
+                   <input id="InstitutionReportConfiguration_name" class="form-control" type="text" name="institutionSite"  value='<c:out value='${not empty param.institutionSite ? param.institutionSite : institutionReportConfiguration.site }'/>' required />
+                </div>  
+            </div>      
             <div class="form-group row">
                 <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.logo"/></div> 
 

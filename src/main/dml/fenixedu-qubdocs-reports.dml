@@ -50,6 +50,9 @@ public class serviceRequests.AcademicServiceRequestTemplate extends DocumentTemp
 
 public class InstitutionReportConfiguration {
     String name;
+    String shortName;
+    String address;
+    String site;
 }
 
 public class InstitutionLogo extends .org.fenixedu.bennu.io.domain.GenericFile {
