@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -220,8 +220,8 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public LocalizedString getGradeDescription() {
-        return DocsStringUtils.capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources",
-                iCurriculumEntry.getGradeValue()));
+        return DocsStringUtils
+                .capitalize(BundleUtil.getLocalizedString("resources.EnumerationResources", iCurriculumEntry.getGradeValue()));
     }
 
     public ExecutionYear getExecutionYear() {
@@ -290,6 +290,17 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return iCurriculumEntry instanceof Enrolment && ((Enrolment) iCurriculumEntry).isStandalone();
     }
 
+    public boolean isAnnual() {
+
+        if (!(iCurriculumEntry instanceof CurriculumLine)) {
+            return false;
+        }
+
+        final CurriculumLine line = (CurriculumLine) iCurriculumEntry;
+        return line.getDegreeModule() != null && line.getCurricularCourse().getCompetenceCourse() != null
+                && line.getCurricularCourse().getCompetenceCourse().isAnual();
+    }
+
     public String getRemarkNumbers() {
         Set<RemarkEntry> remarkEntries = remarksDataProvider.getRemarkEntriesFor(this);
 
@@ -307,7 +318,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         return obj != null && obj instanceof CurriculumEntry
                 && getICurriculumEntry() == ((CurriculumEntry) obj).getICurriculumEntry();
     }
@@ -331,11 +342,11 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
     private static Function<ICurriculumEntry, String> courseEctsGradeProvider = entry -> "";
 
-    public static void setCourseEctsGradeProviderProvider(Function<ICurriculumEntry, String> courseEctsGradeProvider) {
+    public static void setCourseEctsGradeProviderProvider(final Function<ICurriculumEntry, String> courseEctsGradeProvider) {
         CurriculumEntry.courseEctsGradeProvider = courseEctsGradeProvider;
     }
 
-    protected String getEctsGrade(ICurriculumEntry entry) {
+    protected String getEctsGrade(final ICurriculumEntry entry) {
         return courseEctsGradeProvider.apply(entry);
     }
 
@@ -359,7 +370,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
         result.addAll(Collections2.transform(entries, new Function<ICurriculumEntry, CurriculumEntry>() {
             @Override
-            public CurriculumEntry apply(ICurriculumEntry entry) {
+            public CurriculumEntry apply(final ICurriculumEntry entry) {
                 return new CurriculumEntry(registration, entry, remarksDataProvider);
             }
         }));
@@ -371,7 +382,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return new Comparator<CurriculumEntry>() {
 
             @Override
-            public int compare(CurriculumEntry o1, CurriculumEntry o2) {
+            public int compare(final CurriculumEntry o1, final CurriculumEntry o2) {
                 String nameO1 =
                         o1.getName().getContent(locale) != null ? o1.getName().getContent(locale) : o1.getName().getContent();
                 String nameO2 =
@@ -394,7 +405,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return new Comparator<CurriculumEntry>() {
 
             @Override
-            public int compare(CurriculumEntry o1, CurriculumEntry o2) {
+            public int compare(final CurriculumEntry o1, final CurriculumEntry o2) {
                 int result = o1.getExecutionYear().compareTo(o2.getExecutionYear());
 
                 if (result != 0) {
