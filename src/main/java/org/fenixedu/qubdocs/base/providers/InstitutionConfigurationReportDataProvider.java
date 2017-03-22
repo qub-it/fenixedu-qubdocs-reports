@@ -5,6 +5,8 @@ import org.fenixedu.academic.domain.person.Gender;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
+import fr.opensagres.xdocreport.template.formatter.NullImageBehaviour;
+
 public class InstitutionConfigurationReportDataProvider implements IReportDataProvider {
 
     protected static final String KEY_LOGO = "institutionLogo";
@@ -19,19 +21,22 @@ public class InstitutionConfigurationReportDataProvider implements IReportDataPr
     private final String institutionAddress;
     private final String institutionSite;
     private final byte[] institutionLogo;
+    private final boolean showLogo;
 
     public InstitutionConfigurationReportDataProvider(final String name, final String shortName, final String address,
-            final String site, final byte[] image) {
+            final String site, final byte[] image, final boolean showLogo) {
         institutionName = name;
         institutionShortName = shortName;
         institutionAddress = address;
         institutionSite = site;
         institutionLogo = image;
+        this.showLogo = showLogo;
     }
 
     @Override
     public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
-        if (institutionLogo.length == 0) {
+        if (institutionLogo.length == 0 || !showLogo) {
+            documentFieldsData.registerImageNullBehaviour(KEY_LOGO, NullImageBehaviour.RemoveImageTemplate);
             return;
         }
         documentFieldsData.registerImage(KEY_LOGO, institutionLogo);
