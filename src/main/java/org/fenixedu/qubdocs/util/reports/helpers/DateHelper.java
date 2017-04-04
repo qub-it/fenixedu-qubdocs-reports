@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -67,9 +67,8 @@ public class DateHelper implements IDocumentHelper {
                 day += getDayOfMonthOrdinal(localDate.getDayOfMonth());
             }
 
-            String message =
-                    BundleUtil.getString("resources.FenixeduQubdocsReportsResources", locale, "message.DateHelper.extendedDate",
-                            day, month, localDate.toString("yyyy", locale));
+            String message = BundleUtil.getString("resources.FenixeduQubdocsReportsResources", locale,
+                    "message.DateHelper.extendedDate", day, month, localDate.toString("yyyy", locale));
             i18NString = i18NString.with(locale, message);
         }
         return i18NString;
@@ -119,7 +118,7 @@ public class DateHelper implements IDocumentHelper {
         return extendedDate(new LocalDate());
     }
 
-    private String getDayOfMonthOrdinal(int day) {
+    public String getDayOfMonthOrdinal(final int day) {
         if (day >= 11 && day <= 13) {
             return "\u1D57\u02B0";
         }
