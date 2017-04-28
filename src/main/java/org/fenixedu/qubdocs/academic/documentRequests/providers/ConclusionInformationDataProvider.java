@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -64,7 +64,7 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
     }
 
     @Override
-    public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
+    public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
 
     }
 
@@ -84,7 +84,8 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
 
     private static Function<RegistrationConclusionBean, String> degreeEctsGradeProvider = conclusion -> "";
 
-    public static void setDegreeEctsGradeProviderProvider(Function<RegistrationConclusionBean, String> degreeEctsGradeProvider) {
+    public static void setDegreeEctsGradeProviderProvider(
+            final Function<RegistrationConclusionBean, String> degreeEctsGradeProvider) {
         ConclusionInformationDataProvider.degreeEctsGradeProvider = degreeEctsGradeProvider;
     }
 
@@ -99,7 +100,7 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             return conclusionBean;
         }
 
-        public boolean isConclusionDateBefore(String date) {
+        public boolean isConclusionDateBefore(final String date) {
             DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
             return getConclusionDate().isBefore(formatter.parseLocalDate(date));
         }
@@ -129,6 +130,11 @@ public class ConclusionInformationDataProvider implements IReportDataProvider {
             } else {
                 return null;
             }
+        }
+
+        public boolean hasGraduationLevel() {
+            return conclusionBean.getProgramConclusion() != null
+                    && !conclusionBean.getProgramConclusion().getGraduationLevel().isEmpty();
         }
 
         public String getEctsGrade() {

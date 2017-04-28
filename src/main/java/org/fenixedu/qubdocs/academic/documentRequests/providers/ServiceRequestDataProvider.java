@@ -83,7 +83,13 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
             IAcademicServiceRequestAndAcademicTaxTreasuryEvent event =
                     TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
             if (event != null && event.isCharged()) {
-                return "Emolumento: " + helper.total(event);
+                if (serviceRequest.getLanguage().equals("pt_PT")) {
+                    return "Emolumento: " + helper.total(event);
+                } else if (serviceRequest.getLanguage().equals("en_GB")) {
+                    return "Fee: " + helper.total(event);
+                } else {
+                    return "" + helper.total(event);
+                }
             }
             return "";
         } else if (KEY_FOR_PRICE.equals(key)) {
