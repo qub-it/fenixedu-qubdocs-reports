@@ -9,6 +9,7 @@ import org.fenixedu.bennu.FenixeduQubdocsReportsSpringConfiguration;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
 import org.fenixedu.commons.StringNormalizer;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.domain.InstitutionLogo;
 import org.fenixedu.qubdocs.domain.InstitutionReportConfiguration;
 import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
@@ -60,8 +61,8 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
     }
 
     @RequestMapping(value = _UPDATE_URI, method = RequestMethod.POST)
-    public String update(@RequestParam(value = "institutionName", required = true) final String institutionName,
-            @RequestParam(value = "institutionShortName", required = true) final String institutionShortName,
+    public String update(@RequestParam(value = "institutionName", required = true) final LocalizedString institutionName,
+            @RequestParam(value = "institutionShortName", required = true) final LocalizedString institutionShortName,
             @RequestParam(value = "institutionAddress", required = true) final String institutionAddress,
             @RequestParam(value = "institutionSite", required = true) final String institutionSite,
             @RequestParam(value = "logoFile", required = false) final MultipartFile logoFile, final Model model,
@@ -81,8 +82,8 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
     }
 
     @Atomic
-    private void update(final String institutionName, final String institutionShortName, final String institutionAddress,
-            final String institutionSite, final MultipartFile logoFile) throws IOException {
+    private void update(final LocalizedString institutionName, final LocalizedString institutionShortName,
+            final String institutionAddress, final String institutionSite, final MultipartFile logoFile) throws IOException {
         InstitutionReportConfiguration configuration = InstitutionReportConfiguration.getInstance();
 
         configuration.setName(institutionName);

@@ -49,8 +49,8 @@ public class serviceRequests.AcademicServiceRequestTemplate extends DocumentTemp
 }
 
 public class InstitutionReportConfiguration {
-    String name;
-    String shortName;
+    LocalizedString name;
+    LocalizedString shortName;
     String address;
     String site;
 }
