@@ -80,13 +80,13 @@ ${portal.toolkit()}
                 <tr>
 	                <th scope="row" class="col-xs-3"><spring:message code="label.InstitutionReportConfiguration.name"/></th> 
 	                <td>
-		                <c:out value='${institutionReportConfiguration.name}'/>
+		                <c:out value='${institutionReportConfiguration.name.content}'/>
 	                </td> 
                 </tr>
                 <tr>
                     <th scope="row" class="col-xs-3"><spring:message code="label.InstitutionReportConfiguration.shortName"/></th> 
                     <td>
-                        <c:out value='${institutionReportConfiguration.shortName}'/>
+                        <c:out value='${institutionReportConfiguration.shortName.content}'/>
                     </td> 
                 </tr>
                 <tr>

@@ -1,6 +1,9 @@
 package org.fenixedu.qubdocs.base.providers;
 
+import java.util.Locale;
+
 import org.fenixedu.academic.domain.person.Gender;
+import org.fenixedu.commons.i18n.LocalizedString;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IReportDataProvider;
@@ -16,21 +19,23 @@ public class InstitutionConfigurationReportDataProvider implements IReportDataPr
     protected static final String KEY_SITE = "institutionSite";
     protected static final String KEY_PREPOSITION = "institutionGender";
 
-    private final String institutionName;
-    private final String institutionShortName;
+    private final LocalizedString institutionName;
+    private final LocalizedString institutionShortName;
     private final String institutionAddress;
     private final String institutionSite;
     private final byte[] institutionLogo;
     private final boolean showLogo;
+    private final Locale language;
 
-    public InstitutionConfigurationReportDataProvider(final String name, final String shortName, final String address,
-            final String site, final byte[] image, final boolean showLogo) {
+    public InstitutionConfigurationReportDataProvider(final LocalizedString name, final LocalizedString shortName,
+            final String address, final String site, final byte[] image, final boolean showLogo, final Locale language) {
         institutionName = name;
         institutionShortName = shortName;
         institutionAddress = address;
         institutionSite = site;
         institutionLogo = image;
         this.showLogo = showLogo;
+        this.language = language;
     }
 
     @Override
@@ -51,9 +56,9 @@ public class InstitutionConfigurationReportDataProvider implements IReportDataPr
     @Override
     public Object valueForKey(final String key) {
         if (key.equals(KEY_NAME)) {
-            return institutionName;
+            return institutionName.getContent(language);
         } else if (key.equals(KEY_SHORT_NAME)) {
-            return institutionShortName;
+            return institutionShortName.getContent(language);
         } else if (key.equals(KEY_SITE)) {
             return institutionSite;
         } else if (key.equals(KEY_ADDRESS)) {
@@ -66,7 +71,7 @@ public class InstitutionConfigurationReportDataProvider implements IReportDataPr
     }
 
     public Gender getPreposition() {
-        if (institutionName.startsWith("Inst")) {
+        if (institutionName.getContent(language).startsWith("Inst")) {
             return Gender.MALE;
         } else {
             return Gender.FEMALE;
