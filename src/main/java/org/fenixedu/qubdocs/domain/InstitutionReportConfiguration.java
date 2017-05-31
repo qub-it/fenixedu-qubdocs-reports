@@ -12,6 +12,15 @@ public class InstitutionReportConfiguration extends InstitutionReportConfigurati
         setBennu(Bennu.getInstance());
     }
 
+    public void delete() {
+        if (getInstitutionLogo() != null) {
+            getInstitutionLogo().delete();
+        }
+        setBennu(null);
+
+        deleteDomainObject();
+    }
+
     @Atomic(mode = TxMode.SPECULATIVE_READ)
     public static InstitutionReportConfiguration getInstance() {
         if (Bennu.getInstance().getInstitutionReportConfiguration() == null) {
