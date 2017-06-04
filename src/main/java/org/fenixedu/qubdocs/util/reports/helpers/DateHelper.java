@@ -41,7 +41,14 @@ import com.qubit.terra.docs.util.helpers.IDocumentHelper;
 
 public class DateHelper implements IDocumentHelper {
 
-    Locale pt = new Locale("pt");
+    private Locale locale;
+
+    public DateHelper() {
+    }
+
+    public DateHelper(final Locale locale) {
+        this.locale = locale;
+    }
 
     public String numericDate(final LocalDate localDate) {
         return localDate.toString("dd/MM/yyyy");
@@ -64,7 +71,7 @@ public class DateHelper implements IDocumentHelper {
             }
             String day = String.valueOf(localDate.getDayOfMonth());
             if (locale.getLanguage().equals("en")) {
-                day += getDayOfMonthOrdinal(localDate.getDayOfMonth());
+                day += getDayOfMonthOrdinalInEn(localDate.getDayOfMonth());
             }
 
             String message = BundleUtil.getString("resources.FenixeduQubdocsReportsResources", locale,
@@ -118,7 +125,32 @@ public class DateHelper implements IDocumentHelper {
         return extendedDate(new LocalDate());
     }
 
-    public String getDayOfMonthOrdinal(final int day) {
+    public String getDayOfMonthOrdinal(final int day, final boolean isMale, final boolean isPlural) {
+        if (locale == null || locale.getLanguage().equals("pt")) {
+            return getDayOfMonthOrdinalInPt(day, isMale, isPlural);
+        } else if (locale.getLanguage().equals("en")) {
+            return getDayOfMonthOrdinalInEn(day);
+        }
+        return "Unknown Language";
+    }
+
+    private String getDayOfMonthOrdinalInPt(final int day, final boolean isMale, final boolean isPlural) {
+        if (isMale) {
+            if (isPlural) {
+                return "\u1D52\u02E2";
+            } else {
+                return "\u00BA";
+            }
+        } else {
+            if (isPlural) {
+                return "\u1D43\u02E2";
+            } else {
+                return "\u00AA";
+            }
+        }
+    }
+
+    private String getDayOfMonthOrdinalInEn(final int day) {
         if (day >= 11 && day <= 13) {
             return "\u1D57\u02B0";
         }
