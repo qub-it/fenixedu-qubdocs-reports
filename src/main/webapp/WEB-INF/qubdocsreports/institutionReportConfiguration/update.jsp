@@ -78,14 +78,14 @@ ${portal.toolkit()}
                 <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.name"/></div> 
 
                 <div class="col-sm-10">
-	               <input id="InstitutionReportConfiguration_name" class="form-control" type="text" name="institutionName" bennu-localized-string value='<c:out value='${not empty param.institutionName ? param.institutionName : institutionReportConfiguration.name.json() }'/>' required />
+	               <input id="InstitutionReportConfiguration_name" class="form-control" type="text" name="institutionName" bennu-localized-string value='<c:out value='${not empty param.institutionName ? param.institutionName : institutionReportConfiguration.name.json() }'/>' />
                 </div>	
             </div>		
             <div class="form-group row">
                 <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.shortName"/></div> 
 
                 <div class="col-sm-10">
-                   <input id="InstitutionReportConfiguration_shortName" class="form-control" type="text" name="institutionShortName" bennu-localized-string value='<c:out value='${not empty param.institutionShortName ? param.institutionShortName : institutionReportConfiguration.name.json() }'/>' required />
+                   <input id="InstitutionReportConfiguration_shortName" class="form-control" type="text" name="institutionShortName" bennu-localized-string value='<c:out value='${not empty param.institutionShortName ? param.institutionShortName : institutionReportConfiguration.shortName.json() }'/>'  />
                 </div>  
             </div>      
             <div class="form-group row">
