@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -20,22 +21,24 @@ public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvid
     protected static final String KEY_FOR_TOTAL_UNITS = "totalConclusions";
     protected static final String KEY_FOR_TOTAL_ECTS = "totalConcludedECTS";
 
-    private Registration registration;
-    private CurriculumEntryRemarksDataProvider remarksDataProvider;
-    private Locale locale;
-    private Collection<ICurriculumEntry> conclusions;
+    private final Registration registration;
+    private final CurriculumEntryRemarksDataProvider remarksDataProvider;
+    private final Locale locale;
+    private final Collection<ICurriculumEntry> conclusions;
     private Set<CurriculumEntry> curriculumEntries;
+    private final CurriculumEntryServices service;
 
-    public ConcludedCurriculumEntriesDataProvider(final Registration registration,
-            final Collection<ICurriculumEntry> conclusions, final Locale locale) {
+    public ConcludedCurriculumEntriesDataProvider(final Registration registration, final Collection<ICurriculumEntry> conclusions,
+            final Locale locale, final CurriculumEntryServices service) {
         this.registration = registration;
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
         this.conclusions = conclusions;
+        this.service = service;
     }
 
     @Override
-    public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
+    public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
         documentFieldsData.registerCollectionAsField(KEY);
         documentFieldsData.registerCollectionAsField(KEY_FOR_REMARKS);
     }
@@ -78,19 +81,17 @@ public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvid
                 }
 
                 public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
-                    String leftContent =
-                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
-                                    .getContent();
-                    String rightContent =
-                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
-                                    .getContent();
+                    String leftContent = left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left
+                            .getName().getContent();
+                    String rightContent = right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right
+                            .getName().getContent();
                     leftContent = leftContent.toLowerCase();
                     rightContent = rightContent.toLowerCase();
 
                     return leftContent.compareTo(rightContent);
                 }
             });
-            curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
+            curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider, service));
         }
         return curriculumEntries;
     }

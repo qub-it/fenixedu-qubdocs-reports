@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -10,7 +10,7 @@
  *               joao.amaral@qub-it.com
  *               diogo.simoes@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -40,6 +40,7 @@ import java.util.TreeSet;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -52,27 +53,29 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
     protected ExecutionYear executionYear;
     protected Locale locale;
     protected List<Enrolments> data;
+    protected CurriculumEntryServices service;
 
     public EnrolmentsDataProvider(final Registration registration, final Set<ICurriculumEntry> normalEnrolmentsEntries,
-            final Set<ICurriculumEntry> standaloneEnrolmentsEntries,
-            final Set<ICurriculumEntry> extracurricularEnrolmentsEntries, final ExecutionYear executionYear, final Locale locale) {
+            final Set<ICurriculumEntry> standaloneEnrolmentsEntries, final Set<ICurriculumEntry> extracurricularEnrolmentsEntries,
+            final ExecutionYear executionYear, final Locale locale, final CurriculumEntryServices service) {
         this.registration = registration;
         this.executionYear = executionYear;
         this.locale = locale;
-        data = new ArrayList<Enrolments>();
+        this.service = service;
+        data = new ArrayList<>();
         if (normalEnrolmentsEntries != null && !normalEnrolmentsEntries.isEmpty()) {
-            data.add(new Enrolments("normal", locale, registration, normalEnrolmentsEntries));
+            data.add(new Enrolments("normal", locale, registration, normalEnrolmentsEntries, service));
         }
         if (standaloneEnrolmentsEntries != null && !standaloneEnrolmentsEntries.isEmpty()) {
-            data.add(new Enrolments("standalone", locale, registration, standaloneEnrolmentsEntries));
+            data.add(new Enrolments("standalone", locale, registration, standaloneEnrolmentsEntries, service));
         }
         if (extracurricularEnrolmentsEntries != null && !extracurricularEnrolmentsEntries.isEmpty()) {
-            data.add(new Enrolments("extracurricular", locale, registration, extracurricularEnrolmentsEntries));
+            data.add(new Enrolments("extracurricular", locale, registration, extracurricularEnrolmentsEntries, service));
         }
     }
 
     @Override
-    public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
+    public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
         for (Enrolments enrolments : data) {
             enrolments.registerCollections(documentFieldsData);
         }
@@ -111,9 +114,10 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         private Set<ICurriculumEntry> enrolmentsEntries;
         private TreeSet<CurriculumEntry> curriculumEntries;
         private CurriculumEntryRemarksDataProvider remarksDataProvider;
+        private CurriculumEntryServices service;
 
         public Enrolments(final String type, final Locale locale, final Registration registration,
-                final Set<ICurriculumEntry> enrolmentsEntries) {
+                final Set<ICurriculumEntry> enrolmentsEntries, final CurriculumEntryServices service) {
             final String casedType = type.substring(0, 1).toUpperCase() + type.substring(1);
             this.hasEnrolmentsKey = "has" + casedType + "Enrolments";
             this.enrolmentsKey = type + "EnrolmentsList";
@@ -141,22 +145,21 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
                 }
 
                 public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
-                    String leftContent =
-                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
-                                    .getContent();
-                    String rightContent =
-                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
-                                    .getContent();
+                    String leftContent = left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left
+                            .getName().getContent();
+                    String rightContent = right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right
+                            .getName().getContent();
                     leftContent = leftContent.toLowerCase();
                     rightContent = rightContent.toLowerCase();
 
                     return leftContent.compareTo(rightContent);
                 }
             });
-            this.curriculumEntries.addAll(CurriculumEntry.transform(registration, this.enrolmentsEntries, remarksDataProvider));
+            this.curriculumEntries
+                    .addAll(CurriculumEntry.transform(registration, this.enrolmentsEntries, remarksDataProvider, service));
         }
 
-        public Object getValue(String key) {
+        public Object getValue(final String key) {
             if (key.equals(hasEnrolmentsKey)) {
                 return hasEnrolements();
             } else if (key.equals(enrolmentsKey)) {
@@ -191,11 +194,11 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
             return remarksDataProvider.valueForKey("curriculumEntryRemarks");
         }
 
-        public void registerCollections(IDocumentFieldsData documentFieldsData) {
+        public void registerCollections(final IDocumentFieldsData documentFieldsData) {
             documentFieldsData.registerCollectionAsField(enrolmentsKey);
         }
 
-        public boolean hasKey(String key) {
+        public boolean hasKey(final String key) {
             return key.equals(hasEnrolmentsKey) || key.equals(enrolmentsKey) || key.equals(totalsKey) || key.equals(ectsKey)
                     || key.equals(remarksKey);
         }

@@ -36,13 +36,11 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.academic.domain.CompetenceCourse;
-import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
-import org.fenixedu.academic.domain.degreeStructure.Context;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
@@ -51,6 +49,7 @@ import org.fenixedu.academic.domain.studentCurriculum.ExternalEnrolment;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider.RemarkEntry;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
 
@@ -64,13 +63,15 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     protected ICurriculumEntry iCurriculumEntry;
     protected CurriculumEntryRemarksDataProvider remarksDataProvider;
     protected Registration registration;
+    protected CurriculumEntryServices service;
 
     public CurriculumEntry(final Registration registration, final ICurriculumEntry entry,
-            final CurriculumEntryRemarksDataProvider remarksDataProvider) {
+            final CurriculumEntryRemarksDataProvider remarksDataProvider, final CurriculumEntryServices service) {
         this.registration = registration;
         iCurriculumEntry = entry;
         this.remarksDataProvider = remarksDataProvider;
         this.remarksDataProvider.addCurriculumEntry(this);
+        this.service = service;
     }
 
     public LocalizedString getName() {
@@ -192,27 +193,17 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return iCurriculumEntry.getExecutionPeriod();
     }
 
-    public int getCurricularYear() {
-        if (isIEnrolment() && !isExternal()) {
-            return findCurricularYear((Enrolment) iCurriculumEntry);
+    public String getCurricularYear() {
+        //TODO: algoritmo não funciona para substituições
+        if (isExternal()) {
+            return "-";
+        }
+        CurriculumLine input = (CurriculumLine) iCurriculumEntry;
+        if (input.getCurriculumGroup().getDegreeModule() == null) {
+            return "-";
         }
 
-        throw new RuntimeException("how to handle?");
-    }
-
-    private Integer findCurricularYear(final Enrolment enrolment) {
-        List<Integer> possibleCurricularYears = Lists.newArrayList();
-
-        CurricularCourse curricularCourse = enrolment.getCurricularCourse();
-        Set<Context> childContextsSet = enrolment.getCurriculumGroup().getDegreeModule().getChildContextsSet();
-
-        for (Context context : childContextsSet) {
-            if (context.getChildDegreeModule() == curricularCourse && context.isValid(getExecutionSemester())) {
-                possibleCurricularYears.add(context.getCurricularYear());
-            }
-        }
-
-        return !possibleCurricularYears.isEmpty() ? Collections.min(possibleCurricularYears) : -1;
+        return "" + service.getCurricularYear(input);
     }
 
     public String getGrade() {
@@ -365,13 +356,14 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public static Set<CurriculumEntry> transform(final Registration registration,
-            final Collection<? extends ICurriculumEntry> entries, final CurriculumEntryRemarksDataProvider remarksDataProvider) {
+            final Collection<? extends ICurriculumEntry> entries, final CurriculumEntryRemarksDataProvider remarksDataProvider,
+            final CurriculumEntryServices service) {
         Set<CurriculumEntry> result = Sets.newHashSet();
 
         result.addAll(Collections2.transform(entries, new Function<ICurriculumEntry, CurriculumEntry>() {
             @Override
             public CurriculumEntry apply(final ICurriculumEntry entry) {
-                return new CurriculumEntry(registration, entry, remarksDataProvider);
+                return new CurriculumEntry(registration, entry, remarksDataProvider, service);
             }
         }));
 

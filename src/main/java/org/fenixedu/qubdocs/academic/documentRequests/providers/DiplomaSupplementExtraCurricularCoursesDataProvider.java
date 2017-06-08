@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -38,6 +38,7 @@ import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
 import org.fenixedu.academic.domain.studentCurriculum.CycleCurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 
 import com.google.common.collect.Sets;
 
@@ -45,8 +46,10 @@ public class DiplomaSupplementExtraCurricularCoursesDataProvider extends ExtraCu
 
     public DiplomaSupplementExtraCurricularCoursesDataProvider(final Registration registration, final CycleType cycleType,
             final Locale locale, final CurriculumEntryRemarksDataProvider remarksDataProvider,
-            final Boolean includeAllRegistrations, final Boolean includeSubstitutionCreditations) {
-        super(registration, cycleType, locale, remarksDataProvider, includeAllRegistrations, includeSubstitutionCreditations);
+            final Boolean includeAllRegistrations, final Boolean includeSubstitutionCreditations,
+            final CurriculumEntryServices service) {
+        super(registration, cycleType, locale, remarksDataProvider, includeAllRegistrations, includeSubstitutionCreditations,
+                service);
     }
 
     @Override
@@ -54,30 +57,30 @@ public class DiplomaSupplementExtraCurricularCoursesDataProvider extends ExtraCu
         if (this.curriculumEntries == null) {
             this.curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
 
-            Collection<Registration> registrationList =
-                    includeAllRegistrations ? registration.getStudent().getActiveRegistrations() : Collections
-                            .singleton(registration);
+            Collection<Registration> registrationList = includeAllRegistrations ? registration.getStudent()
+                    .getActiveRegistrations() : Collections.singleton(registration);
 
             Set<CurriculumLine> extraCurricularCurriculumLines = Sets.newHashSet();
 
             for (Registration activeRegistration : registrationList) {
                 extraCurricularCurriculumLines.addAll(activeRegistration.getExtraCurricularCurriculumLines());
             }
-            
-            if(cycleType == CycleType.FIRST_CYCLE) {
+
+            if (cycleType == CycleType.FIRST_CYCLE) {
                 // Check for second cycle curriculum group
-                final CycleCurriculumGroup secondCycleCurriculumGroup = registration.getLastStudentCurricularPlan().getCycle(CycleType.SECOND_CYCLE);
-                
-                if(secondCycleCurriculumGroup != null) {
+                final CycleCurriculumGroup secondCycleCurriculumGroup =
+                        registration.getLastStudentCurricularPlan().getCycle(CycleType.SECOND_CYCLE);
+
+                if (secondCycleCurriculumGroup != null) {
                     extraCurricularCurriculumLines.addAll(secondCycleCurriculumGroup.getAllCurriculumLines());
                 }
             }
 
             for (CurriculumLine curriculumLine : extraCurricularCurriculumLines) {
-                if(!curriculumLine.isApproved()) {
+                if (!curriculumLine.isApproved()) {
                     continue;
                 }
-                
+
                 if (curriculumLine.isEnrolment() && ((Enrolment) curriculumLine).isSourceOfAnyCreditsInCurriculum()) {
                     continue;
                 }
@@ -90,8 +93,8 @@ public class DiplomaSupplementExtraCurricularCoursesDataProvider extends ExtraCu
                     continue;
                 }
 
-                curriculumEntries.addAll(CurriculumEntry.transform(registration, curriculumLine.getCurriculum()
-                        .getCurriculumEntries(), remarksDataProvider));
+                curriculumEntries.addAll(CurriculumEntry.transform(registration,
+                        curriculumLine.getCurriculum().getCurriculumEntries(), remarksDataProvider, service));
             }
         }
 

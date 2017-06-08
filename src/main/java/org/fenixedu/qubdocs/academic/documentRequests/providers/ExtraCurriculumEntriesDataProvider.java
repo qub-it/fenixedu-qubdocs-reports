@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: diogo.simoes@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -35,6 +35,7 @@ import java.util.Set;
 
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -52,18 +53,21 @@ public class ExtraCurriculumEntriesDataProvider implements IReportDataProvider {
     protected Locale locale;
     protected Collection<ICurriculumEntry> extracurricularApprovements;
     protected Set<CurriculumEntry> curriculumEntries;
+    protected CurriculumEntryServices service;
 
     public ExtraCurriculumEntriesDataProvider(final Registration registration,
-            final Collection<ICurriculumEntry> extracurricularApprovements, final Locale locale) {
+            final Collection<ICurriculumEntry> extracurricularApprovements, final Locale locale,
+            final CurriculumEntryServices service) {
         this.registration = registration;
         this.locale = locale;
         this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
         this.extracurricularApprovements = extracurricularApprovements;
+        this.service = service;
         init();
     }
 
     @Override
-    public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
+    public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
         documentFieldsData.registerCollectionAsField(KEY);
         documentFieldsData.registerCollectionAsField(KEY_FOR_REMARKS);
     }
@@ -129,19 +133,17 @@ public class ExtraCurriculumEntriesDataProvider implements IReportDataProvider {
                 }
 
                 public int compareByName(final CurriculumEntry left, final CurriculumEntry right) {
-                    String leftContent =
-                            left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left.getName()
-                                    .getContent();
-                    String rightContent =
-                            right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right.getName()
-                                    .getContent();
+                    String leftContent = left.getName().getContent(locale) != null ? left.getName().getContent(locale) : left
+                            .getName().getContent();
+                    String rightContent = right.getName().getContent(locale) != null ? right.getName().getContent(locale) : right
+                            .getName().getContent();
                     leftContent = leftContent.toLowerCase();
                     rightContent = rightContent.toLowerCase();
 
                     return leftContent.compareTo(rightContent);
                 }
             });
-            curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider));
+            curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider, service));
         }
     }
 

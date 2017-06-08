@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -40,6 +40,7 @@ import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
 import org.fenixedu.academic.domain.studentCurriculum.CycleCurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -57,30 +58,32 @@ public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
     protected Locale locale;
     protected Boolean includeAllRegistrations;
     protected Boolean includeSubstitutionCreditations;
+    protected CurriculumEntryServices service;
 
     public ExtraCurricularCoursesDataProvider(final Registration registration, final CycleType cycleType, final Locale locale,
             final CurriculumEntryRemarksDataProvider remarksDataProvider, final Boolean includeAllRegistrations,
-            final Boolean includeSubstitutionCreditations) {
+            final Boolean includeSubstitutionCreditations, final CurriculumEntryServices service) {
         this.registration = registration;
         this.cycleType = cycleType;
         this.remarksDataProvider = remarksDataProvider;
         this.locale = locale;
         this.includeAllRegistrations = includeAllRegistrations;
         this.includeSubstitutionCreditations = includeSubstitutionCreditations;
+        this.service = service;
     }
 
     public ExtraCurricularCoursesDataProvider(final Collection<? extends ICurriculumEntry> entries, final Locale locale,
-            CurriculumEntryRemarksDataProvider remarks) {
+            final CurriculumEntryRemarksDataProvider remarks) {
         this.remarksDataProvider = remarks;
         this.locale = locale;
         this.includeAllRegistrations = false;
         this.includeSubstitutionCreditations = false;
         curriculumEntries = Sets.newTreeSet(CurriculumEntry.NAME_COMPARATOR(locale));
-        curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, this.remarksDataProvider));
+        curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, this.remarksDataProvider, service));
     }
 
     @Override
-    public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
+    public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
         documentFieldsData.registerCollectionAsField(KEY_FOR_LIST);
     }
 
@@ -125,7 +128,7 @@ public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
                     }
 
                     curriculumEntries.addAll(CurriculumEntry.transform(registration,
-                            curriculumLine.getCurriculum().getCurriculumEntries(), remarksDataProvider));
+                            curriculumLine.getCurriculum().getCurriculumEntries(), remarksDataProvider, service));
                 }
             }
 
@@ -138,7 +141,7 @@ public class ExtraCurricularCoursesDataProvider implements IReportDataProvider {
                 for (final CurriculumLine curriculumLine : approvedCurriculumLines) {
                     if (curriculumLine.isEnrolment() && !((Enrolment) curriculumLine).isSourceOfAnyCreditsInCurriculum()) {
                         curriculumEntries.addAll(CurriculumEntry.transform(registration,
-                                curriculumLine.getCurriculum().getCurriculumEntries(), remarksDataProvider));
+                                curriculumLine.getCurriculum().getCurriculumEntries(), remarksDataProvider, service));
                     }
                 }
             }

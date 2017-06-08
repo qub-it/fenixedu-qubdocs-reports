@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -35,6 +35,7 @@ import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -48,19 +49,22 @@ public class CurriculumEntriesDataProvider implements IReportDataProvider {
     protected ProgramConclusion programConclusion;
     protected CurriculumEntryRemarksDataProvider remarksDataProvider;
     protected Locale locale;
+    protected CurriculumEntryServices service;
 
     protected Set<CurriculumEntry> curriculumEntries;
 
     public CurriculumEntriesDataProvider(final Registration registration, final ProgramConclusion programConclusion,
-            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale) {
+            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale,
+            final CurriculumEntryServices service) {
         this.registration = registration;
         this.programConclusion = programConclusion;
         this.remarksDataProvider = remarksDataProvider;
         this.locale = locale;
+        this.service = service;
     }
 
     @Override
-    public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
+    public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
         documentFieldsData.registerCollectionAsField("curriculumEntries");
     }
 
@@ -99,7 +103,8 @@ public class CurriculumEntriesDataProvider implements IReportDataProvider {
 
             });
 
-            curriculumEntries.addAll(CurriculumEntry.transform(registration, curricularYearEntries, remarksDataProvider));
+            curriculumEntries
+                    .addAll(CurriculumEntry.transform(registration, curricularYearEntries, remarksDataProvider, service));
         }
 
         return curriculumEntries;

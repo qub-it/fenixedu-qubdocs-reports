@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -33,13 +33,13 @@ import java.util.Set;
 import org.fenixedu.academic.domain.Curriculum;
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.DegreeOfficialPublication;
-import org.fenixedu.academic.domain.degreeStructure.CycleType;
 import org.fenixedu.academic.domain.degreeStructure.ProgramConclusion;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.dto.student.RegistrationConclusionBean;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
 
@@ -51,8 +51,9 @@ public class ScholarPartCurriculumEntries extends CurriculumEntriesDataProvider 
     protected static final String KEY_LIST = "scholarPartCurriculumEntriesList";
 
     public ScholarPartCurriculumEntries(final Registration registration, final ProgramConclusion programConclusion,
-            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale) {
-        super(registration, programConclusion, remarksDataProvider, locale);
+            final CurriculumEntryRemarksDataProvider remarksDataProvider, final Locale locale,
+            final CurriculumEntryServices service) {
+        super(registration, programConclusion, remarksDataProvider, locale, service);
     }
 
     private Degree getDegree() {
@@ -60,7 +61,7 @@ public class ScholarPartCurriculumEntries extends CurriculumEntriesDataProvider 
     }
 
     @Override
-    public void registerFieldsAndImages(IDocumentFieldsData documentFieldsData) {
+    public void registerFieldsAndImages(final IDocumentFieldsData documentFieldsData) {
         documentFieldsData.registerCollectionAsField("scholarPartCurriculumEntriesList");
     }
 
