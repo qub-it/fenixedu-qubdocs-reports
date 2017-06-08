@@ -49,4 +49,36 @@ public class CurricularHelper implements IDocumentHelper {
 
     }
 
+    public CycleType getCourseLowerCycle(final ICurriculumEntry curriculumEntry, final boolean competenceScope) {
+
+        if (!(curriculumEntry instanceof CurriculumLine)) {
+            return null;
+        }
+
+        final CurriculumLine curriculumLine = (CurriculumLine) curriculumEntry;
+
+        if (!competenceScope) {
+            final CycleCurriculumGroup cycleCurriculumGroup = curriculumLine.getParentCycleCurriculumGroup();
+            return cycleCurriculumGroup != null ? cycleCurriculumGroup.getCycleType() : null;
+        }
+
+        final DegreeModule degreeModule = curriculumLine.getDegreeModule();
+        if (!(degreeModule instanceof CurricularCourse)) {
+            return null;
+        }
+
+        return ((CurricularCourse) degreeModule).getCompetenceCourse().getAssociatedCurricularCoursesSet().stream()
+
+                .filter(c -> !c.getParentContextsByExecutionYear(curriculumEntry.getExecutionYear()).isEmpty())
+
+                .flatMap(cc -> cc.getParentCycleCourseGroups().stream())
+
+                .map(c -> c.getCycleType())
+
+                .filter(c -> ACCEPTED_CYCLES.contains(c))
+
+                .sorted(CycleType.COMPARATOR_BY_GREATER_WEIGHT.reversed()).findFirst().orElse(null);
+
+    }
+
 }
