@@ -26,42 +26,25 @@
  */
 package org.fenixedu.qubdocs.ui.documentpurposetypes;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.util.List;
-import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.joda.time.DateTime;
-
-import java.util.stream.Collectors;
-
-import org.fenixedu.bennu.spring.portal.SpringApplication;
+import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
+import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeTypeInstance;
+import org.fenixedu.bennu.FenixeduQubdocsReportsSpringConfiguration;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
-import org.springframework.stereotype.Component;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
+import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsController;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.fenixedu.bennu.spring.portal.BennuSpringController;
-import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.http.ResponseEntity;
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.FenixeduQubdocsReportsSpringConfiguration;
 
 import pt.ist.fenixframework.Atomic;
-
-import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsBaseController;
-import org.fenixedu.qubdocs.ui.FenixeduQubdocsReportsController;
-import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;
-import org.fenixedu.academic.domain.serviceRequests.documentRequests.DocumentPurposeTypeInstance;
 
 //@Component("org.fenixedu.qubdocs.ui.documentPurposeTypes") <-- Use for duplicate controller name disambiguation
 @SpringFunctionality(app = FenixeduQubdocsReportsController.class, title = "label.title.documentPurposeTypes",
