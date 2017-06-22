@@ -28,23 +28,19 @@
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.academic.domain.Enrolment;
 import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
-import org.fenixedu.academic.domain.organizationalStructure.Unit;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.studentCurriculum.ExternalEnrolment;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.commons.i18n.LocalizedString.Builder;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
@@ -61,14 +57,12 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
     protected static final String KEY = "curriculumEntryRemarks";
     protected char counter = 'a';
 
-    protected RemarkEntry creditsRemarkEntry = new RemarkEntry(String.valueOf(counter++));
-    protected Set<RemarkEntry> entries = Sets.newTreeSet(ENTRY_COMPARATOR);
+    private Set<RemarkEntry> remarkEntries = Sets.newTreeSet(ENTRY_COMPARATOR);
 
     protected String key;
     protected Registration registration;
 
     public CurriculumEntryRemarksDataProvider(final Registration registration) {
-        entries.add(creditsRemarkEntry);
         this.key = KEY;
         this.registration = registration;
     }
@@ -89,35 +83,43 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
             return null;
         }
 
-        return entries;
+        return remarkEntries;
     }
 
-    public void addCurriculumEntry(final CurriculumEntry curriculumEntry) {
-        boolean addedToInstitution = false;
-        for (RemarkEntry remarkEntry : Sets.newHashSet(entries)) {
-            addedToInstitution |= remarkEntry.addIf(curriculumEntry);
+    protected RemarkEntry addCurriculumEntryToRemarkEntry(final CurriculumEntry input) {
+        RemarkEntry result = null;
+
+        final LocalizedString description = input.getCurriculumEntryDescription();
+        if (description != null) {
+
+            for (final RemarkEntry iter : Sets.newHashSet(remarkEntries)) {
+                if (iter.addIf(input)) {
+                    result = iter;
+                    break;
+                }
+            }
+
+            if (result == null) {
+
+                final RemarkEntryType remarkEntryType = getRemarkEntryType(input);
+                if (remarkEntryType != null) {
+                    result = new RemarkEntry(String.valueOf(counter++), remarkEntryType, input);
+
+                    remarkEntries.add(result);
+                }
+            }
         }
 
-        if (addedToInstitution) {
-            return;
-        }
-
-        if (curriculumEntry.isExternal()) {
-            addInstitutionEntryFor(curriculumEntry);
-        }
+        return result;
     }
 
     public Set<RemarkEntry> getRemarkEntriesFor(final CurriculumEntry curriculumEntry) {
-        return Sets.filter(entries, new Predicate<RemarkEntry>() {
+        return Sets.filter(remarkEntries, new Predicate<RemarkEntry>() {
             @Override
             public boolean apply(final RemarkEntry remarkEntry) {
                 return remarkEntry.curriculumEntries.contains(curriculumEntry);
             }
         });
-    }
-
-    protected void addInstitutionEntryFor(final CurriculumEntry curriculumEntry) {
-        entries.add(new RemarkEntry(String.valueOf(counter++), curriculumEntry));
     }
 
     public enum RemarkEntryType {
@@ -130,37 +132,20 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
 
     public class RemarkEntry {
         protected String remarkNumber;
-        protected Set<CurriculumEntry> curriculumEntries = Sets.newHashSet();
-        protected RemarkEntryType type;
-        protected Unit institution;
+        private Set<CurriculumEntry> curriculumEntries = Sets.newHashSet();
+        private RemarkEntryType type;
+        private LocalizedString curriculumEntryDescription;
 
-        public RemarkEntry(final String remarkNumber) {
-            this.remarkNumber = remarkNumber;
-            this.type = RemarkEntryType.CREDITS;
-        }
+        public RemarkEntry(final String remarkNumber, final RemarkEntryType remarkEntryType,
+                final CurriculumEntry curriculumEntry) {
 
-        public RemarkEntry(final String remarkNumber, final CurriculumEntry curriculumEntry) {
             this.remarkNumber = remarkNumber;
-            this.institution = ((ExternalEnrolment) curriculumEntry.getICurriculumEntry()).getAcademicUnit();
-            this.type = RemarkEntryType.INSTITUTION;
+            this.type = remarkEntryType;
             this.curriculumEntries.add(curriculumEntry);
         }
 
         public boolean addIf(final CurriculumEntry entry) {
-            if (entry.isExternal()) {
-                ExternalEnrolment externalEnrolment = (ExternalEnrolment) entry.getICurriculumEntry();
-                if (isInstitutionEntry() && externalEnrolment.getAcademicUnit() == institution) {
-                    curriculumEntries.add(entry);
-                    return true;
-                }
-            }
-
-            if ((entry.isExternal() || isDismissal(entry)) && isCreditsEntry()) {
-                curriculumEntries.add(entry);
-                return false;
-            }
-
-            return false;
+            return entry.getCurriculumEntryDescription().equals(getCurriculumEntryDescription()) && curriculumEntries.add(entry);
         }
 
         protected boolean isInstitutionEntry() {
@@ -172,20 +157,44 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
         }
 
         public LocalizedString getDescription() {
-            LocalizedString mls = new LocalizedString();
-            if (curriculumEntries.isEmpty()) {
-                // It is pointless to build an empty LS because the locales with empty or null values are ignored.
-                // See LS builder implementation for further details.
-                return mls;
-            }
-            for (Locale locale : CoreConfiguration.supportedLocales()) {
-                String message = BundleUtil.getString("resources/FenixeduQubdocsReportsResources", locale,
-                        type.getQualifiedName(), remarkNumber, institution != null ? institution.getNameI18n().getContent() : "");
+            LocalizedString result = getCurriculumEntryDescription();
 
-                mls = mls.with(locale, message);
-            }
-            return mls;
+            final Builder builder = new LocalizedString.Builder();
+            result.forEach((locale, value) -> builder.with(locale, remarkNumber + ") " + value));
+            result = builder.build();
+
+            return result;
         }
+
+        private LocalizedString getCurriculumEntryDescription() {
+            if (curriculumEntryDescription == null) {
+                curriculumEntryDescription = new LocalizedString();
+
+                if (!curriculumEntries.isEmpty()) {
+                    // all entries should share the same description
+                    curriculumEntryDescription = curriculumEntries.iterator().next().getCurriculumEntryDescription();
+                }
+            }
+
+            return curriculumEntryDescription;
+        }
+
+    }
+
+    public RemarkEntryType getRemarkEntryType(final CurriculumEntry entry) {
+
+        if (entry.isExternal()) {
+            final ExternalEnrolment externalEnrolment = (ExternalEnrolment) entry.getICurriculumEntry();
+            if (externalEnrolment.getAcademicUnit() != null) {
+                return RemarkEntryType.INSTITUTION;
+            }
+        }
+
+        if (entry.isExternal() || isDismissal(entry)) {
+            return RemarkEntryType.CREDITS;
+        }
+
+        return null;
     }
 
     public boolean isDismissal(CurriculumEntry entry) {

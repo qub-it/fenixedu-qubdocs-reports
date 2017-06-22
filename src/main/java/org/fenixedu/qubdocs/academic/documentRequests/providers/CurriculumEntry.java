@@ -41,14 +41,17 @@ import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
+import org.fenixedu.academic.domain.organizationalStructure.Unit;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 import org.fenixedu.academic.domain.studentCurriculum.ExternalEnrolment;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider.RemarkEntry;
+import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider.RemarkEntryType;
 import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
@@ -60,18 +63,18 @@ import com.google.common.collect.Sets;
 
 public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
-    protected ICurriculumEntry iCurriculumEntry;
-    protected CurriculumEntryRemarksDataProvider remarksDataProvider;
-    protected Registration registration;
-    protected CurriculumEntryServices service;
+    private ICurriculumEntry iCurriculumEntry;
+    private CurriculumEntryRemarksDataProvider remarksDataProvider;
+    private Registration registration;
+    private CurriculumEntryServices service;
 
     public CurriculumEntry(final Registration registration, final ICurriculumEntry entry,
             final CurriculumEntryRemarksDataProvider remarksDataProvider, final CurriculumEntryServices service) {
         this.registration = registration;
-        iCurriculumEntry = entry;
+        this.iCurriculumEntry = entry;
         this.remarksDataProvider = remarksDataProvider;
-        this.remarksDataProvider.addCurriculumEntry(this);
         this.service = service;
+        this.remarksDataProvider.addCurriculumEntryToRemarkEntry(this);
     }
 
     public LocalizedString getName() {
@@ -204,6 +207,30 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         }
 
         return "" + service.getCurricularYear(input);
+    }
+
+    public LocalizedString getCurriculumEntryDescription() {
+        LocalizedString result = service.getCurriculumEntryDescription(iCurriculumEntry);
+
+        // null forces hidden; empty forces fallback
+        if (result != null && result.isEmpty()) {
+
+            final RemarkEntryType remarkEntryType = remarksDataProvider.getRemarkEntryType(this);
+            if (remarkEntryType != null) {
+
+                final Unit institution = isExternal() ? ((ExternalEnrolment) iCurriculumEntry).getAcademicUnit() : null;
+
+                for (final Locale locale : CoreConfiguration.supportedLocales()) {
+                    final String message = BundleUtil.getString("resources/FenixeduQubdocsReportsResources", locale,
+                            remarkEntryType.getQualifiedName(),
+                            institution != null ? institution.getNameI18n().getContent() : "");
+
+                    result = result.with(locale, message);
+                }
+            }
+        }
+
+        return result;
     }
 
     public String getGrade() {

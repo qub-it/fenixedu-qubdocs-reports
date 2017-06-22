@@ -6,7 +6,9 @@ import java.util.Map;
 import org.fenixedu.academic.domain.DegreeCurricularPlan;
 import org.fenixedu.academic.domain.curricularPeriod.CurricularPeriod;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculum;
+import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
+import org.fenixedu.commons.i18n.LocalizedString;
 
 public interface CurriculumEntryServices {
 
@@ -15,6 +17,8 @@ public interface CurriculumEntryServices {
     public CurricularPeriod getCurricularPeriod(final DegreeCurricularPlan dcp, final int year);
 
     public int getCurricularYear(final CurriculumLine input);
+
+    public LocalizedString getCurriculumEntryDescription(final ICurriculumEntry input);
 
     public Map<CurricularPeriod, BigDecimal> mapYearCredits(final ICurriculum curriculum);
 
