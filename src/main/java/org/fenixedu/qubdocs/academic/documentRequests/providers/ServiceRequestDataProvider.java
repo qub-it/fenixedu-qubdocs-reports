@@ -27,8 +27,6 @@
 
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
-import java.util.Locale;
-
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
 import org.fenixedu.academic.domain.treasury.IAcademicServiceRequestAndAcademicTaxTreasuryEvent;
@@ -85,9 +83,9 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
             IAcademicServiceRequestAndAcademicTaxTreasuryEvent event =
                     TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
             if (event != null && event.isCharged()) {
-                if (serviceRequest.getLanguage().equals(new Locale("pt"))) {
+                if (serviceRequest.getLanguage().getLanguage().equals("pt")) {
                     return "Emolumento: " + helper.total(event);
-                } else if (serviceRequest.getLanguage().equals(new Locale("en"))) {
+                } else if (serviceRequest.getLanguage().getLanguage().equals("en")) {
                     return "Fee: " + helper.total(event);
                 } else {
                     return "" + helper.total(event);

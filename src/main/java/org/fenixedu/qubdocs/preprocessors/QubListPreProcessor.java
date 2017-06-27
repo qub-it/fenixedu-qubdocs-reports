@@ -14,7 +14,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import com.qubit.terra.docs.util.ReportGeneratorPreProcessor;
+import com.qubit.terra.docs.util.processors.pre.ReportGeneratorPreProcessor;
 
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.document.odt.ODTConstants;
