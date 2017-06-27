@@ -11,7 +11,6 @@ public class InstitutionLogo extends InstitutionLogo_Base {
     public InstitutionLogo() {
         super();
         setBennu(Bennu.getInstance());
-        setInstitutionReportConfiguration(InstitutionReportConfiguration.getInstance());
     }
 
     public InstitutionLogo(final String filename, final byte[] content) {
@@ -23,7 +22,8 @@ public class InstitutionLogo extends InstitutionLogo_Base {
     @Override
     public void delete() {
         setUploader(null);
-        setInstitutionReportConfiguration(null);
+        setInstitutionReportConfigurationFromLogo(null);
+        setInstitutionReportConfigurationFromLetterheadLogo(null);
         setBennu(null);
         super.delete();
     }
@@ -34,7 +34,7 @@ public class InstitutionLogo extends InstitutionLogo_Base {
     }
 
     @Override
-    public boolean isAccessible(User arg0) {
+    public boolean isAccessible(final User arg0) {
         //TODO
         return true;
     }

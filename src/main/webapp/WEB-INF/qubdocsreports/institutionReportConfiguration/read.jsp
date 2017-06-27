@@ -109,6 +109,14 @@ ${portal.toolkit()}
                        </a>
 	               </td> 
                 </tr>
+                <tr>
+                   <th scope="row" class="col-xs-3"><spring:message code="label.InstitutionReportConfiguration.letterheadLogo"/></th> 
+                   <td>
+                       <a href="${pageContext.request.contextPath}<%= InstitutionConfigurationController.DOWNLOAD_URL %>/${institutionReportConfiguration.letterheadInstitutionLogo.externalId}">
+                           <c:out value='${institutionReportConfiguration.letterheadInstitutionLogo.displayName}'/>
+                       </a>
+                   </td> 
+                </tr>
             </tbody>
         </table>
     </div>

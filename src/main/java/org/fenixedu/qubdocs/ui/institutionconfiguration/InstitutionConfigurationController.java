@@ -65,12 +65,13 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
             @RequestParam(value = "institutionShortName", required = true) final LocalizedString institutionShortName,
             @RequestParam(value = "institutionAddress", required = true) final String institutionAddress,
             @RequestParam(value = "institutionSite", required = true) final String institutionSite,
-            @RequestParam(value = "logoFile", required = false) final MultipartFile logoFile, final Model model,
-            final RedirectAttributes redirectAttributes) {
+            @RequestParam(value = "logoFile", required = false) final MultipartFile logoFile,
+            @RequestParam(value = "letterheadLogoFile", required = false) final MultipartFile letterheadLogoFile,
+            final Model model, final RedirectAttributes redirectAttributes) {
         try {
             InstitutionReportConfiguration configuration = InstitutionReportConfiguration.getInstance();
 
-            update(institutionName, institutionShortName, institutionAddress, institutionSite, logoFile);
+            update(institutionName, institutionShortName, institutionAddress, institutionSite, logoFile, letterheadLogoFile);
 
             setInstitutionConfiguration(configuration, model);
             return redirect(READ_URL, model, redirectAttributes);
@@ -83,7 +84,8 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
 
     @Atomic
     private void update(final LocalizedString institutionName, final LocalizedString institutionShortName,
-            final String institutionAddress, final String institutionSite, final MultipartFile logoFile) throws IOException {
+            final String institutionAddress, final String institutionSite, final MultipartFile logoFile,
+            final MultipartFile letterheadLogoFile) throws IOException {
         InstitutionReportConfiguration configuration = InstitutionReportConfiguration.getInstance();
 
         configuration.setName(institutionName);
@@ -91,15 +93,23 @@ public class InstitutionConfigurationController extends FenixeduQubdocsReportsBa
         configuration.setAddress(institutionAddress);
         configuration.setSite(institutionSite);
 
-        if (logoFile.getBytes().length == 0) {
-            return;
+        if (!logoFile.isEmpty()) {
+            if (configuration.getInstitutionLogo() != null) {
+                configuration.getInstitutionLogo().delete();
+            }
+            InstitutionLogo institutionLogo = new InstitutionLogo(logoFile.getOriginalFilename(), logoFile.getBytes());
+            configuration.setInstitutionLogo(institutionLogo);
         }
 
-        if (configuration.getInstitutionLogo() != null) {
-            configuration.getInstitutionLogo().delete();
+        if (!letterheadLogoFile.isEmpty()) {
+            if (configuration.getLetterheadInstitutionLogo() != null) {
+                configuration.getLetterheadInstitutionLogo().delete();
+            }
+            InstitutionLogo letterheadInstitutionLogo =
+                    new InstitutionLogo(letterheadLogoFile.getOriginalFilename(), letterheadLogoFile.getBytes());
+            configuration.setLetterheadInstitutionLogo(letterheadInstitutionLogo);
         }
-        InstitutionLogo institutionLogo = new InstitutionLogo(logoFile.getOriginalFilename(), logoFile.getBytes());
-        configuration.setInstitutionLogo(institutionLogo);
+
     }
 
     private static final String _DOWNLOAD_URI = "/download";

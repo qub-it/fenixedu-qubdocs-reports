@@ -209,11 +209,21 @@ relation InstitutionLogoBennu {
 }
 
 relation InstitutionReportConfigurationInstitutionLogo {
-    InstitutionReportConfiguration playsRole institutionReportConfiguration {
-        multiplicity 1..1;
+    InstitutionReportConfiguration playsRole institutionReportConfigurationFromLogo {
+        multiplicity 0..1;
     }
     
     InstitutionLogo playsRole institutionLogo {
+        multiplicity 0..1;
+    }
+}
+
+relation InstitutionReportConfigurationLetterheadInstitutionLogo {
+    InstitutionReportConfiguration playsRole institutionReportConfigurationFromLetterheadLogo {
+        multiplicity 0..1;
+    }
+    
+    InstitutionLogo playsRole letterheadInstitutionLogo {
         multiplicity 0..1;
     }
 }

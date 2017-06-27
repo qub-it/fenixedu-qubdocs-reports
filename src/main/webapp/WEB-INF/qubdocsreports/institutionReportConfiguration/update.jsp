@@ -109,6 +109,13 @@ ${portal.toolkit()}
                     <input type="file" name="logoFile" accept="image/*" />
                 </div>
             </div>		
+            <div class="form-group row">
+                <div class="col-sm-2 control-label"><spring:message code="label.InstitutionReportConfiguration.letterheadLogo"/></div> 
+
+                <div class="col-sm-4">
+                    <input type="file" name="letterheadLogoFile" accept="image/*" />
+                </div>
+            </div>      
 
         </div>
         <div class="panel-footer">
