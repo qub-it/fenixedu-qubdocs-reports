@@ -88,7 +88,29 @@ public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvid
                     leftContent = leftContent.toLowerCase();
                     rightContent = rightContent.toLowerCase();
 
-                    return leftContent.compareTo(rightContent);
+                    int result = leftContent.compareTo(rightContent);
+                    if (result == 0) {
+                        return compareByCode(left, right);
+                    }
+                    return result;
+                }
+
+                public int compareByCode(final CurriculumEntry left, final CurriculumEntry right) {
+                    String leftCode = left.getICurriculumEntry().getCode();
+                    String rightCode = right.getICurriculumEntry().getCode();
+
+                    int result = leftCode.compareTo(rightCode);
+                    if (result == 0) {
+                        return compareByExternalId(left, right);
+                    }
+                    return result;
+                }
+
+                public int compareByExternalId(final CurriculumEntry left, final CurriculumEntry right) {
+                    String leftExternalId = left.getICurriculumEntry().getExternalId();
+                    String rightExternalId = right.getICurriculumEntry().getExternalId();
+
+                    return leftExternalId.compareTo(rightExternalId);
                 }
             });
             curriculumEntries.addAll(CurriculumEntry.transform(registration, entries, remarksDataProvider, service));
