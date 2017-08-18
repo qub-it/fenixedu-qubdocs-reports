@@ -27,6 +27,8 @@
 
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
+import java.math.BigDecimal;
+
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
 import org.fenixedu.academic.domain.treasury.IAcademicServiceRequestAndAcademicTaxTreasuryEvent;
@@ -83,13 +85,29 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
             IAcademicServiceRequestAndAcademicTaxTreasuryEvent event =
                     TreasuryBridgeAPIFactory.implementation().academicTreasuryEventForAcademicServiceRequest(serviceRequest);
             if (event != null && event.isCharged()) {
-                if (serviceRequest.getLanguage().getLanguage().equals("pt")) {
-                    return "Emolumento: " + helper.total(event);
-                } else if (serviceRequest.getLanguage().getLanguage().equals("en")) {
-                    return "Fee: " + helper.total(event);
+
+                if (!event.getExemptionTypeName(serviceRequest.getLanguage()).isEmpty()
+                        && event.getAmountToPay().compareTo(BigDecimal.ZERO) == 0) {
+                    String exemptionText = event.getExemptionTypeName(serviceRequest.getLanguage());
+
+                    if (!event.getExemptionReason().isEmpty()) {
+                        return exemptionText + " - " + event.getExemptionReason();
+                    }
+
+                    return exemptionText;
+
                 } else {
-                    return "" + helper.total(event);
+
+                    if (serviceRequest.getLanguage().getLanguage().equals("pt")) {
+                        return "Emolumento: " + helper.total(event);
+                    } else if (serviceRequest.getLanguage().getLanguage().equals("en")) {
+                        return "Fee: " + helper.total(event);
+                    } else {
+                        return "" + helper.total(event);
+                    }
+
                 }
+
             }
             return "";
         } else if (KEY_FOR_PRICE.equals(key)) {
