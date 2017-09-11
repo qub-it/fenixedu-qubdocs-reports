@@ -90,9 +90,10 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
                         && event.getAmountToPay().compareTo(BigDecimal.ZERO) == 0) {
                     String exemptionText = event.getExemptionTypeName(serviceRequest.getLanguage());
 
-                    if (!event.getExemptionReason().isEmpty()) {
-                        return exemptionText + " - " + event.getExemptionReason();
-                    }
+                    //TODO is reason necessary?
+//                    if (!event.getExemptionReason().isEmpty()) {
+//                        return exemptionText + " - " + event.getExemptionReason();
+//                    }
 
                     return exemptionText;
 
