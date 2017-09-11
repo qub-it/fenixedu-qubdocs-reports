@@ -114,6 +114,9 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
         List<AcademicServiceRequestTemplate> searchtemplatesResultsDataSet =
                 filterSearchTemplates(active, name, serviceRequestType, custom);
 
+        if (serviceRequestType != null) {
+            model.addAttribute("selectedServiceRequestType", serviceRequestType);
+        }
         model.addAttribute("searchtemplatesResultsDataSet", searchtemplatesResultsDataSet);
         model.addAttribute("AcademicServiceRequestTemplate_serviceRequestType_options",
                 org.fenixedu.academic.domain.serviceRequests.ServiceRequestType.findActive()
