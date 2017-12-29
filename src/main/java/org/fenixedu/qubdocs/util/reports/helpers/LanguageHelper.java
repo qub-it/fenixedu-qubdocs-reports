@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -29,7 +29,6 @@ package org.fenixedu.qubdocs.util.reports.helpers;
 
 import java.util.Locale;
 
-import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.qubdocs.FenixEduDocumentGenerator;
 
@@ -45,7 +44,7 @@ public class LanguageHelper implements IDocumentHelper {
 
     }
 
-    public LanguageHelper(Locale locale) {
+    public LanguageHelper(final Locale locale) {
         this.locale = locale;
     }
 
@@ -65,15 +64,6 @@ public class LanguageHelper implements IDocumentHelper {
         return message != null ? message : "";
     }
 
-    public String i18n(final MultiLanguageString i18nString) {
-        if (i18nString == null || locale == null) {
-            return FenixEduDocumentGenerator.DASH;
-        }
-
-        String message = i18nString.getContent(locale);
-        return message != null ? message : "";
-    }
-
     public String pt(final LocalizedString i18nString) {
         if (i18nString == null) {
             return FenixEduDocumentGenerator.DASH;
@@ -83,25 +73,7 @@ public class LanguageHelper implements IDocumentHelper {
         return message != null ? message : "";
     }
 
-    public String pt(final MultiLanguageString i18nString) {
-        if (i18nString == null) {
-            return FenixEduDocumentGenerator.DASH;
-        }
-
-        String message = i18nString.getContent(new Locale("pt", "PT"));
-        return message != null ? message : "";
-    }
-
     public String en(final LocalizedString i18nString) {
-        if (i18nString == null) {
-            return FenixEduDocumentGenerator.DASH;
-        }
-
-        String message = i18nString.getContent(new Locale("en", "GB"));
-        return message != null ? message : "";
-    }
-
-    public String en(final MultiLanguageString i18nString) {
         if (i18nString == null) {
             return FenixEduDocumentGenerator.DASH;
         }
