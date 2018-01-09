@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -27,33 +27,44 @@
 
 package org.fenixedu.qubdocs.domain;
 
+import java.io.File;
 import java.util.Set;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 
-import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.Atomic.TxMode;
-
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.core.IDocumentTemplateService;
 
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.Atomic.TxMode;
+
 public class DocumentPrinterConfiguration extends DocumentPrinterConfiguration_Base implements IDocumentTemplateService {
-	
-	private static String DEFAULT_FONTS_PATH = "/usr/share/fonts";
-    
+
+    private static String DEFAULT_FONTS_PATH = "/usr/share/fonts";
+
     private DocumentPrinterConfiguration() {
         super();
         setBennu(Bennu.getInstance());
-        setFontsPath(DEFAULT_FONTS_PATH);
+        initFontsPath();
         setOpenOfficeConverting(true);
     }
 
-	@Override
-	public boolean isOpenOfficeConverting() {
-		return getOpenOfficeConverting() != null && getOpenOfficeConverting();
-	}
+    private void initFontsPath() {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            String path = System.getenv("WINDIR");
+            File fontDirectory = new File(path, "Fonts");
+            setFontsPath(fontDirectory.getAbsolutePath());
+        } else {
+            setFontsPath(DEFAULT_FONTS_PATH);
+        }
+    }
 
-	@Override
+    @Override
+    public boolean isOpenOfficeConverting() {
+        return getOpenOfficeConverting() != null && getOpenOfficeConverting();
+    }
+
+    @Override
     public Set<? extends DocumentTemplate> readAllDocuments() {
         return Bennu.getInstance().getDocumentTemplatesSet();
     }
@@ -62,20 +73,20 @@ public class DocumentPrinterConfiguration extends DocumentPrinterConfiguration_B
     public Set<? extends DocumentTemplate> readActiveDocuments() {
         return Sets.filter(readAllDocuments(), DocumentTemplate.filters.active(true));
     }
-	
+
     @Atomic(mode = TxMode.SPECULATIVE_READ)
-	public static DocumentPrinterConfiguration getInstance() {
-		if (Bennu.getInstance().getDocumentPrinterConfiguration() == null) {
-			return initialize();
-		}
-		return Bennu.getInstance().getDocumentPrinterConfiguration();
-	}
-	
+    public static DocumentPrinterConfiguration getInstance() {
+        if (Bennu.getInstance().getDocumentPrinterConfiguration() == null) {
+            return initialize();
+        }
+        return Bennu.getInstance().getDocumentPrinterConfiguration();
+    }
+
     private static DocumentPrinterConfiguration initialize() {
         if (Bennu.getInstance().getDocumentPrinterConfiguration() == null) {
             return new DocumentPrinterConfiguration();
         }
         return Bennu.getInstance().getDocumentPrinterConfiguration();
     }
-    
+
 }
