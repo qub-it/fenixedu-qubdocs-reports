@@ -57,7 +57,8 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
 
     public EnrolmentsDataProvider(final Registration registration, final Set<ICurriculumEntry> normalEnrolmentsEntries,
             final Set<ICurriculumEntry> standaloneEnrolmentsEntries, final Set<ICurriculumEntry> extracurricularEnrolmentsEntries,
-            final ExecutionYear executionYear, final Locale locale, final CurriculumEntryServices service) {
+            final Set<ICurriculumEntry> enrolmentsInEnrolState, final ExecutionYear executionYear, final Locale locale,
+            final CurriculumEntryServices service) {
         this.registration = registration;
         this.executionYear = executionYear;
         this.locale = locale;
@@ -71,6 +72,9 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
         }
         if (extracurricularEnrolmentsEntries != null && !extracurricularEnrolmentsEntries.isEmpty()) {
             data.add(new Enrolments("extracurricular", locale, registration, extracurricularEnrolmentsEntries, service));
+        }
+        if (enrolmentsInEnrolState != null && !enrolmentsInEnrolState.isEmpty()) {
+            data.add(new Enrolments("active", locale, registration, enrolmentsInEnrolState, service));
         }
     }
 
