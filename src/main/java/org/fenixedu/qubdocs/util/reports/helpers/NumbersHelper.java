@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -49,6 +49,13 @@ public class NumbersHelper implements IDocumentHelper {
             return FenixEduDocumentGenerator.DASH;
         }
         return (value.scale() > 2 ? value.setScale(2, RoundingMode.HALF_EVEN) : value).toPlainString();
+    }
+
+    public String place(final BigDecimal value, final int scale) {
+        if (value == null) {
+            return FenixEduDocumentGenerator.DASH;
+        }
+        return (value.scale() > scale ? value.setScale(scale, RoundingMode.HALF_EVEN) : value).toPlainString();
     }
 
     public Integer count(final Collection collection) {
