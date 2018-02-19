@@ -106,11 +106,15 @@ public class AcademicServiceRequestTemplateController extends FenixeduQubdocsRep
     public static final String SEARCHTEMPLATES_URL = CONTROLLER_URL + _SEARCHTEMPLATES_URI;
 
     @RequestMapping(value = _SEARCHTEMPLATES_URI)
-    public String searchTemplates(@RequestParam(value = "active", required = false) final java.lang.Boolean active,
+    public String searchTemplates(@RequestParam(value = "active", required = false) java.lang.Boolean active,
             @RequestParam(value = "name", required = false) final org.fenixedu.commons.i18n.LocalizedString name,
             @RequestParam(value = "servicerequesttype",
                     required = false) final org.fenixedu.academic.domain.serviceRequests.ServiceRequestType serviceRequestType,
             @RequestParam(value = "custom", required = false) final java.lang.Boolean custom, final Model model) {
+        if (active == null) {
+            active = Boolean.TRUE;
+        }
+
         List<AcademicServiceRequestTemplate> searchtemplatesResultsDataSet =
                 filterSearchTemplates(active, name, serviceRequestType, custom);
 

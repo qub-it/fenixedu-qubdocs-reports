@@ -159,7 +159,7 @@ angular.module('angularAppAcademicServiceRequestTemplate', ['ngSanitize', 'ui.se
 <div class="col-sm-4">
 	<%-- Relation to side 1 drop down rendered in input --%>
 		<ui-select id="academicServiceRequestTemplate_serviceRequestType" class="" name="servicerequesttype" ng-model="$parent.object.serviceRequestType" theme="bootstrap" ng-disabled="disabled" required>
-    						<ui-select-match >{{$select.selected.text}}</ui-select-match>
+    						<ui-select-match allow-clear="true">{{$select.selected.text}}</ui-select-match>
     						<ui-select-choices repeat="serviceRequestType.id as serviceRequestType in object.serviceRequestTypeDataSource | filter: $select.search">
       							<span ng-bind-html="serviceRequestType.text | highlight: $select.search"></span>
     						</ui-select-choices>
@@ -172,7 +172,7 @@ angular.module('angularAppAcademicServiceRequestTemplate', ['ngSanitize', 'ui.se
 <div class="col-sm-4">
 	<%-- Relation to side 1 drop down rendered in input --%>
 		<ui-select id="academicServiceRequestTemplate_degreeType" class="" name="degreetype" ng-model="$parent.object.degreeType" on-select="onDegreeTypeChange($item, $model)" theme="bootstrap" ng-disabled="disabled" >
-    						<ui-select-match >{{$select.selected.text}}</ui-select-match>
+    						<ui-select-match allow-clear="true">{{$select.selected.text}}</ui-select-match>
     						<ui-select-choices repeat="degreeType.id as degreeType in object.degreeTypeDataSource | filter: $select.search">
       							<span ng-bind-html="degreeType.text | highlight: $select.search"></span>
     						</ui-select-choices>
@@ -185,7 +185,7 @@ angular.module('angularAppAcademicServiceRequestTemplate', ['ngSanitize', 'ui.se
 <div class="col-sm-4">
 	<%-- Relation to side 1 drop down rendered in input --%>
 		<ui-select id="academicServiceRequestTemplate_degree" class="" name="degree" ng-model="$parent.object.degree" theme="bootstrap" ng-disabled="disabled" >
-    						<ui-select-match >{{$select.selected.text}}</ui-select-match>
+    						<ui-select-match allow-clear="true">{{$select.selected.text}}</ui-select-match>
     						<ui-select-choices repeat="degree.id as degree in object.degreeDataSource | filter: $select.search">
       							<span ng-bind-html="degree.text | highlight: $select.search"></span>
     						</ui-select-choices>
@@ -198,7 +198,7 @@ angular.module('angularAppAcademicServiceRequestTemplate', ['ngSanitize', 'ui.se
 <div class="col-sm-4">
 	<%-- Relation to side 1 drop down rendered in input --%>
 		<ui-select id="academicServiceRequestTemplate_programConclusion" class="" name="programconclusion" ng-model="$parent.object.programConclusion" theme="bootstrap" ng-disabled="disabled" >
-    						<ui-select-match >{{$select.selected.text}}</ui-select-match>
+    						<ui-select-match allow-clear="true">{{$select.selected.text}}</ui-select-match>
     						<ui-select-choices repeat="programConclusion.id as programConclusion in object.programConclusionDataSource | filter: $select.search">
       							<span ng-bind-html="programConclusion.text | highlight: $select.search"></span>
     						</ui-select-choices>
