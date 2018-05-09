@@ -63,10 +63,10 @@ import com.google.common.collect.Sets;
 
 public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
-    private ICurriculumEntry iCurriculumEntry;
-    private CurriculumEntryRemarksDataProvider remarksDataProvider;
-    private Registration registration;
-    private CurriculumEntryServices service;
+    private final ICurriculumEntry iCurriculumEntry;
+    private final CurriculumEntryRemarksDataProvider remarksDataProvider;
+    private final Registration registration;
+    private final CurriculumEntryServices service;
 
     public CurriculumEntry(final Registration registration, final ICurriculumEntry entry,
             final CurriculumEntryRemarksDataProvider remarksDataProvider, final CurriculumEntryServices service) {
@@ -79,11 +79,10 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
 
     public LocalizedString getName() {
         if (iCurriculumEntry instanceof IEnrolment && ((IEnrolment) iCurriculumEntry).isEnrolment()) {
-            return ((Enrolment) iCurriculumEntry).getCurricularCourse().getNameI18N(iCurriculumEntry.getExecutionPeriod())
-                    .toLocalizedString();
+            return ((Enrolment) iCurriculumEntry).getCurricularCourse().getNameI18N(iCurriculumEntry.getExecutionPeriod());
         }
 
-        return iCurriculumEntry.getName().toLocalizedString();
+        return iCurriculumEntry.getName();
     }
 
     public BigDecimal getEctsCredits() {

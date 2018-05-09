@@ -1,6 +1,6 @@
 /**
- * This file was created by Quorum Born IT <http://www.qub-it.com/> and its 
- * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa 
+ * This file was created by Quorum Born IT <http://www.qub-it.com/> and its
+ * copyright terms are bind to the legal agreement regulating the FenixEdu@ULisboa
  * software development project between Quorum Born IT and Serviços Partilhados da
  * Universidade de Lisboa:
  *  - Copyright © 2015 Quorum Born IT (until any Go-Live phase)
@@ -8,7 +8,7 @@
  *
  * Contributors: anil.mamede@qub-it.com
  *
- * 
+ *
  * This file is part of FenixEdu QubDocs.
  *
  * FenixEdu QubDocs is free software: you can redistribute it and/or modify
@@ -28,11 +28,9 @@
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.DegreeCurricularPlan;
-import org.fenixedu.academic.domain.DegreeInfo;
 import org.fenixedu.academic.domain.DegreeOfficialPublication;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.degree.DegreeType;
@@ -42,9 +40,7 @@ import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
-import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
-import com.qubit.terra.docs.util.IFieldsExporter;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class DegreeCurricularPlanInformationDataProvider implements IReportDataProvider {
@@ -122,7 +118,7 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
     }
 
     public LocalizedString getDegreeName() {
-        return getDegree().getNameI18N().toLocalizedString();
+        return getDegree().getNameI18N();
     }
 
     public LocalizedString getDegreePresentationName() {
