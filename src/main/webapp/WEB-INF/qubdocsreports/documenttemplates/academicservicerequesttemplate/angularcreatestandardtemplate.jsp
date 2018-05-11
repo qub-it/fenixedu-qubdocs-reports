@@ -135,14 +135,14 @@ angular.module('angularAppAcademicServiceRequestTemplate', ['ngSanitize', 'ui.se
 <div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.name"/></div> 
 
 <div class="col-sm-10">
-	<input id="academicServiceRequestTemplate_name" class="form-control" type="text" name="name"  ng-localized-string="object.name" required="required" ng-required="true"/>
+	<input id="academicServiceRequestTemplate_name" class="form-control" type="text" name="name"  bennu-localized-string="object.name" required="required" ng-required="true"/>
 </div>
 </div>		
 <div class="form-group row">
 <div class="col-sm-2 control-label"><spring:message code="label.AcademicServiceRequestTemplate.description"/></div> 
 
 <div class="col-sm-10">
-	<input id="academicServiceRequestTemplate_description" class="form-control" type="text" name="description"  ng-localized-string="object.description"/>
+	<input id="academicServiceRequestTemplate_description" class="form-control" type="text" name="description"  bennu-localized-string="object.description"/>
 </div>
 </div>		
 <div class="form-group row">
