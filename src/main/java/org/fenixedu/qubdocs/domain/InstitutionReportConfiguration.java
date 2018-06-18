@@ -16,6 +16,10 @@ public class InstitutionReportConfiguration extends InstitutionReportConfigurati
         if (getInstitutionLogo() != null) {
             getInstitutionLogo().delete();
         }
+        if (getLetterheadInstitutionLogo() != null) {
+            getLetterheadInstitutionLogo().delete();
+        }
+
         setBennu(null);
 
         deleteDomainObject();
