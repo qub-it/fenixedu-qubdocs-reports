@@ -1,9 +1,14 @@
 package org.fenixedu.qubdocs.util.reports.helpers;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.fenixedu.academic.domain.CurricularCourse;
+import org.fenixedu.academic.domain.degreeStructure.Context;
+import org.fenixedu.academic.domain.degreeStructure.CycleCourseGroup;
 import org.fenixedu.academic.domain.degreeStructure.CycleType;
 import org.fenixedu.academic.domain.degreeStructure.DegreeModule;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
@@ -35,18 +40,23 @@ public class CurricularHelper implements IDocumentHelper {
             return null;
         }
 
-        return ((CurricularCourse) degreeModule).getCompetenceCourse().getAssociatedCurricularCoursesSet().stream()
+        Collection<Context> contexts =
+                ((CurricularCourse) degreeModule).getCompetenceCourse().getAssociatedCurricularCoursesSet().stream()
 
-                .filter(c -> !c.getParentContextsByExecutionYear(curriculumEntry.getExecutionYear()).isEmpty())
+                        .flatMap(cc -> cc.getParentContextsByExecutionYear(curriculumEntry.getExecutionYear()).stream())
 
-                .flatMap(cc -> cc.getParentCycleCourseGroups().stream())
+                        .collect(Collectors.toSet());
 
-                .map(c -> c.getCycleType())
+        Collection<CycleCourseGroup> result = new HashSet<>();
+        for (Context context : contexts) {
+            if (context.getParentCourseGroup().isCycleCourseGroup()) {
+                result.add((CycleCourseGroup) context.getParentCourseGroup());
+            }
+            result.addAll(context.getParentCourseGroup().getParentCycleCourseGroups());
+        }
 
-                .filter(c -> ACCEPTED_CYCLES.contains(c))
-
+        return result.stream().map(ccg -> ccg.getCycleType()).filter(ct -> ACCEPTED_CYCLES.contains(ct))
                 .sorted(CycleType.COMPARATOR_BY_GREATER_WEIGHT).findFirst().orElse(null);
-
     }
 
     public CycleType getCourseLowerCycle(final ICurriculumEntry curriculumEntry, final boolean competenceScope) {
@@ -67,18 +77,23 @@ public class CurricularHelper implements IDocumentHelper {
             return null;
         }
 
-        return ((CurricularCourse) degreeModule).getCompetenceCourse().getAssociatedCurricularCoursesSet().stream()
+        Collection<Context> contexts =
+                ((CurricularCourse) degreeModule).getCompetenceCourse().getAssociatedCurricularCoursesSet().stream()
 
-                .filter(c -> !c.getParentContextsByExecutionYear(curriculumEntry.getExecutionYear()).isEmpty())
+                        .flatMap(cc -> cc.getParentContextsByExecutionYear(curriculumEntry.getExecutionYear()).stream())
 
-                .flatMap(cc -> cc.getParentCycleCourseGroups().stream())
+                        .collect(Collectors.toSet());
 
-                .map(c -> c.getCycleType())
+        Collection<CycleCourseGroup> result = new HashSet<>();
+        for (Context context : contexts) {
+            if (context.getParentCourseGroup().isCycleCourseGroup()) {
+                result.add((CycleCourseGroup) context.getParentCourseGroup());
+            }
+            result.addAll(context.getParentCourseGroup().getParentCycleCourseGroups());
+        }
 
-                .filter(c -> ACCEPTED_CYCLES.contains(c))
-
+        return result.stream().map(ccg -> ccg.getCycleType()).filter(ct -> ACCEPTED_CYCLES.contains(ct))
                 .sorted(CycleType.COMPARATOR_BY_GREATER_WEIGHT.reversed()).findFirst().orElse(null);
-
     }
 
 }
