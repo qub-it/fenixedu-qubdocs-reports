@@ -194,7 +194,12 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
     }
 
     protected DegreeOfficialPublication getDegreeOfficialPublication() {
-        return getDegree().getOfficialPublication(conclusionDate.toDateTimeAtStartOfDay());
+        return getDegree().getOfficialPublicationSet().stream()
+                .filter(op -> op.getPublication().toDateTimeAtStartOfDay().isBefore(conclusionDate.toDateTimeAtStartOfDay()))
+                .sorted((x, y) -> -(x.getPublication().toDateTimeAtStartOfDay()
+                        .compareTo(y.getPublication().toDateTimeAtStartOfDay())))
+                .findFirst().orElse(null);
+
     }
 
     public String getDegreeOfficialPublicationName() {

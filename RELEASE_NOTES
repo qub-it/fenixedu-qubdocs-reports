@@ -1,2 +1,3 @@
+- Refactor: make code compatible with latest academic core version
 - Bug Fix: Collecting target curriculum lines for ICurriculumEntry requires curricular plan because this information is specific to calculated curriculum / curricular plan
 
