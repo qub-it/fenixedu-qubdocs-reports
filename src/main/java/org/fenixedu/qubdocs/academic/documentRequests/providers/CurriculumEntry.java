@@ -209,7 +209,9 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public LocalizedString getCurriculumEntryDescription() {
-        LocalizedString result = service.getCurriculumEntryDescription(iCurriculumEntry);
+        //TODO: this should use StudentCurricularPlan associated to collected ICurriculumEntry instead of last
+        LocalizedString result =
+                service.getCurriculumEntryDescription(iCurriculumEntry, registration.getLastStudentCurricularPlan());
 
         // null forces hidden; empty forces fallback
         if (result != null && result.isEmpty()) {
