@@ -33,7 +33,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.fenixedu.academic.domain.CompetenceCourse;
-import org.fenixedu.academic.domain.ExecutionSemester;
+import org.fenixedu.academic.domain.ExecutionInterval;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -70,14 +70,14 @@ public class CompetenceCoursesDataProvider implements IReportDataProvider {
     public static class CompetenceCourseWrapper {
 
         protected CompetenceCourse competenceCourse;
-        protected ExecutionSemester executionSemester;
+        protected ExecutionInterval executionInterval;
 
         public CompetenceCourseWrapper(final CompetenceCourse competenceCourse) {
             this.competenceCourse = competenceCourse;
         }
 
-        public CompetenceCourseWrapper withExecutionInterval(final ExecutionSemester executionSemester) {
-            this.executionSemester = executionSemester;
+        public CompetenceCourseWrapper withExecutionInterval(final ExecutionInterval executionInterval) {
+            this.executionInterval = executionInterval;
             return this;
         }
 
@@ -86,19 +86,19 @@ public class CompetenceCoursesDataProvider implements IReportDataProvider {
         }
 
         public String getExecutionYear() {
-            return executionSemester.getExecutionYear().getName();
+            return executionInterval.getExecutionYear().getName();
         }
 
         public String getAutonomousWorkHours() {
-            return new BigDecimal(this.competenceCourse.getAutonomousWorkHours(executionSemester)).toPlainString();
+            return new BigDecimal(this.competenceCourse.getAutonomousWorkHours(executionInterval)).toPlainString();
         }
 
         public String getTotalHours() {
-            return new BigDecimal(this.competenceCourse.getTotalLoad(executionSemester)).toPlainString();
+            return new BigDecimal(this.competenceCourse.getTotalLoad(executionInterval)).toPlainString();
         }
 
         public String getContactHours() {
-            return new BigDecimal(this.competenceCourse.getContactLoad(executionSemester)).toPlainString();
+            return new BigDecimal(this.competenceCourse.getContactLoad(executionInterval)).toPlainString();
         }
 
     }

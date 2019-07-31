@@ -37,7 +37,7 @@ import java.util.Set;
 
 import org.fenixedu.academic.domain.CompetenceCourse;
 import org.fenixedu.academic.domain.Enrolment;
-import org.fenixedu.academic.domain.ExecutionSemester;
+import org.fenixedu.academic.domain.ExecutionInterval;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
@@ -191,8 +191,8 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return getCompetenceCourse().getCode();
     }
 
-    public ExecutionSemester getExecutionSemester() {
-        return iCurriculumEntry.getExecutionPeriod();
+    public ExecutionInterval getExecutionSemester() {
+        return iCurriculumEntry.getExecutionInterval();
     }
 
     public String getCurricularYear() {
