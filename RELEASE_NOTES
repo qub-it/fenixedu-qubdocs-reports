@@ -1,3 +1,5 @@
+- Refactor: added missing group id
+
 2.2.0 (26-09-2019)
 - Refactor: Upgrade fenixedu-academic-core dependency
 
