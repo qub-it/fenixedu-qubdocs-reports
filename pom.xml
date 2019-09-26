@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.qubit.solution.fenixedu</groupId>
             <artifactId>fenixedu-academic-core</artifactId>
-            <version>24.0.0</version>
+            <version>25.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.qubit.terra</groupId>
