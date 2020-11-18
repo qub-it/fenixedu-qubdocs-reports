@@ -230,9 +230,4 @@ public class DegreeCurricularPlanInformationDataProvider implements IReportDataP
         return getDegree().isThirdCycle();
     }
 
-    public boolean isFiveYearsDegree() {
-        DegreeType degreeType = getDegree().getDegreeType();
-        return !degreeType.isBolonhaType() && degreeType.isDegree();
-    }
-
 }
