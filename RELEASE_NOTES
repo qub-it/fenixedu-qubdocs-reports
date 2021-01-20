@@ -1,3 +1,5 @@
+- Bug fix: Limit the name of service request type
+
 2.2.3 (18-11-2020)
 - Refactor: Remove usage of bolonha degree type (deprecated slot)
 

@@ -29,6 +29,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <spring:url var="datatablesUrl"
     value="/javaScript/dataTables/media/js/jquery.dataTables.latest.min.js" />
 <spring:url var="datatablesBootstrapJsUrl"
@@ -325,12 +326,13 @@ ${portal.toolkit()}
 	<%-- Block for providing serviceRequestType options --%>
 	<%-- CHANGE_ME --%> <%-- INSERT YOUR FORMAT FOR element --%>
 	serviceRequestType_options = [
-		<c:forEach items="${AcademicServiceRequestTemplate_serviceRequestType_options}" var="element"> 
-			{
-				text :"<c:out value='${element.name.content}'/>", 
-				id : "<c:out value='${element.externalId}'/>"
-			},
-		</c:forEach>
+        <c:forEach items="${AcademicServiceRequestTemplate_serviceRequestType_options}" var="element">
+            <c:set var="elementText" value="${fn:substring(element.name.content, 0, 160)}" />
+            {
+                text :"<c:out value='${elementText}'/>",
+                id : "<c:out value='${element.externalId}'/>"
+            },
+        </c:forEach>
 	];
 	
 	$("#academicServiceRequestTemplate_serviceRequestType").select2(
