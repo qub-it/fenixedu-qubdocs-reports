@@ -12,7 +12,7 @@
 
 	<groupId>org.fenixedu</groupId>
     <artifactId>fenixedu-qubdocs-reports</artifactId>
-    <version>2.2.5</version>
+    <version>2.2.6</version>
     <packaging>jar</packaging>
 
     <name>QubDocs Reports</name>
