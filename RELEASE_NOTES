@@ -1,3 +1,5 @@
+- Refactor: Redesign of algorithm to calculate credits transfer remarks
+
 2.2.6 (27-05-2022)
 - Refactor: Remove unused class
 

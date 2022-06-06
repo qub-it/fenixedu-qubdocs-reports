@@ -60,7 +60,7 @@ public class ExtraCurriculumEntriesDataProvider implements IReportDataProvider {
             final CurriculumEntryServices service) {
         this.registration = registration;
         this.locale = locale;
-        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration, extracurricularApprovements, service);
         this.extracurricularApprovements = extracurricularApprovements;
         this.service = service;
         init();

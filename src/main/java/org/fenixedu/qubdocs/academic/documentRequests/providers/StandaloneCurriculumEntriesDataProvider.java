@@ -60,7 +60,7 @@ public class StandaloneCurriculumEntriesDataProvider implements IReportDataProvi
             final CurriculumEntryServices service) {
         this.registration = registration;
         this.locale = locale;
-        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration, standaloneApprovements, service);
         this.standaloneApprovements = standaloneApprovements;
         this.service = service;
         init();

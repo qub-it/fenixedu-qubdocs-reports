@@ -130,7 +130,7 @@ public class EnrolmentsDataProvider implements IReportDataProvider {
             this.remarksKey = type + "EnrolmentsRemarks";
 
             this.enrolmentsEntries = enrolmentsEntries;
-            this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+            this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration, enrolmentsEntries, service);
             this.curriculumEntries = Sets.newTreeSet(new Comparator<CurriculumEntry>() {
 
                 @Override

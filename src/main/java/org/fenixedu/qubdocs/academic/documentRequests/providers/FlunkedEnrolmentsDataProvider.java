@@ -32,7 +32,7 @@ public class FlunkedEnrolmentsDataProvider implements IReportDataProvider {
             final Locale locale, final CurriculumEntryServices service) {
         this.registration = registration;
         this.locale = locale;
-        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration, flunkedEnrolments, service);
         this.flunkedEnrolments = flunkedEnrolments;
         this.service = service;
         init();

@@ -32,7 +32,7 @@ public class ConcludedCurriculumEntriesDataProvider implements IReportDataProvid
             final Locale locale, final CurriculumEntryServices service) {
         this.registration = registration;
         this.locale = locale;
-        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration);
+        this.remarksDataProvider = new CurriculumEntryRemarksDataProvider(registration, conclusions, service);
         this.conclusions = conclusions;
         this.service = service;
     }

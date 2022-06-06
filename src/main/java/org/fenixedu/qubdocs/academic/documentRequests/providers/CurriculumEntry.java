@@ -29,9 +29,7 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -41,24 +39,19 @@ import org.fenixedu.academic.domain.ExecutionInterval;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
-import org.fenixedu.academic.domain.organizationalStructure.Unit;
 import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.academic.domain.studentCurriculum.CurriculumLine;
 import org.fenixedu.academic.domain.studentCurriculum.Dismissal;
 import org.fenixedu.academic.domain.studentCurriculum.ExternalEnrolment;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider.RemarkEntry;
-import org.fenixedu.qubdocs.academic.documentRequests.providers.CurriculumEntryRemarksDataProvider.RemarkEntryType;
 import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 import org.fenixedu.qubdocs.util.DocsStringUtils;
 import org.joda.time.LocalDate;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class CurriculumEntry implements Comparable<CurriculumEntry> {
@@ -74,7 +67,6 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         this.iCurriculumEntry = entry;
         this.remarksDataProvider = remarksDataProvider;
         this.service = service;
-        this.remarksDataProvider.addCurriculumEntryToRemarkEntry(this);
     }
 
     public LocalizedString getName() {
@@ -208,32 +200,6 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
         return "" + service.getCurricularYear(input);
     }
 
-    public LocalizedString getCurriculumEntryDescription() {
-        //TODO: this should use StudentCurricularPlan associated to collected ICurriculumEntry instead of last
-        LocalizedString result =
-                service.getCurriculumEntryDescription(iCurriculumEntry, registration.getLastStudentCurricularPlan());
-
-        // null forces hidden; empty forces fallback
-        if (result != null && result.isEmpty()) {
-
-            final RemarkEntryType remarkEntryType = remarksDataProvider.getRemarkEntryType(this);
-            if (remarkEntryType != null) {
-
-                final Unit institution = isExternal() ? ((ExternalEnrolment) iCurriculumEntry).getAcademicUnit() : null;
-
-                for (final Locale locale : CoreConfiguration.supportedLocales()) {
-                    final String message = BundleUtil.getString("resources/FenixeduQubdocsReportsResources", locale,
-                            remarkEntryType.getQualifiedName(),
-                            institution != null ? institution.getNameI18n().getContent() : "");
-
-                    result = result.with(locale, message);
-                }
-            }
-        }
-
-        return result;
-    }
-
     public String getGrade() {
         return iCurriculumEntry.getGradeValue();
     }
@@ -321,19 +287,7 @@ public class CurriculumEntry implements Comparable<CurriculumEntry> {
     }
 
     public String getRemarkNumbers() {
-        Set<RemarkEntry> remarkEntries = remarksDataProvider.getRemarkEntriesFor(this);
-
-        final List<String> list =
-                Lists.newArrayList(Lists.transform(Lists.newArrayList(remarkEntries), new Function<RemarkEntry, String>() {
-                    @Override
-                    public String apply(final RemarkEntry entry) {
-                        return String.format("%s)", entry.remarkNumber);
-                    }
-                }));
-
-        Collections.sort(list);
-
-        return DocsStringUtils.join(list, DocsStringUtils.SINGLE_SPACE);
+        return remarksDataProvider.getRemarkIdsFor(this);
     }
 
     @Override

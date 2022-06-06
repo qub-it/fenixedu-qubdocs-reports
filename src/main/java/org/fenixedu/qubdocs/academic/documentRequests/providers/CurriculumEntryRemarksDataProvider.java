@@ -27,44 +27,39 @@
 
 package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.Set;
+import java.util.function.BiFunction;
 
-import org.fenixedu.academic.domain.Enrolment;
-import org.fenixedu.academic.domain.IEnrolment;
 import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.student.Registration;
-import org.fenixedu.academic.domain.studentCurriculum.ExternalEnrolment;
+import org.fenixedu.academic.domain.student.curriculum.ICurriculumEntry;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.commons.i18n.LocalizedString.Builder;
+import org.fenixedu.qubdocs.util.CurriculumEntryServices;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 import com.qubit.terra.docs.util.IDocumentFieldsData;
 import com.qubit.terra.docs.util.IReportDataProvider;
 
 public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
 
-    public static final Comparator<RemarkEntry> ENTRY_COMPARATOR = new Comparator<RemarkEntry>() {
-
-        @Override
-        public int compare(RemarkEntry o1, RemarkEntry o2) {
-            return o1.remarkNumber.compareTo(o2.remarkNumber);
-        }
-
-    };
-
     protected static final String KEY = "curriculumEntryRemarks";
-    protected char counter = 'a';
 
-    private Set<RemarkEntry> remarkEntries = Sets.newTreeSet(ENTRY_COMPARATOR);
+    private Set<RemarkEntry> remarkEntries = Sets.newLinkedHashSet();
 
     protected String key;
     protected Registration registration;
 
-    public CurriculumEntryRemarksDataProvider(final Registration registration) {
+    private ICreditsTransferRemarksCollection creditsTransferRemarks;
+
+    public CurriculumEntryRemarksDataProvider(final Registration registration, final Collection<ICurriculumEntry> entries,
+            final CurriculumEntryServices service) {
         this.key = KEY;
         this.registration = registration;
+        
+        creditsTransferRemarks = service.buildRemarksFor(entries, registration.getLastStudentCurricularPlan());
+        creditsTransferRemarks.getRemarkIds().forEach(
+                remarkId -> remarkEntries.add(new RemarkEntry(remarkId, creditsTransferRemarks.getRemarkTextForId(remarkId))));
     }
 
     @Override
@@ -86,132 +81,37 @@ public class CurriculumEntryRemarksDataProvider implements IReportDataProvider {
         return remarkEntries;
     }
 
-    protected RemarkEntry addCurriculumEntryToRemarkEntry(final CurriculumEntry input) {
-        RemarkEntry result = null;
-
-        final LocalizedString description = input.getCurriculumEntryDescription();
-        if (description != null) {
-
-            for (final RemarkEntry iter : Sets.newHashSet(remarkEntries)) {
-                if (iter.addIf(input)) {
-                    result = iter;
-                    break;
-                }
-            }
-
-            if (result == null) {
-
-                final RemarkEntryType remarkEntryType = getRemarkEntryType(input);
-                if (remarkEntryType != null) {
-                    result = new RemarkEntry(String.valueOf(counter++), remarkEntryType, input);
-
-                    remarkEntries.add(result);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public Set<RemarkEntry> getRemarkEntriesFor(final CurriculumEntry curriculumEntry) {
-        return Sets.filter(remarkEntries, new Predicate<RemarkEntry>() {
-            @Override
-            public boolean apply(final RemarkEntry remarkEntry) {
-                return remarkEntry.curriculumEntries.contains(curriculumEntry);
-            }
-        });
-    }
-
-    public enum RemarkEntryType {
-        INSTITUTION, CREDITS;
-
-        public String getQualifiedName() {
-            return this.getClass().getSimpleName() + "." + name();
-        }
-    }
-
     public class RemarkEntry {
-        protected String remarkNumber;
-        private Set<CurriculumEntry> curriculumEntries = Sets.newHashSet();
-        private RemarkEntryType type;
-        private LocalizedString curriculumEntryDescription;
 
-        public RemarkEntry(final String remarkNumber, final RemarkEntryType remarkEntryType,
-                final CurriculumEntry curriculumEntry) {
+        private String remarkNumber;
+        private LocalizedString description;
+
+        public RemarkEntry(final String remarkNumber, LocalizedString description) {
 
             this.remarkNumber = remarkNumber;
-            this.type = remarkEntryType;
-            this.curriculumEntries.add(curriculumEntry);
+            this.description = description;
         }
 
-        public boolean addIf(final CurriculumEntry entry) {
-            return entry.getCurriculumEntryDescription().equals(getCurriculumEntryDescription()) && curriculumEntries.add(entry);
+        public String getRemarkNumber() {
+            return remarkNumber;
         }
 
-        protected boolean isInstitutionEntry() {
-            return RemarkEntryType.INSTITUTION == type;
+        public void setRemarkNumber(String remarkNumber) {
+            this.remarkNumber = remarkNumber;
         }
 
-        protected boolean isCreditsEntry() {
-            return RemarkEntryType.CREDITS == type;
+        public void setDescription(LocalizedString description) {
+            this.description = description;
         }
 
         public LocalizedString getDescription() {
-            LocalizedString result = getCurriculumEntryDescription();
-
-            final Builder builder = new LocalizedString.Builder();
-            result.forEach((locale, value) -> builder.with(locale, remarkNumber + ") " + value));
-            result = builder.build();
-
-            return result;
-        }
-
-        private LocalizedString getCurriculumEntryDescription() {
-            if (curriculumEntryDescription == null) {
-                curriculumEntryDescription = new LocalizedString();
-
-                if (!curriculumEntries.isEmpty()) {
-                    // all entries should share the same description
-                    curriculumEntryDescription = curriculumEntries.iterator().next().getCurriculumEntryDescription();
-                }
-            }
-
-            return curriculumEntryDescription;
+            return description;
         }
 
     }
 
-    public RemarkEntryType getRemarkEntryType(final CurriculumEntry entry) {
-
-        if (entry.isExternal()) {
-            final ExternalEnrolment externalEnrolment = (ExternalEnrolment) entry.getICurriculumEntry();
-            if (externalEnrolment.getAcademicUnit() != null) {
-                return RemarkEntryType.INSTITUTION;
-            }
-        }
-
-        if (entry.isExternal() || isDismissal(entry)) {
-            return RemarkEntryType.CREDITS;
-        }
-
-        return null;
-    }
-
-    public boolean isDismissal(CurriculumEntry entry) {
-        if (entry.isDismissal()) {
-            return true;
-        }
-
-        if (entry.isIEnrolment() && ((IEnrolment) entry.getICurriculumEntry()).isEnrolment()) {
-            return hasAnyDismissal(registration.getLastStudentCurricularPlan(), (Enrolment) entry.getICurriculumEntry());
-        }
-
-        return false;
-    }
-
-    private boolean hasAnyDismissal(StudentCurricularPlan studentCurricularPlan, Enrolment enrolment) {
-        return studentCurricularPlan.getCreditsSet().stream()
-                .anyMatch(c -> c.getEnrolmentsSet().stream().anyMatch(ew -> ew.getIEnrolment() == enrolment));
+    public String getRemarkIdsFor(CurriculumEntry curriculumEntry) {
+        return creditsTransferRemarks.getRemarkIdsFor(curriculumEntry.getICurriculumEntry());
     }
 
 }
