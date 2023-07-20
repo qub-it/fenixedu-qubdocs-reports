@@ -33,7 +33,7 @@ import com.qubit.terra.docs.util.helpers.IDocumentHelper;
 public class MoneyHelper implements IDocumentHelper {
 
     public String total(final IAcademicTreasuryEvent event) {
-        return event.formatMoney(event.getAmountToPay());
+        return event.formatMoney(event.getAmountWithVatToPay());
     }
 
 }

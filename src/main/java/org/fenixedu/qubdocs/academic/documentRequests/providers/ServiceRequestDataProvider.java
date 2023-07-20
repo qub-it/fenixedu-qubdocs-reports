@@ -87,7 +87,7 @@ public class ServiceRequestDataProvider implements IReportDataProvider {
             if (event != null && event.isCharged()) {
 
                 if (!event.getExemptionTypeName(serviceRequest.getLanguage()).isEmpty()
-                        && event.getAmountToPay().compareTo(BigDecimal.ZERO) == 0) {
+                        && event.getAmountWithVatToPay().compareTo(BigDecimal.ZERO) == 0) {
                     String exemptionText = event.getExemptionTypeName(serviceRequest.getLanguage());
 
                     //TODO is reason necessary?
