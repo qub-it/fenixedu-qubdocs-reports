@@ -1,3 +1,4 @@
+2.3.1 (20-07-2023)
 - Refactor: Rename invocation of TreasuryEvent::getAmountToPay to TreasuryEvent::getAmountWithVatToPay
 
 2.3.0 (06-06-2022)
