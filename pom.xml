@@ -17,28 +17,33 @@
 
     <name>QubDocs Reports</name>
 
-    <properties>
-        <version.org.fenixedu.bennu>6.0.0-FORK</version.org.fenixedu.bennu>
-        <version.pt.ist.standards>1.1.0-SNAPSHOT</version.pt.ist.standards>
-    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.qubit.solution.fenixedu</groupId>
+                <artifactId>fenixedu-oss-dependency-management</artifactId>
+                <version>1</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <dependencies>
         <dependency>
             <groupId>com.qubit.solution.fenixedu</groupId>
             <artifactId>fenixedu-academic-core</artifactId>
-            <version>41.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.qubit.terra</groupId>
             <artifactId>qub-docs</artifactId>
-            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time-jsptags</artifactId>
             <version>1.1.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -47,37 +52,30 @@
         <dependency>
             <groupId>pt.ist</groupId>
             <artifactId>standards</artifactId>
-            <version>${version.pt.ist.standards}</version>
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-core</artifactId>
-            <version>${version.org.fenixedu.bennu}</version>
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-scheduler</artifactId>
-            <version>${version.org.fenixedu.bennu}</version>
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-portal</artifactId>
-            <version>${version.org.fenixedu.bennu}</version>
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-io</artifactId>
-            <version>${version.org.fenixedu.bennu}</version>
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-spring</artifactId>
-            <version>${version.org.fenixedu.bennu}</version>
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-cas-client</artifactId>
-            <version>${version.org.fenixedu.bennu}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -87,7 +85,6 @@
         <dependency>
             <groupId>com.qubit.solution.fenixedu</groupId>
             <artifactId>bennu-webservices-core</artifactId>
-            <version>2.1.2</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
@@ -147,37 +144,13 @@
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>fenixedu-commons</artifactId>
-            <version>1.1.0</version>
         </dependency>
 		<dependency>
 			<groupId>com.qubit.solution.fenixedu</groupId>
 			<artifactId>fenixedu-ulisboa-tools</artifactId>
-			<version>2.0.0</version>
 		</dependency>
     </dependencies>
 
-       <distributionManagement>
-                <repository>
-                        <id>qubIT-oss</id>
-                        <url>https://repository-oss.omnis.cloud/nexus/repository/releases/</url>
-                </repository>
-                <snapshotRepository>
-                        <id>qubIT-oss</id>
-                        <url>https://repository-oss.omnis.cloud/nexus/repository/snapshots/</url>
-                </snapshotRepository>
-     </distributionManagement>
-
-    <repositories>
-        <repository>
-		<id>qubIT-oss</id>
-                <url>https://repository-oss.omnis.cloud/nexus/repository/releases/</url>
-        </repository>
-        <repository>
-            <id>fenixedu-maven-repository</id>
-            <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
-        </repository>
-    </repositories>
-    
     <build>
         <plugins>
             <plugin>
@@ -199,10 +172,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>

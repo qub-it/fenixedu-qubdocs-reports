@@ -1,3 +1,6 @@
+- Improvement: Adds fenixedu OSS DM [#qubIT-Omnis-4736]
+- Improvement: Updates java version to 11 in maven compiler plugin [#qubIT-Omnis-4736]
+
 2.3.1 (20-07-2023)
 - Refactor: Rename invocation of TreasuryEvent::getAmountToPay to TreasuryEvent::getAmountWithVatToPay
 
