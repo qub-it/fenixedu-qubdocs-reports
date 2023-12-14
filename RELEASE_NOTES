@@ -1,3 +1,4 @@
+- Improvement: Updates jdk to 17 [#qubIT-Omnis-4749]
 - Improvement: Adds fenixedu OSS DM [#qubIT-Omnis-4736]
 - Improvement: Updates java version to 11 in maven compiler plugin [#qubIT-Omnis-4736]
 
