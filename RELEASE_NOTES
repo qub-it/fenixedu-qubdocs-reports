@@ -1,3 +1,4 @@
+2.4.1 (17-11-2025)
 - Refactor: Add removed method from registration entity to its data provider [#UL-FM-3363]
 
 2.4.0 (17-06-2024)
