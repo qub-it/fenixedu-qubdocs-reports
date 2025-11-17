@@ -29,6 +29,7 @@ package org.fenixedu.qubdocs.academic.documentRequests.providers;
 
 import java.util.Locale;
 
+import org.fenixedu.academic.domain.StudentCurricularPlan;
 import org.fenixedu.academic.domain.student.Registration;
 
 import com.qubit.terra.docs.util.IDocumentFieldsData;
@@ -37,6 +38,7 @@ import com.qubit.terra.docs.util.IReportDataProvider;
 public class RegistrationDataProvider implements IReportDataProvider {
 
     protected static final String KEY = "registration";
+    protected static final String KEY_FOR_NUMBER_ENROLED_CURRICULAR_COURSES_IN_CURRENT_YEAR = "numberEnroledCurricularCoursesInCurrentYear";
 
     protected Registration registration;
 
@@ -46,7 +48,7 @@ public class RegistrationDataProvider implements IReportDataProvider {
 
     @Override
     public boolean handleKey(final String key) {
-        return KEY.equals(key);
+        return KEY.equals(key) || KEY_FOR_NUMBER_ENROLED_CURRICULAR_COURSES_IN_CURRENT_YEAR.equals(key);
     }
 
     @Override
@@ -56,7 +58,23 @@ public class RegistrationDataProvider implements IReportDataProvider {
 
     @Override
     public Object valueForKey(final String key) {
-        return handleKey(key) ? registration : null;
+        if (KEY.equals(key)) {
+            return registration;
+        } else if (KEY_FOR_NUMBER_ENROLED_CURRICULAR_COURSES_IN_CURRENT_YEAR.equals(key)) {
+            return getNumberEnroledCurricularCoursesInCurrentYear(registration);
+        }
+
+        return null;
+    }
+
+    private int getNumberEnroledCurricularCoursesInCurrentYear(final Registration registration) {
+        final StudentCurricularPlan lastStudentCurricularPlan = registration.getLastStudentCurricularPlan();
+        if (lastStudentCurricularPlan == null) {
+            return 0;
+        }
+        long result = lastStudentCurricularPlan.getEnrolmentsSet().stream()
+                .filter(e -> e.getExecutionInterval().getExecutionYear().isCurrent()).count();
+        return Math.toIntExact(result);
     }
 
 }
