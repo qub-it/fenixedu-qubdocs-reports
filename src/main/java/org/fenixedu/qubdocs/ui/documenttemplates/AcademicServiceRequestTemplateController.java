@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.fenixedu.academic.domain.degree.DegreeType;
 import org.fenixedu.academic.domain.serviceRequests.ServiceRequestType;

@@ -3,7 +3,7 @@ package org.fenixedu.qubdocs.ui.institutionconfiguration;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.fenixedu.bennu.FenixeduQubdocsReportsSpringConfiguration;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
