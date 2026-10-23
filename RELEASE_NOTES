@@ -1,3 +1,5 @@
+- Refactor: Removing bennu-spring dependency [#qubIT-Fenix-9802]
+
 2.6.0 (21-10-2026)
 - Refactor: Making compatible with latest versions [#qubIT-Omnis-10960]
 

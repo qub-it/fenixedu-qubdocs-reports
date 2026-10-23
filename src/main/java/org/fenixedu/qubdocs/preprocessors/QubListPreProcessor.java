@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.fenixedu.bennu.FenixeduQubdocsReportsSpringConfiguration;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -88,7 +87,7 @@ public class QubListPreProcessor extends ReportGeneratorPreProcessor {
         }
 
         throw new RuntimeException(
-                BundleUtil.getString(FenixeduQubdocsReportsSpringConfiguration.BUNDLE, "error.unexpected.document.format"));
+                "error.unexpected.document.format");
     }
 
     protected List<Node> getCellNodes(List<Node> tableList) {
