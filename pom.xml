@@ -141,10 +141,6 @@
             <groupId>org.fenixedu</groupId>
             <artifactId>fenixedu-commons</artifactId>
         </dependency>
-		<dependency>
-			<groupId>com.qubit.solution.fenixedu</groupId>
-			<artifactId>fenixedu-ulisboa-tools</artifactId>
-		</dependency>
     </dependencies>
 
     <build>
